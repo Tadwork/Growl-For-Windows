@@ -1,0 +1,758 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Growl.CoreLibrary</name>
+    </assembly>
+    <members>
+        <member name="T:Growl.CoreLibrary.GNTPStreamReader">
+            <summary>
+            This class operates exactly like a normal StreamReader with one difference:
+            the ReadLine method only looks for '\r\n' as line terminators (as opposed 
+            to the StreamReader implementation that looks for '\r', '\n', and '\r\n').
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.GNTPStreamReader.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.CoreLibrary.GNTPStreamReader"/> class.
+            </summary>
+            <param name="stream">The underlying stream to read.</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.GNTPStreamReader.ReadLine">
+            <summary>
+            Reads a line of characters from the current stream and returns the data as a string.
+            </summary>
+            <returns>
+            The next line from the input stream, or null if the end of the input stream is reached.
+            </returns>
+            <exception cref="T:System.OutOfMemoryException">There is insufficient memory to allocate a buffer for the returned string. </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+            <remarks>
+            This method differs from the base StreamReader implementation in that it  only looks for '\r\n' as line terminators (as opposed 
+            to the StreamReader implementation that looks for '\r', '\n', and '\r\n').
+            </remarks>
+        </member>
+        <member name="T:Growl.CoreLibrary.CallbackResult">
+            <summary>
+            Contains a list of the available types of callback actions that can be reported
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.CallbackResult.CLICK">
+            <summary>
+            The user clicked on the notification
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.CallbackResult.CLOSE">
+            <summary>
+            The user closed the notification explicitly
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.CallbackResult.TIMEDOUT">
+            <summary>
+            The notification timed out without user intervention
+            </summary>
+        </member>
+        <member name="T:Growl.CoreLibrary.BinaryData">
+            <summary>
+            Represents binary data that can be sent in a GNTP message
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.BinaryData.ID_FORMAT">
+            <summary>
+            Format for inline resource identifiers
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.BinaryData.md5">
+            <summary>
+            Provides the mechanism to generate default IDs
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.BinaryData.id">
+            <summary>
+            The identifier of the data
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.BinaryData.data">
+            <summary>
+            The actual data
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.BinaryData.#ctor(System.Byte[])">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.CoreLibrary.BinaryData"/> class
+            and auto-generates a unique ID.
+            </summary>
+            <param name="data">Array of bytes that make up the data</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.BinaryData.#ctor(System.String,System.Byte[])">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.CoreLibrary.BinaryData"/> class
+            and uses the supplied value for the unique ID.
+            </summary>
+            <param name="id">The value of the ID</param>
+            <param name="data">Array of bytes that make up the data</param>
+            <remarks>
+            The ID provided should be unique for different binary data, but
+            should be the same for duplicate versions of the same data (by
+            generating the hash of the data, for example).
+            </remarks>
+        </member>
+        <member name="M:Growl.CoreLibrary.BinaryData.GenerateID(System.Byte[])">
+            <summary>
+            Generates a unique ID for the supplied binary data.
+            </summary>
+            <param name="data">Array of bytes</param>
+            <remarks>
+            This implementation generates the MD5 hash of the data and
+            returns the hex-encoded hash.
+            </remarks>
+            <returns>string</returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.BinaryData.op_Implicit(Growl.CoreLibrary.BinaryData)~System.Byte[]">
+            <summary>
+            Converts the value of a <see cref="T:Growl.CoreLibrary.BinaryData"/> object to a byte array
+            </summary>
+            <param name="data"><see cref="T:Growl.CoreLibrary.BinaryData"/></param>
+            <returns>byte array</returns>
+        </member>
+        <member name="P:Growl.CoreLibrary.BinaryData.ID">
+            <summary>
+            Gets the value of the unique ID associated with the data
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.CoreLibrary.BinaryData.Length">
+            <summary>
+            Gets the length of the actual data
+            </summary>
+            <value>
+            int - number of bytes
+            </value>
+        </member>
+        <member name="P:Growl.CoreLibrary.BinaryData.Data">
+            <summary>
+            The actual binary data
+            </summary>
+            <value>
+            Array of bytes
+            </value>
+        </member>
+        <member name="P:Growl.CoreLibrary.BinaryData.IDPointer">
+            <summary>
+            The unique pointer associated with the data
+            </summary>
+            <remarks>
+            When passed in a GNTP message, this is the value used
+            for any headers that are pointing to binary data.
+            </remarks>
+            <value>
+            string in the format:  x-growl-resource://id
+            </value>
+        </member>
+        <member name="T:Growl.CoreLibrary.NotificationCallbackEventArgs">
+            <summary>
+            Provides information about notification callback events
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.NotificationCallbackEventArgs.notificationUUID">
+            <summary>
+            The UUID of the notification making the callback
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.NotificationCallbackEventArgs.result">
+            <summary>
+            The callback result
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.NotificationCallbackEventArgs.customInfo">
+            <summary>
+            Additional information to be returned in the callback response (as custom headers)
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.NotificationCallbackEventArgs.#ctor(System.String,Growl.CoreLibrary.CallbackResult)">
+            <summary>
+            Creates a new instance of this class
+            </summary>
+            <param name="notificationUUID">The UUID of the notification making the callback</param>
+            <param name="result">The callback result</param>
+        </member>
+        <member name="P:Growl.CoreLibrary.NotificationCallbackEventArgs.NotificationUUID">
+            <summary>
+            The notification UUID of the notification making the callback
+            </summary>
+        </member>
+        <member name="P:Growl.CoreLibrary.NotificationCallbackEventArgs.Result">
+            <summary>
+            The callback result
+            </summary>
+            <value><see cref="T:Growl.CoreLibrary.CallbackResult"/></value>
+        </member>
+        <member name="P:Growl.CoreLibrary.NotificationCallbackEventArgs.CustomInfo">
+            <summary>
+            Returns the list of additional information to be returned in the callback response
+            (as custom headers)
+            </summary>
+            <value><see cref="T:System.Collections.Generic.Dictionary`2"/></value>
+        </member>
+        <member name="T:Growl.CoreLibrary.WebClientEx">
+            <summary>
+            A specialized <see cref="T:System.Net.WebClient"/> class that automatically handles using 
+            the user's GfW proxy settings and logging the appropriate debug information.
+            </summary>
+            <remarks>
+            Plugin developers that require making calls to websites/services should use this
+            class in place of the standard <see cref="T:System.Net.WebClient"/> to ensure that the user's 
+            proxy settings are honored.
+            
+            For developers using the lower-level HttpWebRequest class, the default 
+            <see cref="T:System.Net.HttpWebRequest"/> is already configured with the user's 
+            proxy settings so no special class is required.
+            </remarks>
+        </member>
+        <member name="M:Growl.CoreLibrary.WebClientEx.GetWebRequest(System.Uri)">
+            <summary>
+            Returns a <see cref="T:System.Net.WebRequest"/> object for the specified resource.
+            </summary>
+            <param name="address">A <see cref="T:System.Uri"/> that identifies the resource to request.</param>
+            <returns>
+            A new <see cref="T:System.Net.WebRequest"/> object for the specified resource.
+            </returns>
+        </member>
+        <member name="T:Growl.CoreLibrary.DebugInfo">
+            <summary>
+            Provides a means for plugins to write to GfW's debug log
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.DebugInfo.WriteLine(System.String)">
+            <summary>
+            Writes the specified info the the debug log
+            </summary>
+            <param name="info">The info to log</param>
+        </member>
+        <member name="E:Growl.CoreLibrary.DebugInfo.Write">
+            <summary>
+            Occurs when a plugin write's debug info to the log
+            </summary>
+        </member>
+        <member name="T:Growl.CoreLibrary.DebugInfo.WriteEventHandler">
+            <summary>
+            Handles the <see cref="E:Growl.CoreLibrary.DebugInfo.Write"/> event
+            </summary>
+        </member>
+        <member name="T:Growl.CoreLibrary.PathUtility">
+            <summary>
+            Provides utilities for working with file and folder paths
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.PathUtility.GetSafeFolderName(System.String)">
+            <summary>
+            Gets a folder name consisting of path-safe characters.
+            </summary>
+            <param name="name">The string to base the folder name on</param>
+            <returns><paramref name="name"/> with any invalid characters removed</returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.PathUtility.GetSafeFileName(System.String)">
+            <summary>
+            Gets a file name consisting of filename-safe characters.
+            </summary>
+            <param name="name">The string to base the filename on</param>
+            <returns><paramref name="name"/> with any invalid characters removed</returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.PathUtility.GetSafeName(System.String,System.Char[])">
+            <summary>
+            Removes any <paramref name="disallowedChars"/> in <paramref name="name"/>
+            and returns the resulting string.
+            </summary>
+            <param name="name">The string to base the safe name on</param>
+            <param name="disallowedChars">array of <see cref="T:System.Char"/>s to replace</param>
+            <returns></returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.PathUtility.EnsureDirectoryExists(System.String)">
+            <summary>
+            Ensures that the given path exists, creating it if necessary.
+            </summary>
+            <param name="path">The path to check</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.PathUtility.Combine(System.String,System.String)">
+            <summary>
+            Combines two portions of a path into one valid path.
+            </summary>
+            <param name="path1">The beginning of the path</param>
+            <param name="path2">The end of the path</param>
+            <returns>Full path</returns>
+            <remarks>
+            If <paramref name="path1"/> does not end in a trailing slash, it 
+            will be added. <paramref name="path2"/> is not modified (and thus
+            can be a filename or folder path).
+            </remarks>
+        </member>
+        <member name="T:Growl.CoreLibrary.IPUtilities">
+            <summary>
+            Provides helper methods for common IP-address related functionality.
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.IPUtilities.syncLock">
+            <summary>
+            Provides a lock while gathering network adapter information from the system.
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.IPUtilities.masks">
+            <summary>
+            Loads a list of subnet masks for each IP address on the machine (IPv4 only)
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.IPUtilities.IsInSameSubnet(System.Net.IPAddress,System.Net.IPAddress)">
+            <summary>
+            Determines whether <paramref name="otherAddress"/> is in the same subnet as <paramref name="localAddress"/>.
+            </summary>
+            <param name="localAddress">The local address to compare to.</param>
+            <param name="otherAddress">The other address being compared.</param>
+            <returns>
+            	<c>true</c> if both addresses are in the same subnet; otherwise, <c>false</c>.
+            </returns>
+            <remarks>
+            If the otherAddress is the loopback address, then this method always returns true.
+            The subnet comparison is done for IPv4 addresses. For IPv6 addresses, this method returns
+            <c>true</c> if the address is a LinkLocal or SiteLocal address.
+            </remarks>
+        </member>
+        <member name="M:Growl.CoreLibrary.IPUtilities.GetLocalSubnetMask(System.Net.IPAddress)">
+            <summary>
+            Gets the local subnet mask for the given IP address.
+            </summary>
+            <param name="ipaddress">The ipaddress.</param>
+            <returns>
+            <see cref="T:System.Net.IPAddress"/> of the subnet mask of the IP address, or <see cref="F:System.Net.IPAddress.None"/>
+            if the subnet cannot be determined.
+            </returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.IPUtilities.GetNetworkAddress(System.Net.IPAddress,System.Net.IPAddress)">
+            <summary>
+            Gets the network broadcast address based on an IP address and subnet mask.
+            </summary>
+            <param name="address">The IP address.</param>
+            <param name="subnetMask">The subnet mask.</param>
+            <returns>
+            The broadcast <see cref="T:System.Net.IPAddress"/>
+            </returns>
+        </member>
+        <member name="T:Growl.CoreLibrary.Detector">
+            <summary>
+            Detects whether or not Growl is installed on the local machine, and if so, returns information
+            about the installation.
+            </summary>
+            <remarks>
+            This class is useful in custom installation routines for displays or plug-ins that need to know 
+            where Growl is installed.
+            </remarks>
+        </member>
+        <member name="F:Growl.CoreLibrary.Detector.MUTEX_NAME">
+            <summary>
+            The name of the mutex obtained by a running instance of Growl
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Detector.REGISTRY_KEY">
+            <summary>
+            The registry key that holds installation information.
+            The key is: HKEY_CURRENT_USER\SOFTWARE\Growl
+            (We can't use HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ because of UAC restrictions)
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Detector.isInstalled">
+            <summary>
+            Indicates if Growl is installed on the machine
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Detector.installationFolder">
+            <summary>
+            The folder where Growl is installed
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Detector.displaysFolder">
+            <summary>
+            The folder where Displays are located
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Detector.assemblyVersion">
+            <summary>
+            The assembly version of Growl that is installed
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Detector.fileVersion">
+            <summary>
+            The file version of Growl that is installed
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.Detector.#ctor">
+            <summary>
+            Creates a new instance of the Detector class.
+            </summary>
+            <remarks>
+            When this class is created, it automatically tries to detect if Growl is installed
+            and if so, the other relevant installation information. After the class is created,
+            you can check the <see cref="P:Growl.CoreLibrary.Detector.IsInstalled"/> property to see if Growl is installed.
+            If Growl is not installed, the other properties will be <c>null</c>.
+            </remarks>
+        </member>
+        <member name="M:Growl.CoreLibrary.Detector.DetectIfGrowlIsRunning">
+            <summary>
+            Detects if Growl is currently running on the local machine.
+            </summary>
+            <returns>
+            <c>true</c> if Growl is running;
+            <c>false</c> if Growl is not running;
+            </returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.Detector.ShowSettingsWindow">
+            <summary>
+            Shows the settings window.
+            </summary>
+            <remarks>
+            If GfW is not running, it will be launched.
+            </remarks>
+        </member>
+        <member name="P:Growl.CoreLibrary.Detector.IsAvailable">
+            <summary>
+            Indicates if Growl is installed on the machine
+            </summary>
+            <value>
+            <c>true</c> - Growl is installed on the machine;
+            <c>false</c> - Growl is not installed on the machine
+            Note that a <c>true</c> response here simply means that Growl is installed,
+            and does not pertain to if Growl is currently running or not.
+            </value>
+        </member>
+        <member name="P:Growl.CoreLibrary.Detector.IsInstalled">
+            <summary>
+            Indicates if Growl is installed on the machine
+            </summary>
+            <value>
+            <c>true</c> - Growl is installed on the machine;
+            <c>false</c> - Growl is not installed on the machine
+            Note that a <c>true</c> response here simply means that Growl is installed,
+            and does not pertain to if Growl is currently running or not.
+            </value>
+        </member>
+        <member name="P:Growl.CoreLibrary.Detector.IsGrowlRunning">
+            <summary>
+            Detects if Growl is currently running on the local machine.
+            </summary>
+            <value>
+            <c>true</c> if Growl is running;
+            <c>false</c> if Growl is not running;
+            </value>
+        </member>
+        <member name="P:Growl.CoreLibrary.Detector.InstallationFolder">
+            <summary>
+            Returns the full path to where Growl is installed
+            </summary>
+        </member>
+        <member name="P:Growl.CoreLibrary.Detector.DisplaysFolder">
+            <summary>
+            Returns the full path to where Growl's displays are installed
+            </summary>
+            <remarks>
+            If installing a custom display module, it should be installed into a 
+            subfolder of this directory.
+            </remarks>
+        </member>
+        <member name="P:Growl.CoreLibrary.Detector.AssemblyVersion">
+            <summary>
+            The assembly version of Growl that is installed
+            </summary>
+            <value>
+            <see cref="T:System.Version"/>
+            </value>
+            <remarks>This is the Assembly version, so it should not change amongst minor or point releases.</remarks>
+        </member>
+        <member name="P:Growl.CoreLibrary.Detector.FileVersion">
+            <summary>
+            The file version of Growl that is installed
+            </summary>
+            <value>
+            <see cref="T:System.Diagnostics.FileVersionInfo"/>
+            </value>
+            <remarks>This is the File version, so it will be updated whenever the Growl .exe changes (including minor and point releases)</remarks>
+        </member>
+        <member name="T:Growl.CoreLibrary.NotificationCallbackDelegate">
+            <summary>
+            This class supports internal Growl functionality and is not intended for public use.
+            
+            Represents a delegate proxy that can communicate across AppDomain boundaries.
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.NotificationCallbackDelegate.OnNotificationCallback(Growl.CoreLibrary.NotificationCallbackEventArgs)">
+            <summary>
+            Raises the <c>NotificationCallback</c> event
+            </summary>
+            <param name="args"><see cref="T:Growl.CoreLibrary.NotificationCallbackEventArgs"/> containing data about the event</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.NotificationCallbackDelegate.InternalOnNotificationCallback(Growl.CoreLibrary.NotificationCallbackEventArgs)">
+            <summary>
+            Raises the <c>NotificationCallback</c> event
+            </summary>
+            <param name="args"><see cref="T:Growl.CoreLibrary.NotificationCallbackEventArgs"/> containing data about the event</param>
+            <remarks>
+            This is where derived classes in other AppDomains do their actual work.
+            </remarks>
+        </member>
+        <member name="M:Growl.CoreLibrary.NotificationCallbackDelegate.InitializeLifetimeService">
+            <summary>
+            Obtains a lifetime service object to control the lifetime policy for this instance.
+            </summary>
+            <returns>
+            An object of type <see cref="T:System.Runtime.Remoting.Lifetime.ILease"></see> used to control the lifetime policy for this instance. This is the current lifetime service object for this instance if one exists; otherwise, a new lifetime service object initialized to the value of the <see cref="P:System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseManagerPollTime"></see> property.
+            </returns>
+        </member>
+        <member name="T:Growl.CoreLibrary.NotificationCallbackEventHandler">
+            <summary>
+            Handles notification callback events (clicked and closed)
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="T:Growl.CoreLibrary.Resource">
+            <summary>
+            Represents a resource that can be passed in a GNTP message.
+            Resources may be either URLs or actual binary data.
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Resource.url">
+            <summary>
+            The url of the resource
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Resource.data">
+            <summary>
+            The binary data of the resource
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Resource.image">
+            <summary>
+            The actual Image, regardless of type (url or binary). This is used as sort of a cache for images that need to be downloaded.
+            </summary>
+        </member>
+        <member name="F:Growl.CoreLibrary.Resource.alreadyConvertedResource">
+            <summary>
+            Indicates if the Resource has already been converted into an Image (used to reduce repetitive conversions)
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.CoreLibrary.Resource"/> class,
+            using a URL as the resource.
+            </summary>
+            <param name="url">The fully qualified url</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.#ctor(Growl.CoreLibrary.BinaryData)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.CoreLibrary.Resource"/> class,
+            using binary data as the resource.
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.ToString">
+            <summary>
+            Returns the string representation of the resource
+            </summary>
+            <returns>
+            If this is a URL resource, return the URL.
+            If this is a binary resource, return the special data pointer.
+            </returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.GetKey">
+            <summary>
+            Gets the unique identifier of this resource
+            </summary>
+            <returns>string</returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.op_Implicit(System.String)~Growl.CoreLibrary.Resource">
+            <summary>
+            Converts the value of a string URL to a <see cref="T:Growl.CoreLibrary.Resource"/>
+            </summary>
+            <param name="val">The URL</param>
+            <returns><see cref="T:Growl.CoreLibrary.Resource"/></returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.op_Implicit(Growl.CoreLibrary.BinaryData)~Growl.CoreLibrary.Resource">
+            <summary>
+            Converts the value of a <see cref="T:Growl.CoreLibrary.BinaryData"/> object to a <see cref="T:Growl.CoreLibrary.Resource"/>
+            </summary>
+            <param name="data"><see cref="T:Growl.CoreLibrary.BinaryData"/></param>
+            <returns><see cref="T:Growl.CoreLibrary.Resource"/></returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.op_Implicit(System.Drawing.Image)~Growl.CoreLibrary.Resource">
+            <summary>
+            Converts the value of a <see cref="T:System.Drawing.Image"/> object to a <see cref="T:Growl.CoreLibrary.Resource"/>
+            </summary>
+            <param name="image"><see cref="T:System.Drawing.Image"/></param>
+            <returns><see cref="T:Growl.CoreLibrary.Resource"/></returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.op_Implicit(Growl.CoreLibrary.Resource)~System.String">
+            <summary>
+            Converts a <see cref="T:Growl.CoreLibrary.Resource"/> to a string URL
+            </summary>
+            <param name="resource"><see cref="T:Growl.CoreLibrary.Resource"/></param>
+            <returns>string URL</returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.op_Implicit(Growl.CoreLibrary.Resource)~Growl.CoreLibrary.BinaryData">
+            <summary>
+            Converts a <see cref="T:Growl.CoreLibrary.Resource"/> to a <see cref="T:Growl.CoreLibrary.BinaryData"/>
+            </summary>
+            <param name="resource"><see cref="T:Growl.CoreLibrary.Resource"/></param>
+            <returns><see cref="T:Growl.CoreLibrary.BinaryData"/></returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.Resource.op_Implicit(Growl.CoreLibrary.Resource)~System.Drawing.Image">
+            <summary>
+            Converts a <see cref="T:Growl.CoreLibrary.Resource"/> to a <see cref="T:System.Drawing.Image"/>
+            </summary>
+            <param name="resource"><see cref="T:Growl.CoreLibrary.Resource"/></param>
+            <returns><see cref="T:System.Drawing.Image"/></returns>
+        </member>
+        <member name="P:Growl.CoreLibrary.Resource.Url">
+            <summary>
+            Gets or sets the URL value of this resource
+            </summary>
+            <remarks>
+            If this resource is a binary resource, this property will return <c>null</c>.
+            </remarks>
+            <value>
+            Fully qualified URL. Example: http://www.domain.com/image.png
+            </value>
+        </member>
+        <member name="P:Growl.CoreLibrary.Resource.Data">
+            <summary>
+            Gets or sets the <see cref="T:Growl.CoreLibrary.BinaryData"/> of this resource
+            </summary>
+            <remarks>
+            If this resource is a URL resource, this property will return <c>null</c>.
+            </remarks>
+            <value>
+            <see cref="T:Growl.CoreLibrary.BinaryData"/>
+            </value>
+        </member>
+        <member name="P:Growl.CoreLibrary.Resource.IsSet">
+            <summary>
+            Indicates if this resource contains either binary data or a url (as opposed to neither)
+            </summary>
+        </member>
+        <member name="P:Growl.CoreLibrary.Resource.IsRawData">
+            <summary>
+            Indicates if this resource contains binary data (as opposed to being a URL pointer)
+            </summary>
+            <remarks>
+            If both a URL and binary data are specified for the resource, only the most recently 
+            set value will be used.
+            </remarks>
+        </member>
+        <member name="P:Growl.CoreLibrary.Resource.IsUrl">
+            <summary>
+            Indicates if this resource is a url (as opposed to being the actual binary data)
+            </summary>
+            <remarks>
+            If both a URL and binary data are specified for the resource, only the most recently 
+            set value will be used.
+            </remarks>
+        </member>
+        <member name="T:Growl.CoreLibrary.ImageConverter">
+            <summary>
+            Converts Image objects to byte arrays, as well as converting byte arrays and
+            url references into Images.
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.ImageConverter.ImageToBytes(System.Drawing.Image)">
+            <summary>
+            Converts the specified <see cref="T:System.Drawing.Image"/> into an array of bytes
+            </summary>
+            <param name="image"><see cref="T:System.Drawing.Image"/></param>
+            <returns>Array of bytes</returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.ImageConverter.ImageFromBytes(System.Byte[])">
+            <summary>
+            Converts an array of bytes into an <see cref="T:System.Drawing.Image"/>
+            </summary>
+            <param name="bytes">The array of bytes</param>
+            <returns>The resulting <see cref="T:System.Drawing.Image"/></returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.ImageConverter.ImageFromUrl(System.String)">
+            <summary>
+            Converts a url (filesystem or web) into an <see cref="T:System.Drawing.Image"/>
+            </summary>
+            <param name="url">The url path to the image</param>
+            <returns>The resulting <see cref="T:System.Drawing.Image"/></returns>
+        </member>
+        <member name="T:Growl.CoreLibrary.Base64">
+            <summary>
+            Provides convenience methods for Base64 encoding and decoding strings
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.Base64.Encode(System.String)">
+            <summary>
+            Encodes a string using Base64 format
+            </summary>
+            <param name="str">The string to encode</param>
+            <returns>Base64 encoded string</returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.Base64.Decode(System.String)">
+            <summary>
+            Decodes a Base64 encoded string
+            </summary>
+            <param name="str">The string to decode</param>
+            <returns>The decoded string</returns>
+        </member>
+        <member name="T:Growl.CoreLibrary.ByteBuilder">
+            <summary>
+            Helper class for converting basic data types to a byte array.
+            This class is similar to the <see cref="T:System.Text.StringBuilder"/> class.
+            </summary>
+        </member>
+        <member name="M:Growl.CoreLibrary.ByteBuilder.Append(System.Byte)">
+            <summary>
+            Appends a single byte to the array
+            </summary>
+            <param name="val">The byte to append</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.ByteBuilder.Append(System.Byte[])">
+            <summary>
+            Appends an array of bytes to the array
+            </summary>
+            <param name="val">The bytes to append</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.ByteBuilder.Append(System.String)">
+            <summary>
+            Appends a string as an array of UTF8-encoded bytes
+            </summary>
+            <param name="val">The string to append</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.ByteBuilder.Append(System.Int32)">
+            <summary>
+            Appends an <see cref="T:System.Int32"/> as a 4-byte array using Big Endian encoding
+            </summary>
+            <param name="val">The number to append</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.ByteBuilder.Append(System.Int16)">
+            <summary>
+            Appends a <see cref="T:System.Int16"/> as a 2-byte array using Big Endian encoding
+            </summary>
+            <param name="val">The number to append</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.ByteBuilder.Append(System.Int64)">
+            <summary>
+            Appends a <see cref="T:System.Int64"/> as a 8-byte array using Big Endian encoding
+            </summary>
+            <param name="val">The number to append</param>
+        </member>
+        <member name="M:Growl.CoreLibrary.ByteBuilder.GetBytes">
+            <summary>
+            Returns all of the bytes as an array
+            </summary>
+            <returns>Array of <see cref="T:System.Byte"/>s</returns>
+        </member>
+        <member name="M:Growl.CoreLibrary.ByteBuilder.GetStringLengthAsShort(System.String)">
+            <summary>
+            Returns the number of bytes making up the string
+            </summary>
+            <param name="val">The string whose length you want</param>
+            <returns>The number of bytes making up the string (NOT the number of characters, since some characters will require 2 bytes)</returns>
+        </member>
+    </members>
+</doc>

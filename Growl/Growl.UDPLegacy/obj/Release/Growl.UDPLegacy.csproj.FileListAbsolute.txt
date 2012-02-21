@@ -1,0 +1,9 @@
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.UDPLegacy\bin\Release\Growl.UDPLegacy.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.UDPLegacy\bin\Release\Growl.UDPLegacy.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.UDPLegacy\bin\Release\Growl.Connector.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.UDPLegacy\bin\Release\Growl.CoreLibrary.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.UDPLegacy\bin\Release\Growl.Connector.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.UDPLegacy\bin\Release\Growl.CoreLibrary.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.UDPLegacy\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.UDPLegacy\obj\Release\Growl.UDPLegacy.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.UDPLegacy\obj\Release\Growl.UDPLegacy.pdb

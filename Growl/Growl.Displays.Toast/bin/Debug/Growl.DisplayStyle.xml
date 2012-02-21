@@ -1,0 +1,2287 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Growl.DisplayStyle</name>
+    </assembly>
+    <members>
+        <member name="T:Growl.DisplayStyle.NotificationWindow">
+            <summary>
+            Provides the base class for all visual notifications
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.displayTimer">
+            <summary>
+            Controls the AutoClose behavior
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.notificationUUID">
+            <summary>
+            The UUID of the notification being shown
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.notificationID">
+            <summary>
+            The notification ID of the notification being shown
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.coalescingGroup">
+            <summary>
+            The coalescing group of the notification
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.alreadyClicked">
+            <summary>
+            Indicates if the notification has already been clicked
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.isAutoClose">
+            <summary>
+            Indicates if form is configured for AutoClose
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.sticky">
+            <summary>
+            Indicates if the notification should be sticky
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.dontCloseOnClick">
+            <summary>
+            Indicates if the form should not automatically be closed when clicked
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.fireFormClick">
+            <summary>
+            Indicates if child controls hooked up via HookupClickEvents should also fire the main form's Click event
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.allowFocus">
+            <summary>
+            Specifies if the form allows focus (normally used during any loading animation)
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.currentForegroundWindow">
+            <summary>
+            A pointer to the current foreground window
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.animator">
+            <summary>
+            The Animator associated with the form, if any
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.userClosed">
+            <summary>
+            Indicates if the user explicitly closed the notification window
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationWindow.pauseWhenMouseOver">
+            <summary>
+            Indicates if the display window should not automatically close itself if the mouse cursor is over the window
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.#ctor">
+            <summary>
+            Creates a new instance of the NotificationWindow class
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Windows.Forms.Form.Load"/>, <see cref="E:Growl.DisplayStyle.NotificationWindow.AfterLoad"/>, and <see cref="E:Growl.DisplayStyle.NotificationWindow.BeforeShown"/> events.
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.NotificationWindow_Shown(System.Object,System.EventArgs)">
+            <summary>
+            Allows the form to receive focus once it is shown
+            </summary>
+            <param name="sender">The object that fired this event</param>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.NotificationWindow_Activated(System.Object,System.EventArgs)">
+            <summary>
+            Occurs when the form is activated
+            </summary>
+            <param name="sender">The object that fired this event</param>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.NotificationWindow_FormClosed(System.Object,System.Windows.Forms.FormClosedEventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClosed"/> event
+            </summary>
+            <param name="sender">The object that fired this event</param>
+            <param name="e">An <see cref="T:System.Windows.Forms.FormClosedEventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.Show">
+            <summary>
+            Displays the notification window
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.Close(System.Boolean)">
+            <summary>
+            Closes the notification, optionally ignoring any animation behaviors
+            </summary>
+            <param name="immediate">If <c>true</c>, then the window will be closed immediately and any animation behaviors will be ignored</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.SetNotification(Growl.DisplayStyle.Notification)">
+            <summary>
+            Sets the notification information
+            </summary>
+            <param name="n">The <see cref="T:Growl.DisplayStyle.Notification"/> data to show</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.StartAutoCloseTimer">
+            <summary>
+            Starts the auto close timer.
+            </summary>
+            <remarks>
+            If no value has been set using SetAutoCloseInterval, this method does nothing.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.StopAutoCloseTimer">
+            <summary>
+            Stops the auto close timer.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.SetAutoCloseInterval(System.Int32)">
+            <summary>
+            Sets the auto close interval.
+            </summary>
+            <param name="duration">The duration.</param>
+            <remarks>
+            If the auto close timer was already started, it will be stopped when this method is called.
+            You must manually call StartAutoCloseTimer() again after calling this method.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.AutoClose(System.Int32)">
+            <summary>
+            Causes the form to automatically close after a set period of time
+            </summary>
+            <param name="duration">The amount of time (in milliseconds) to wait before automatically closing</param>
+            <remarks>
+            A value of zero will disable the AutoClose behavior.
+            This method must be called before the form is shown to work properly.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.IsMouseOver">
+            <summary>
+            Determines whether the mouse cursor is mouse over the form.
+            </summary>
+            <returns>
+            	<c>true</c> if the mouse is over the form; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.HookUpClickEvents(System.Windows.Forms.Control)">
+            <summary>
+            Causes all click events on child controls to fire the <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClicked"/> event
+            (or <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClosed"/> event if right-clicked)
+            </summary>
+            <param name="control">The parent control</param>
+            <remarks>
+            Call this method using <c>HookUpClickEvents(this)</c> from your main Form to easily
+            hook up all child controls.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.HookUpClickEvents(System.Windows.Forms.Control,System.Boolean,System.Boolean)">
+            <summary>
+            Causes all click events on child controls to fire the <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClicked"/> event
+            (or <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClosed"/> event if right-clicked)
+            </summary>
+            <param name="control">The parent control</param>
+            <param name="dontCloseOnClick">If <c>true</c> then the form will not be automatically closed when clicked</param>
+            <param name="fireFormClick">If <c>true</c> then click events on child controls will also fire the form's Click event</param>
+            <remarks>
+            Call this method using <c>HookUpClickEvents(this)</c> from your main Form to easily
+            hook up all child controls.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.c_Click(System.Object,System.EventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClicked"/> event and optionally closes the form
+            </summary>
+            <param name="sender">The object that fired this event</param>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+            <remarks>
+            If <c>fireFormClick</c> is <c>true</c> and the click came from a child control, the main form's Click event will also be fired.
+            If <c>dontCloseOnClick</c> is <c>true</c>, then the form will not be closed when clicked. Otherwise, the form will be closed at this point.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.control_MouseClick(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClicked"/> or <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClosed"/> event and optionally closes the form
+            </summary>
+            <param name="sender">The object that fired this event</param>
+            <param name="e">An <see cref="T:System.Windows.Forms.MouseEventArgs"/> object that contains the mouse event data.</param>
+            <remarks>
+            If this is a standard (left) click, the following rules apply:
+                If <c>fireFormClick</c> is <c>true</c> and the click came from a child control, the main form's Click event will also be fired.
+                If <c>dontCloseOnClick</c> is <c>true</c>, then the form will not be closed when clicked. Otherwise, the form will be closed at this point.
+            If this is a right click, the following rules apply:
+                The form is closed immediately regardless of the <c>dontCloseOnClick</c> property (consistent with using the keyboard shortcuts).
+                The main form's Click event is <c>not</c> fired even if <c>fireFormClick</c> is <c>true</c> (since the form is closing immediately anyway).
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.OnNotificationClicked(Growl.CoreLibrary.NotificationCallbackEventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClicked"/> event
+            </summary>
+            <param name="args"><see cref="T:Growl.CoreLibrary.NotificationCallbackEventArgs"/> containing data about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.OnNotificationClosed(Growl.CoreLibrary.NotificationCallbackEventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.NotificationWindow.NotificationClosed"/> event
+            </summary>
+            <param name="args"><see cref="T:Growl.CoreLibrary.NotificationCallbackEventArgs"/> containing data about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.OnAfterLoad(System.Object,System.EventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.NotificationWindow.AfterLoad"/> event
+            </summary>
+            <param name="sender">The object that fired this event</param>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.OnBeforeShown(System.Object,System.EventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.NotificationWindow.BeforeShown"/> event
+            </summary>
+            <param name="sender">The object that fired this event</param>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.OnAutoClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.NotificationWindow.AutoClosing"/> event
+            </summary>
+            <param name="sender">The object that fired this event</param>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.displayTimer_Tick(System.Object,System.EventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.NotificationWindow.AutoClosing"/> event
+            </summary>
+            <param name="sender">The object that fired this event</param>
+            <param name="e">An <see cref="T:System.EventArgs"/> object that contains the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationWindow.Dispose(System.Boolean)">
+            <summary>
+            Disposes of the resources (other than memory) used by the <see cref="T:System.Windows.Forms.Form"/>.
+            </summary>
+            <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        </member>
+        <member name="E:Growl.DisplayStyle.NotificationWindow.AfterLoad">
+            <summary>
+            Fires after <c>Load</c> but before <c>BeforeShown</c>
+            </summary>
+            <remarks>
+            This event is a good place to put any code that determines the window's initial position or size.
+            If positioning is done before Load is called, the notification could steal focus from the currently active window
+            (for example, using Screen.FromControl() to get the desktop size activates the new window, but not if
+            it is called after Load).
+            The LayoutManager's repositioning code is also run in the AfterLoad event, but after the form's event handler.
+            The LayoutManager needs to know the size and position of the window, so they must be set before this event
+            handler completes.
+            </remarks>
+        </member>
+        <member name="E:Growl.DisplayStyle.NotificationWindow.BeforeShown">
+            <summary>
+            Fires after <c>AfterLoad</c> but before <c>Shown</c>
+            </summary>
+            <remarks>
+            This event is the preferred place to hook into for any <see cref="T:Growl.DisplayStyle.IAnimator">Animator</see> classes
+            that want to animate the showing of the form. It runs after the form size and location are known
+            and any repositioning has been done (ensuring enough free space for the final form).
+            </remarks>
+        </member>
+        <member name="E:Growl.DisplayStyle.NotificationWindow.AutoClosing">
+            <summary>
+            Fires when the form is about to close due to lack of user interaction
+            </summary>
+            <remarks>
+            This event is the preferred place to hook into for any <see cref="T:Growl.DisplayStyle.IAnimator">Animator</see> classes
+            that want to animate the closing of the form. It only fires when the form is closed due to the user
+            ignoring the notification, which is usually the only time you should animate the form closing.
+            </remarks>
+        </member>
+        <member name="E:Growl.DisplayStyle.NotificationWindow.NotificationClicked">
+            <summary>
+            Fires when the notification is clicked (standard left click)
+            </summary>
+        </member>
+        <member name="E:Growl.DisplayStyle.NotificationWindow.NotificationClosed">
+            <summary>
+            Fires when the notification is closed (either explicitly by the user or automatically)
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.NotificationWindow.CreateParams">
+            <summary>
+            Overridden to set the WS_EX_TOOLWINDOW style bit so that notification windows don't
+            show up in the Alt-Tab list.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Growl.DisplayStyle.NotificationWindow.NotificationUUID">
+            <summary>
+            Gets the UUID of the notification being shown
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.NotificationWindow.NotificationID">
+            <summary>
+            Gets the notification ID of the notification being shown
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.NotificationWindow.CoalescingGroup">
+            <summary>
+            Gets the coalescing group.
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.NotificationWindow.Sticky">
+            <summary>
+            Gets or sets a value that indicates if the nofication wants to be sticky
+            </summary>
+            <remarks>
+            In the default implementation, if a notification is sets this value to <c>true</c>
+            then any AutoClose behavior will be ignored.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.NotificationWindow.Animator">
+            <summary>
+            Gets or sets the <see cref="T:Growl.DisplayStyle.IAnimator"/> associated with this form
+            </summary>
+            <value>
+            <see cref="T:Growl.DisplayStyle.IAnimator"/> or <c>null</c> if the form does not have an Animator
+            </value>
+        </member>
+        <member name="P:Growl.DisplayStyle.NotificationWindow.ShowWithoutActivation">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.NotificationWindow.PauseWhenMouseOver">
+            <summary>
+            Gets or sets a value indicating whether the notification's auto-closing behavior should
+            pause if the mouse cursor is over the display.
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.NotificationLite">
+            <summary>
+            Represents the most basic information associated with a single notification.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationLite.Name">
+            <summary>
+            The name of the notification (also known as the notification type).
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationLite.ApplicationName">
+            <summary>
+            The name of the application sending the notification.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationLite.Title">
+            <summary>
+            The title of the notification.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationLite.Description">
+            <summary>
+            The main text of the notification.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationLite.Priority">
+            <summary>
+            The priority of the notification.
+            </summary>
+            <remarks>
+             2 = Emergency
+             1 = High
+             0 = Normal
+            -1 = Moderate
+            -2 = Very Low
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationLite.Sticky">
+            <summary>
+            Indicates if the notification should be sticky or not.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationLite.Duration">
+            <summary>
+            The amount of time (in seconds) that the notification should be displayed (for visual displays).
+            Zero == default value
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.NotificationLite.OriginMachineName">
+            <summary>
+            The name of the machine where the notification originated
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.NotificationLite.Clone(Growl.DisplayStyle.NotificationLite)">
+            <summary>
+            Creates a new <see cref="T:Growl.DisplayStyle.NotificationLite"/> instance, copying the property values
+            of the <paramref name="original"/> <see cref="T:Growl.DisplayStyle.NotificationLite"/>.
+            </summary>
+            <param name="original">The <see cref="T:Growl.DisplayStyle.NotificationLite"/> to clone.</param>
+            <returns><see cref="T:Growl.DisplayStyle.NotificationLite"/></returns>
+        </member>
+        <member name="T:Growl.DisplayStyle.DefaultSettingsPanel">
+            <summary>
+            Represents the settings panel for a display with no user-configurable settings
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.SettingsPanelBase">
+            <summary>
+            Provides the base class for all settings panels for all displays.
+            Settings panels provide the user interface for the end user to set
+            and modify any user-configurable settings.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.SettingsPanelBase.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.SettingsPanelBase.display">
+            <summary>
+            Provided for the Growl application to associated display-specific information with this panel.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.SettingsPanelBase.settingsCollection">
+            <summary>
+            A collection of user-configurable setting values.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.SettingsPanelBase.haveSettingsChanged">
+            <summary>
+            Indicates if any settings have changed.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.SettingsPanelBase.sp">
+            <summary>
+            A local instance of the <see cref="T:Growl.DisplayStyle.ISettingsProvider"/> used to persist settings to disk.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.SettingsPanelBase.directory">
+            <summary>
+            The directory where the display associated with this panel is installed.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.SettingsPanelBase.settingsDirectory">
+            <summary>
+            The path where these settings are saved (user-specific)
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.#ctor">
+            <summary>
+            Creates a new instance of the class.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.SetDirectories(System.String,System.String)">
+            <summary>
+            Sets the path to the folder where the display associated with this panel is installed,
+            as well as the directory where the settings for this display are saved.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.EnsureSettingsProvider">
+            <summary>
+            Ensures that the internal <see cref="T:Growl.DisplayStyle.ISettingsProvider"/> class has been instantiated.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.GetSettings">
+            <summary>
+            Returns the list of user-configured setting values.
+            </summary>
+            <returns><see cref="T:System.Collections.Generic.Dictionary`2"/></returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.SaveSetting(System.String,System.Object)">
+            <summary>
+            Saves the setting value <paramref name="val"/> identified by the <paramref name="key"/>.
+            </summary>
+            <param name="key">The setting name.</param>
+            <param name="val">The setting value.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.SelectPanel">
+            <summary>
+            Selects the panel.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.DeselectPanel">
+            <summary>
+            Deselects the panel.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.ReadSettings">
+            <summary>
+            Reads the settings from the persisted file on disk.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.PersistSettings">
+            <summary>
+            Persists the settings to a file on disk.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.OnSettingsPanelSelected(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:SettingsPanelSelected"/> event.
+            </summary>
+            <param name="args">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.OnSettingsPanelDeselected(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:SettingsPanelDeselected"/> event.
+            </summary>
+            <param name="args">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.OnSettingsChanged(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:SettingsChanged"/> event.
+            </summary>
+            <param name="args">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.SettingsPanelBase_Load(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Load event of the SettingsPanelBase control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.SettingsPanelBase_SettingsPanelSelected(System.Object,System.EventArgs)">
+            <summary>
+            Handles the SettingsPanelSelected event of the SettingsPanelBase control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.SettingsPanelBase_SettingsPanelDeselected(System.Object,System.EventArgs)">
+            <summary>
+            Handles the SettingsPanelDeselected event of the SettingsPanelBase control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingsPanelBase.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="E:Growl.DisplayStyle.SettingsPanelBase.SettingsPanelSelected">
+            <summary>
+            Fired when the panel is selected in the Growl application.
+            </summary>
+        </member>
+        <member name="E:Growl.DisplayStyle.SettingsPanelBase.SettingsPanelDeselected">
+            <summary>
+            Fired when the panel is deselected in the Growl application.
+            </summary>
+        </member>
+        <member name="E:Growl.DisplayStyle.SettingsPanelBase.SettingsChanged">
+            <summary>
+            Fired whenever a user-configurable setting is changed.
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.SettingsPanelBase.Display">
+            <summary>
+            Provided for the Growl application to associated display-specific information with this panel.
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.SettingsPanelBase.SettingsProvider">
+            <summary>
+            Gets or sets the <see cref="T:Growl.DisplayStyle.ISettingsProvider"/> used to manage the display' settings.
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.SettingsPanelBase.Directory">
+            <summary>
+            The path to the directory where this style is installed.
+            </summary>
+            <remarks>
+            This property is set via the SetDirectory method when the display is loaded.
+            It will be set before the settings are loaded.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.DefaultSettingsPanel.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.DefaultSettingsPanel.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.DefaultSettingsPanel.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.DefaultSettingsPanel.#ctor">
+            <summary>
+            Creates a new instance of the class.
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.IDisplay">
+            <summary>
+            Represents the interface required when creating a new DisplayStyle.
+            </summary>
+            <remarks>
+            Most developers should simply inherit from the <see cref="T:Growl.DisplayStyle.Display"/> or
+            <see cref="T:Growl.DisplayStyle.VisualDisplay"/> classes, which provide implementations for most 
+            common properties. If you choose to implement <see cref="T:Growl.DisplayStyle.IDisplay"/> directly, 
+            note that your display class must still inherit from <see cref="T:System.MarshalByRefObject"/>.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.IDisplay.Load">
+            <summary>
+            Called when the display is first loaded, generally used for any initialization-type actions.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.IDisplay.Unload">
+            <summary>
+            Called when the display is unloaded, generally used for any last-minute cleanup.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.IDisplay.ProcessNotification(Growl.DisplayStyle.Notification,System.String)">
+            <summary>
+            Handles displaying the notification. Called each time a notification is received that is to 
+            be handled by this display.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.DisplayStyle.Notification"/> information</param>
+            <param name="displayName">A string identifying the display name (used mainly by displays that provide multiple end-user selectable display styles)</param>
+            <returns><c>true</c> if the handling of the message is 100% complete when this method finishes;<c>false</c> if the display may send a callback later (if you are creating a visual display that can be clicked, you should return false)</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.IDisplay.GetListOfAvailableDisplays">
+            <summary>
+            Returns a list of end-user selectable display names that this display supports.
+            </summary>
+            <remarks>
+            Most displays will only support a single end-user selectable display, so this method can usually 
+            just return:  string[] {this.Name};
+            For developers who wish to support multiple displays with a single DisplayStyle engine, this
+            method can return a list of display names that will appear as options for the user. When 
+            <see cref="M:Growl.DisplayStyle.IDisplay.ProcessNotification(Growl.DisplayStyle.Notification,System.String)"/> is called, the individual display name will be passed
+            along with the notification.
+            </remarks>
+            <returns>Array of display names</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.IDisplay.CloseAllOpenNotifications">
+            <summary>
+            When implemented in a derived class, closes any open notifications.
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.IDisplay.CloseLastNotification">
+            <summary>
+            When implemented in a derived class, closes the most-recently opened notification.
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.IDisplay.Refresh">
+            <summary>
+            Forces any on-screen notifications to redraw themselves.
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.IDisplay.Name">
+            <summary>
+            The name of the display as shown to the user in Growl's preference settings.
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.IDisplay.Description">
+            <summary>
+            A short description of what the display is or does.
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.IDisplay.Author">
+            <summary>
+            The name of the author of the display.
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.IDisplay.Website">
+            <summary>
+            The website of the author or display
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.IDisplay.Version">
+            <summary>
+            The version of the display.
+            </summary>
+            <remarks>
+            Display developers should take care to make sure to update the version information whenever
+            the display code is updated.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.IDisplay.SettingsPanel">
+            <summary>
+            The <see cref="T:Growl.DisplayStyle.SettingsPanelBase"/> used to allow user's to set display-specific settings.
+            </summary>
+            <remarks>
+            If your display has no user-configurable settings, you may use the <see cref="T:Growl.DisplayStyle.DefaultSettingsPanel"/>
+            class.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.IDisplay.GrowlApplicationPath">
+            <summary>
+            The full path to the installation directory of the Growl program.
+            </summary>
+            <remarks>
+            This property is set by Growl when the display is loaded. Developers can use the information if
+            required, but should not otherwise change the behavior of this property.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.IDisplay.DisplayStylePath">
+            <summary>
+            The full path to the installation directory of this DisplayStyle.
+            </summary>
+            <remarks>
+            This property is set by Growl when the display is loaded. Developers can use the information if
+            required, but should not otherwise change the behavior of this property.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.IDisplay.SettingsCollection">
+            <summary>
+            Stores a collection of user-configurable settings that can be modified by the associated
+            <see cref="P:Growl.DisplayStyle.IDisplay.SettingsPanel"/>.
+            </summary>
+            <remarks>
+            Although the dictionary allows storing any object, all settings must be serializable
+            (either marked with the <see cref="T:System.SerializableAttribute"/> or implementing <see cref="T:System.Runtime.Serialization.ISerializable"/>).
+            </remarks>
+        </member>
+        <member name="E:Growl.DisplayStyle.IDisplay.NotificationClicked">
+            <summary>
+            Fired when the notification is clicked (standard left clicks only)
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="E:Growl.DisplayStyle.IDisplay.NotificationClosed">
+            <summary>
+            Fired when the notification is closed (either explicitly by the user, or
+            automatically after a period of time, etc)
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            In the current version of Growl, a right mouse click explicitly closes 
+            the notification. In this instance, the NotificationClosed event is fired,
+            not the NotificationClicked event.
+            </remarks>
+        </member>
+        <member name="T:Growl.DisplayStyle.Utility">
+            <summary>
+            Provides common routines used when drawing notification windows
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Utility.CreateRoundedRegion(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a rounded region.
+            </summary>
+            <param name="top">The top.</param>
+            <param name="left">The left.</param>
+            <param name="width">The width.</param>
+            <param name="height">The height.</param>
+            <param name="xradius">The xradius.</param>
+            <param name="yradius">The yradius.</param>
+            <returns><see cref="T:System.Drawing.Region"/></returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.Utility.UpdateLayeredWindow(System.Drawing.Bitmap,System.Windows.Forms.Form,System.Int32,System.Int32)">
+            <summary>
+            Updates the layered window.
+            </summary>
+            <param name="b">The image to uses as the window background</param>
+            <param name="form">The form containing any controls to draw</param>
+            <param name="x">The x position</param>
+            <param name="y">The y position</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.Utility.UpdateLayeredWindow(System.Drawing.Bitmap,System.Windows.Forms.Form,System.Int32,System.Int32,System.Byte)">
+            <summary>
+            Updates the layered window.
+            </summary>
+            <param name="b">The image to uses as the window background</param>
+            <param name="form">The form containing any controls to draw</param>
+            <param name="x">The x position</param>
+            <param name="y">The y position</param>
+            <param name="opacity">The opacity</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.Utility.DrawControlToBitmap(System.Windows.Forms.Control,System.Drawing.Bitmap,System.Drawing.Rectangle)">
+            <summary>
+            Draws the control to bitmap.
+            </summary>
+            <param name="control">The control to draw</param>
+            <param name="bitmap">The bitmap to draw on</param>
+            <param name="targetBounds">The bounds of the area to draw on</param>
+        </member>
+        <member name="T:Growl.DisplayStyle.MultiMonitorVisualDisplay">
+            <summary>
+            Provides the base implementation for on-screen (visual) displays that provide multiple-monitor support.
+            </summary>
+            <remarks>
+            Most developers should inherit their displays from this class if they are
+            going to show a notification on-screen and want to support multiple monitors.
+            </remarks>
+        </member>
+        <member name="T:Growl.DisplayStyle.VisualDisplay">
+            <summary>
+            Provides the base implementation for on-screen (visual) displays.
+            </summary>
+            <remarks>
+            Most developers should inherit their displays from this class if they are
+            going to show a notification on-screen, as it provides useful implementation 
+            of most common properties and methods. If your display is non-visual (email, 
+            text-to-speech, etc), you should choose the <see cref="T:Growl.DisplayStyle.Display"/> class instead.
+            </remarks>
+        </member>
+        <member name="T:Growl.DisplayStyle.Display">
+            <summary>
+            Provides the base implementation of the <see cref="T:Growl.DisplayStyle.IDisplay"/> interface.
+            </summary>
+            <remarks>
+            If you are developing a visual display, you should inherit from <see cref="T:Growl.DisplayStyle.VisualDisplay"/>
+            as it provides implementations for common visual display tasks. If you are creating a non-visual
+            display (email, text-to-speech, etc), you should inherit from this class. 
+            If you choose not to inherit from this class and instead to implement <see cref="T:Growl.DisplayStyle.IDisplay"/> 
+            directly, note that your display class must still inherit from <see cref="T:System.MarshalByRefObject"/>.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.Display.growlApplicationPath">
+            <summary>
+            The full path to the installation directory of Growl
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Display.displayStylePath">
+            <summary>
+            The full path to the installation directory of this display
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Display.settingsPanel">
+            <summary>
+            The <see cref="T:Growl.DisplayStyle.SettingsPanelBase"/> used to allow user's to set display-specific settings.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Display.settingsCollection">
+            <summary>
+            A collection of user-configurable settings that can be modified by the associated <see cref="T:Growl.DisplayStyle.SettingsPanelBase"/>.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.#ctor">
+            <summary>
+            Creates a new instance of the class.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.Load">
+            <summary>
+            Called when the display is first loaded, generally used for any initialization-type actions.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.Unload">
+            <summary>
+            Called when the display is unloaded, generally used for any last-minute cleanup.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.ProcessNotification(Growl.DisplayStyle.Notification,System.String)">
+            <summary>
+            Handles displaying the notification. Called each time a notification is received that is to
+            be handled by this display.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.DisplayStyle.Notification"/> information</param>
+            <param name="displayName">A string identifying the display name (used mainly by displays that provide multiple end-user selectable display styles)</param>
+            <returns><c>true</c> if the handling of the message is 100% complete when this method finishes;<c>false</c> if the display may send a callback later (if you are creating a visual display that can be clicked, you should return false)</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.HandleNotification(Growl.DisplayStyle.Notification,System.String)">
+            <summary>
+            Handles displaying the notification. Called each time a notification is received that is to
+            be handled by this display.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.DisplayStyle.Notification"/> information</param>
+            <param name="displayName">A string identifying the display name (used mainly by displays that provide multiple end-user selectable display styles)</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.GetListOfAvailableDisplays">
+            <summary>
+            Returns a list of end-user selectable display names that this display supports.
+            </summary>
+            <returns>Array of display names</returns>
+            <remarks>
+            Most displays will only support a single end-user selectable display, so this method can usually
+            just return:  string[] {this.Name};
+            For developers who wish to support multiple displays with a single DisplayStyle engine, this
+            method can return a list of display names that will appear as options for the user. When
+            <see cref="M:Growl.DisplayStyle.Display.HandleNotification(Growl.DisplayStyle.Notification,System.String)"/> is called, the individual display name will be passed
+            along with the notification.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.CloseAllOpenNotifications">
+            <summary>
+            When implemented in a derived class, closes any open notifications.
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.CloseLastNotification">
+            <summary>
+            When implemented in a derived class, closes the most-recently shown notification.
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.Refresh">
+            <summary>
+            Forces any on-screen notifications to redraw themselves.
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.Display.InitializeLifetimeService">
+            <summary>
+            Obtains a lifetime service object to control the lifetime policy for this instance.
+            </summary>
+            <returns>
+            An object of type <see cref="T:System.Runtime.Remoting.Lifetime.ILease"></see> used to control the lifetime policy for this instance. This is the current lifetime service object for this instance if one exists; otherwise, a new lifetime service object initialized to the value of the <see cref="P:System.Runtime.Remoting.Lifetime.LifetimeServices.LeaseManagerPollTime"></see> property.
+            </returns>
+            <remarks>
+            Developers who do not inherit from this class and implement <see cref="T:Growl.DisplayStyle.IDisplay"/> directly must take care to manage
+            their leases properly. If a lease expires while Growl is still running and the display is later accessed, a
+            RemotingException will occur.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.Display.Name">
+            <summary>
+            The name of the display as shown to the user in Growl's preference settings.
+            </summary>
+            <value>Ex: Mailman</value>
+        </member>
+        <member name="P:Growl.DisplayStyle.Display.Description">
+            <summary>
+            A short description of what the display is or does.
+            </summary>
+            <value>Ex: Mailman delivers Growl notifications via email</value>
+        </member>
+        <member name="P:Growl.DisplayStyle.Display.Author">
+            <summary>
+            The name of the author of the display.
+            </summary>
+            <value>Ex: Joe Schmoe</value>
+        </member>
+        <member name="P:Growl.DisplayStyle.Display.Website">
+            <summary>
+            The website of the author or display.
+            </summary>
+            <value>Ex: http://www.website.com</value>
+        </member>
+        <member name="P:Growl.DisplayStyle.Display.Version">
+            <summary>
+            The version of the display.
+            </summary>
+            <value>Ex: 2.0.1</value>
+        </member>
+        <member name="P:Growl.DisplayStyle.Display.SettingsPanel">
+            <summary>
+            The <see cref="T:Growl.DisplayStyle.SettingsPanelBase"/> used to allow user's to set display-specific settings.
+            </summary>
+            <value></value>
+            <remarks>
+            If your display has no user-configurable settings, you may use the <see cref="T:Growl.DisplayStyle.DefaultSettingsPanel"/>
+            class.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.Display.GrowlApplicationPath">
+            <summary>
+            The full path to the installation directory of the Growl program.
+            </summary>
+            <value></value>
+            <remarks>
+            This property is set by Growl when the display is loaded. Developers can use the information if
+            required, but should not otherwise change the behavior of this property.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.Display.DisplayStylePath">
+            <summary>
+            The full path to the installation directory of this DisplayStyle.
+            </summary>
+            <value></value>
+            <remarks>
+            This property is set by Growl when the display is loaded. Developers can use the information if
+            required, but should not otherwise change the behavior of this property.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.Display.SettingsCollection">
+            <summary>
+            Stores a collection of user-configurable settings that can be modified by the associated
+            <see cref="P:Growl.DisplayStyle.Display.SettingsPanel"/>.
+            </summary>
+            <value></value>
+            <remarks>
+            Although the dictionary allows storing any object, all settings must be serializable
+            (either marked with the <see cref="T:System.SerializableAttribute"/> or implementing <see cref="T:System.Runtime.Serialization.ISerializable"/>).
+            </remarks>
+        </member>
+        <member name="E:Growl.DisplayStyle.Display.NotificationClicked">
+            <summary>
+            Fired when the notification is clicked (standard left clicks only)
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="E:Growl.DisplayStyle.Display.NotificationClosed">
+            <summary>
+            Fired when the notification is closed (either explicitly by the user, or
+            automatically after a period of time, etc)
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            In the current version of Growl, a right mouse click explicitly closes 
+            the notification. In this instance, the NotificationClosed event is fired,
+            not the NotificationClicked event.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.VisualDisplay.activeWindows">
+            <summary>
+            Contains a list of currently open (visible) windows associated with this display
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.VisualDisplay.suppressLayout">
+            <summary>
+            Indicates if any calls to an associated <see cref="T:Growl.DisplayStyle.LayoutManager"/> should be suppressed
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.Show(Growl.DisplayStyle.NotificationWindow)">
+            <summary>
+            Shows the notification window.
+            </summary>
+            <param name="win">The <see cref="T:Growl.DisplayStyle.NotificationWindow"/> to show</param>
+            <remarks>
+            Classes inheriting from <see cref="T:Growl.DisplayStyle.VisualDisplay"/> should always use this
+            method to show their notifications rather than calling <c>NotificationWindow.Show</c>
+            directly because this method hooks up some necessary events to handle click callbacks,
+            layout management, etc.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.GetLayoutManager(Growl.DisplayStyle.NotificationWindow)">
+            <summary>
+            Returns a reference to the <see cref="T:Growl.DisplayStyle.LayoutManager"/> used to control
+            window layout.
+            </summary>
+            <param name="win">The current <see cref="T:Growl.DisplayStyle.NotificationWindow"/> being shown or hidden</param>
+            <returns>
+            <see cref="T:Growl.DisplayStyle.LayoutManager"/> if the display is using the built-in layout management;
+            <c>null</c> if the display is handling its own layout management
+            </returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.win_NotificationClicked(Growl.CoreLibrary.NotificationCallbackEventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.VisualDisplay.NotificationClicked"/> event
+            </summary>
+            <param name="args"><see cref="T:Growl.CoreLibrary.NotificationCallbackEventArgs"/> containing information about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.win_NotificationClosed(Growl.CoreLibrary.NotificationCallbackEventArgs)">
+            <summary>
+            Fires the <see cref="E:Growl.DisplayStyle.VisualDisplay.NotificationClosed"/> event
+            </summary>
+            <param name="args"><see cref="T:Growl.CoreLibrary.NotificationCallbackEventArgs"/> containing information about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.win_AfterLoad(System.Object,System.EventArgs)">
+            <summary>
+            Makes a call to the associated LayoutManager when the notification is shown
+            </summary>
+            <param name="sender">The object that fired the event</param>
+            <param name="e">Information about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.win_FormClosed(System.Object,System.Windows.Forms.FormClosedEventArgs)">
+            <summary>
+            Makes a call to the associated LayoutManager when the notification is closed
+            </summary>
+            <param name="sender">The object that fired the event</param>
+            <param name="e">Information about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.CloseAllOpenNotifications">
+            <summary>
+            Closes any open notifications associated with this display
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.CloseLastNotification">
+            <summary>
+            Closes the most-recently shown notification.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.ProcessNotification(Growl.DisplayStyle.Notification,System.String)">
+            <summary>
+            Handles displaying the notification. Called each time a notification is received that is to
+            be handled by this display.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.DisplayStyle.Notification"/> information</param>
+            <param name="displayName">A string identifying the display name (used mainly by displays that provide multiple end-user selectable display styles)</param>
+            <returns>Should almost always return <c>false</c>, which indicates that the notification is still 'open' (visible) and may callback later</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.VisualDisplay.Refresh">
+            <summary>
+            Forces any on-screen notifications to redraw themselves.
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.VisualDisplay.ActiveWindows">
+            <summary>
+            The list of all open notifications associated with this display
+            </summary>
+            <value><see cref="T:System.Collections.Generic.List`1"/></value>
+        </member>
+        <member name="E:Growl.DisplayStyle.VisualDisplay.NotificationClicked">
+            <summary>
+            Fired when the notification is clicked (standard left clicks only)
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            </remarks>
+        </member>
+        <member name="E:Growl.DisplayStyle.VisualDisplay.NotificationClosed">
+            <summary>
+            Fired when the notification is closed (either explicitly by the user, or
+            automatically after a period of time, etc)
+            </summary>
+            <remarks>
+            This is generally only applicable to displays that show a visual element,
+            but all displays must implement the method nonetheless.
+            In the current version of Growl, a right mouse click explicitly closes 
+            the notification. In this instance, the NotificationClosed event is fired,
+            not the NotificationClicked event.
+            </remarks>
+        </member>
+        <member name="T:Growl.DisplayStyle.IDisplayMultipleMonitor">
+            <summary>
+            Represents the interface required for displays that want to provide 
+            muliple monitor support in GfW.
+            </summary>
+            <remarks>
+            Most developers should simply inherit from the <see cref="T:Growl.DisplayStyle.VisualDisplay"/> class, 
+            which provide implementation for this interface.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.IDisplayMultipleMonitor.SetPreferredDisplay(System.String)">
+            <summary>
+            Sets the preferred display.
+            </summary>
+            <param name="deviceName">Name of the device.</param>
+            <remarks>
+            This method will be called by GfW when the user selects the monitor that they
+            prefer the notification to be displayed on (and also again each time GfW starts up).
+            
+            When a notification is later passed to the display, the display can use the
+            <paramref name="deviceName"/> to determine which monitor to render itself on.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.MultiMonitorVisualDisplay.preferredDisplayDeviceName">
+            <summary>
+            The device name for the preferred monitor to display this type of notifications on
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.MultiMonitorVisualDisplay.GetPreferredDisplay">
+            <summary>
+            Gets the preferred display.
+            </summary>
+            <returns>The <see cref="T:System.Windows.Forms.Screen"/> to show the display on.</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.MultiMonitorVisualDisplay.SetPreferredDisplay(System.String)">
+            <summary>
+            Sets the preferred display.
+            </summary>
+            <param name="deviceName">Name of the device.</param>
+            <remarks>
+            This method will be called by GfW when the user selects the monitor that they
+            prefer the notification to be displayed on.
+            When a notification is later passed to the display, the display can use the
+            <paramref name="deviceName"/> to determine which monitor to render itself on.
+            </remarks>
+        </member>
+        <member name="T:Growl.DisplayStyle.ExpandingLabel">
+            <summary> 
+            A label that supports vertical auto resizing. 
+            </summary> 
+        </member>
+        <member name="M:Growl.DisplayStyle.ExpandingLabel.#ctor">
+            <summary>
+            Creates a new instance of this class
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.ExpandingLabel.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Fires the Paint event
+            </summary>
+            <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="F:Growl.DisplayStyle.ExpandingLabel.bChanging">
+            <summary>
+            Indicates if the label is in the process of changing its height.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.ExpandingLabel.MeasureStringExtended(System.String,System.Drawing.Font,System.Int32,System.Int32)">
+            <summary>
+            Returns the <see cref="T:System.Drawing.Size"/> of a rectangle required to render the given text
+            </summary>
+            <param name="text">The text to measure</param>
+            <param name="font">The <see cref="T:System.Drawing.Font"/> to use</param>
+            <param name="desWidth">The desired with of the label</param>
+            <param name="minHeight">The minimum height of the label (if the text does not expand beyond it)</param>
+            <returns><see cref="T:System.Drawing.Size"/> of the rectangle required to render the text</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.ExpandingLabel.InitializeComponent">
+            <summary>
+            Performs an initialization of the control
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.ExpandingLabel.OnTextChanged(System.EventArgs)">
+            <summary>
+            Raises the <c>TextChanged</c> event
+            </summary>
+            <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data</param>
+        </member>
+        <member name="P:Growl.DisplayStyle.ExpandingLabel.TextRenderingHint">
+            <summary>
+            Gets or sets the text rendering hint.
+            </summary>
+            <value><see cref="T:System.Drawing.Text.TextRenderingHint"/></value>
+        </member>
+        <member name="E:Growl.DisplayStyle.ExpandingLabel.LabelHeightChanged">
+            <summary>
+            Fired when an expanding label's height is automatically changed (increased or decreased)
+            to fit its contents
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.ExpandingLabel.LabelHeightChangedEventHandler">
+            <summary>
+            Handles the <c>LabelHeightChange</c> event
+            </summary>
+            <param name="args">The <see cref="T:Growl.DisplayStyle.ExpandingLabel.LabelHeightChangedEventArgs"/> associated with the event</param>
+        </member>
+        <member name="T:Growl.DisplayStyle.ExpandingLabel.LabelHeightChangedEventArgs">
+            <summary>
+            Provides data for the <see cref="E:Growl.DisplayStyle.ExpandingLabel.LabelHeightChanged"/> event
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.ExpandingLabel.LabelHeightChangedEventArgs.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new instance of this class
+            </summary>
+            <param name="originalHeight">The original height of the label</param>
+            <param name="newHeight">The new height of the label</param>
+        </member>
+        <member name="F:Growl.DisplayStyle.ExpandingLabel.LabelHeightChangedEventArgs.OriginalHeight">
+            <summary>
+            The starting height of the label
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.ExpandingLabel.LabelHeightChangedEventArgs.NewHeight">
+            <summary>
+            The new height of the label
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.ExpandingLabel.LabelHeightChangedEventArgs.HeightChange">
+            <summary>
+            The height changed (positive or negative)
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.ImageData">
+            <summary>
+            Contains information about a notification image
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.ImageData.url">
+            <summary>
+            The file path or url of the image
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.ImageData.data">
+            <summary>
+            The binary data of the resource
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.ImageData.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.DisplayStyle.ImageData"/> class,
+            using a URL as the resource.
+            </summary>
+            <param name="url">The fully qualified url</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.ImageData.#ctor(System.Byte[])">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.DisplayStyle.ImageData"/> class,
+            using binary data as the resource.
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:Growl.DisplayStyle.ImageData.ToString">
+            <summary>
+            Returns the string representation of the resource
+            </summary>
+            <returns>
+            If this is a URL resource, return the URL.
+            If this is a binary resource, returns "{data}".
+            </returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.ImageData.op_Implicit(System.String)~Growl.DisplayStyle.ImageData">
+            <summary>
+            Converts the value of a string URL to a <see cref="T:Growl.DisplayStyle.ImageData"/>
+            </summary>
+            <param name="val">The URL</param>
+            <returns><see cref="T:Growl.DisplayStyle.ImageData"/></returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.ImageData.op_Implicit(System.Byte[])~Growl.DisplayStyle.ImageData">
+            <summary>
+            Converts the value of a byte array to a <see cref="T:Growl.DisplayStyle.ImageData"/>
+            </summary>
+            <param name="data"><see cref="T:System.Byte"/> array</param>
+            <returns><see cref="T:Growl.DisplayStyle.ImageData"/></returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.ImageData.op_Implicit(Growl.DisplayStyle.ImageData)~System.String">
+            <summary>
+            Converts a <see cref="T:Growl.DisplayStyle.ImageData"/> to a string URL
+            </summary>
+            <param name="imageData"><see cref="T:Growl.DisplayStyle.ImageData"/></param>
+            <returns>string URL</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.ImageData.op_Implicit(Growl.DisplayStyle.ImageData)~System.Byte[]">
+            <summary>
+            Converts a <see cref="T:Growl.DisplayStyle.ImageData"/> to an array of bytes
+            </summary>
+            <param name="imageData"><see cref="T:Growl.DisplayStyle.ImageData"/></param>
+            <returns><see cref="T:System.Byte"/> array</returns>
+        </member>
+        <member name="P:Growl.DisplayStyle.ImageData.Url">
+            <summary>
+            Gets or sets the URL value of this resource
+            </summary>
+            <remarks>
+            If this resource is a binary resource, this property will return <c>null</c>.
+            </remarks>
+            <value>
+            Fully qualified URL. Example: http://www.domain.com/image.png
+            </value>
+        </member>
+        <member name="P:Growl.DisplayStyle.ImageData.Data">
+            <summary>
+            Gets or sets the binary data of this resource
+            </summary>
+            <remarks>
+            If this resource is a URL resource, this property will return <c>null</c>.
+            </remarks>
+            <value>
+            <see cref="T:System.Byte"/> array
+            </value>
+        </member>
+        <member name="P:Growl.DisplayStyle.ImageData.IsSet">
+            <summary>
+            Indicates if this resource contains either binary data or a url (as opposed to neither)
+            </summary>
+        </member>
+        <member name="P:Growl.DisplayStyle.ImageData.IsRawData">
+            <summary>
+            Indicates if this resource contains binary data (as opposed to being a URL pointer)
+            </summary>
+            <remarks>
+            If both a URL and binary data are specified for the resource, only the most recently 
+            set value will be used.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.ImageData.IsUrl">
+            <summary>
+            Indicates if this resource is a url (as opposed to being the actual binary data)
+            </summary>
+            <remarks>
+            If both a URL and binary data are specified for the resource, only the most recently 
+            set value will be used.
+            </remarks>
+        </member>
+        <member name="T:Growl.DisplayStyle.ISettingsProvider">
+            <summary>
+            Provides the interface used by displays to manage and persist their settings.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.ISettingsProvider.Save(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Saves the settings
+            </summary>
+            <param name="settings">The settings to save</param>
+            <remarks>
+            All settings contained in the settings dictionary must be of a serializable type.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.ISettingsProvider.Load">
+            <summary>
+            Loads the saved settings
+            </summary>
+            <returns>Dictionary of settings</returns>
+        </member>
+        <member name="T:Growl.DisplayStyle.SettingSaver">
+            <summary>
+            Provides a means to persist user settings to disk by serializing the object
+            to a file.
+            </summary>
+            <remarks>
+            This class is provided as a convenience to display developers who inherit from
+            the <see cref="T:Growl.DisplayStyle.Display"/> class. If you would like to persist your display settings
+            in another manner, feel free to do so.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.SettingSaver.path">
+            <summary>
+            The path to the file containing the serialized data.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingSaver.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the class.
+            </summary>
+            <param name="filePath">The path to the folder where the file will be saved.</param>
+            <param name="fileName">The name of the file</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingSaver.Save(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Serializes all of the data in <paramref name="settings"/> and writes the data to the file
+            specified in the <see cref="P:Growl.DisplayStyle.SettingSaver.Path"/>.
+            </summary>
+            <param name="settings">The collection of settings to serialize.</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingSaver.Load">
+            <summary>
+            Deserializes the data from the file on disk and returns the reconstituted object.
+            </summary>
+            <returns>Dictionary containing the original settings that were persisted</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingSaver.SerializeObject(System.Object)">
+            <summary>
+            Serializes an object into a string
+            </summary>
+            <param name="obj">The object to serialize</param>
+            <returns>string representation of the object</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.SettingSaver.DeserializeObject(System.String)">
+            <summary>
+            Deserializes a string representation of an object back into an
+            actual object
+            </summary>
+            <param name="serializedObject">string representation of the object</param>
+            <returns>deserialized object</returns>
+        </member>
+        <member name="P:Growl.DisplayStyle.SettingSaver.Path">
+            <summary>
+            The path to the file containing the serialized data.
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.Win32">
+            <summary>
+            Provides access to structs, constants, and native methods used when calling into the Win32 API
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.Notification">
+            <summary>
+            Represents all of the information associated with a single notification.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Notification.customTextAttributes">
+            <summary>
+            Contains any custom text attributes associated with the notification
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Notification.customBinaryAttributes">
+            <summary>
+            Contains any custom binary attributes associated with the notification
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Notification.UUID">
+            <summary>
+            The globally unique ID of this notification
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Notification.NotificationID">
+            <summary>
+            The notification ID (application-specific/application-provided)
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Notification.CoalescingID">
+            <summary>
+            The 'replacement group' id for a notification.
+            In other words, if a subsequent notification is sent from the same app with the same coalescing ID,
+            it should replace any existing notification from the same app with the same coalescing ID.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Notification.Image">
+            <summary>
+            The Image associated with the notification
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Notification.AddCustomTextAttributes(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Adds custom text attributes to the notification. These attributes will be available
+            to any displays that handle the notification.
+            </summary>
+            <param name="attributes"><see cref="T:System.Collections.Generic.Dictionary`2"/></param>
+        </member>
+        <member name="M:Growl.DisplayStyle.Notification.AddCustomBinaryAttributes(System.Collections.Generic.Dictionary{System.String,Growl.CoreLibrary.Resource})">
+            <summary>
+            Adds custom binary attributes to the notification. These attributes will be available
+            to any displays that handle the notification.
+            </summary>
+            <param name="attributes"><see cref="T:System.Collections.Generic.Dictionary`2"/></param>
+        </member>
+        <member name="P:Growl.DisplayStyle.Notification.CustomTextAttributes">
+            <summary>
+            Gets a collection of custom text attributes associated with this object
+            </summary>
+            <remarks>
+            Each custom text attribute is equivalent to a custom "X-" header
+            </remarks>
+            <value>
+            <see cref="T:System.Collections.Generic.Dictionary`2"/>
+            </value>
+        </member>
+        <member name="P:Growl.DisplayStyle.Notification.CustomBinaryAttributes">
+            <summary>
+            Gets a collection of custom binary attributes associated with this object
+            </summary>
+            <remarks>
+            Each custom binary attribute is equivalent to a custom "X-" header with a 
+            "x-growl-resource://" value, as well as the necessary resource headers
+            (Identifier, Length, and binary bytes)
+            </remarks>
+            <value>
+            <see cref="T:System.Collections.Generic.Dictionary`2"/>
+            </value>
+        </member>
+        <member name="P:Growl.DisplayStyle.Notification.CoalescingGroup">
+            <summary>
+            Gets the coalescing group of the notification.
+            </summary>
+            <value>The coalescing group.</value>
+            <remarks>
+            Notifications from the same application with the same CoalescingID will be in the same
+            coalescing group. If no CoalescingID is supplied, CoalescingGroup will return an empty string.
+            </remarks>
+        </member>
+        <member name="T:Growl.DisplayStyle.AnimatorBase">
+            <summary>
+            Base implementation for animators used in animated displays
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.IAnimator">
+            <summary>
+            Defines properties for classes that perform window animation
+            </summary>
+            <remarks>
+            Normally, implementors should hook into the <see cref="E:Growl.DisplayStyle.NotificationWindow.BeforeShown"/>
+            and <see cref="E:Growl.DisplayStyle.NotificationWindow.AutoClosing"/> events for their animation
+            routines.
+            <c>BeforeShown</c> is preferred because it is after <c>Load</c> and <c>AfterLoad</c>, 
+            which are recommended places to determine the form's intial size and position, both 
+            of which are probably necessary for animation. It is also after an LayoutManager 
+            repositioning, which is useful if your animation will be resizing the form into view
+            (by ensuring there will be enough free space for the final form size).
+            <c>AutoClosing</c> is preferred because it happens before <c>FormClosing</c>, allowing 
+            implementors the ability to control when the form is actually closed (usually after
+            the animation). <c>AutoClosing</c> is also only fired when the notification has been
+            ignored by the user, which is an appropriate time to animate away. If the form is 
+            actively closed by the user via click, the window should close immediately in most
+            cases and skip any animation. If the notification is closed via keyboard shortcut
+            (<c>CloseAllOpenNotifications</c> or <c>CloseLastNotification</c>), the windows
+            should be closed immediately in all cases and not animated away.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.IAnimator.CancelClosing">
+            <summary>
+            Cancels the closing (and thus, animation) of a display.
+            </summary>
+            <remarks>
+            If the display is not yet closing, this has no effect.
+            This only cancels the current animation - if the display is closed again later, a new
+            animation may be started.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.IAnimator.Disabled">
+            <summary>
+            Indicates if the animator is disabled (and thus should not peform any animation)
+            </summary>
+            <remarks>
+            <see cref="T:Growl.DisplayStyle.IAnimator"/> implementors should take care to check this property before
+            performing any animations. Growl's visual notifications can be animated when shown, or
+            when automatically closing after a time-out, but they should close themselves immediately
+            (and not animate) when called from <see cref="M:Growl.DisplayStyle.VisualDisplay.CloseAllOpenNotifications"/>
+            or <see cref="M:Growl.DisplayStyle.VisualDisplay.CloseLastNotification"/>. The <c>Disabled</c> property will
+            automatically be set to <c>true</c> for calls from either of those methods, so it is best
+            to simply check it before animating. Also, <c>AutoClose</c> is not called in those cases,
+            so as long as you hook into that event for your closing animation, you should be OK
+            anyway.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.AnimatorBase.CancelClosing">
+            <summary>
+            Cancels the closing (and thus, animation) of a display.
+            </summary>
+            <remarks>
+            If the display is not yet closing, this has no effect.
+            This only cancels the current animation - if the display is closed again later, a new
+            animation may be started.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.AnimatorBase.Disabled">
+            <summary>
+            Indicates if the animator is disabled
+            </summary>
+            <value>
+            <c>true</c> - the animator is disabled and should not animate the window;
+            <c>false</c> - the animator is enabled and should perform its animations
+            </value>
+        </member>
+        <member name="T:Growl.DisplayStyle.LayoutManager">
+            <summary>
+            Automatically repositions open notification windows of a similar display style when
+            new notifications are displayed or exisiting notifications are closed
+            </summary>
+            <remarks>
+            The behavior of this LayoutManager is to open new notifications in their default
+            position and move all open notification correspondingly. If you would prefer to leave
+            exisiting notifications in their place and open new notifications in an adjusted location,
+            you will have to provide your own layout logic for your display.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.LayoutManager.activeWindows">
+            <summary>
+            A list of all of the open windows that this layout manager is managing
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.LayoutManager.direction">
+            <summary>
+            The direction to move exisiting notifications when new notifications are displayed
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.LayoutManager.verticalPadding">
+            <summary>
+            The amount of vertical space between notifications
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.LayoutManager.horizontalPadding">
+            <summary>
+            The amount of horizontal space between notifications
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.LayoutManager.#ctor(Growl.DisplayStyle.LayoutManager.AutoPositionDirection,System.Int32,System.Int32)">
+            <summary>
+            Creates a new instance of this class
+            </summary>
+            <param name="direction">The direction to move exisiting notifications when new notifications are displayed</param>
+            <param name="verticalPadding">The amount of vertical space between notifications</param>
+            <param name="horizontalPadding">The amount of horizontal space between notifications</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.LayoutManager.Add(Growl.DisplayStyle.NotificationWindow)">
+            <summary>
+            Adds a new notification to the list and repositions any other open notifications
+            </summary>
+            <param name="win">The new notification window being shown</param>
+            <remarks>
+            This method does not call the window's <c>Show</c> method - you must show
+            the window yourself.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.LayoutManager.Remove(Growl.DisplayStyle.NotificationWindow)">
+            <summary>
+            Removes a notification from the list and repositions any other open notifications
+            </summary>
+            <param name="win">The notification window being closed</param>
+            <remarks>
+            This method does not call the window's <c>Close</c> method - you must close
+            the window yourself.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.LayoutManager.RepositionWindows(Growl.DisplayStyle.NotificationWindow,System.Boolean)">
+            <summary>
+            Repositions any open windows
+            </summary>
+            <param name="currentWin">The new window being shown or the window being closed</param>
+            <param name="closing">Indicates if the window is being closed (vs. being shown)</param>
+        </member>
+        <member name="P:Growl.DisplayStyle.LayoutManager.Direction">
+            <summary>
+            The direction to move exisiting notifications when new notifications are displayed
+            </summary>
+            <value><see cref="T:Growl.DisplayStyle.LayoutManager.AutoPositionDirection"/></value>
+        </member>
+        <member name="P:Growl.DisplayStyle.LayoutManager.VerticalPadding">
+            <summary>
+            The amount of vertical space between notifications
+            </summary>
+            <value>int (number of pixels)</value>
+        </member>
+        <member name="P:Growl.DisplayStyle.LayoutManager.HorizontalPadding">
+            <summary>
+            The amount of horizontal space between notifications
+            </summary>
+            <value>int (number of pixels)</value>
+        </member>
+        <member name="P:Growl.DisplayStyle.LayoutManager.ActiveWindows">
+            <summary>
+            The list of all open notifications that this layout manager is managing
+            </summary>
+            <value><see cref="T:System.Collections.Generic.List`1"/></value>
+        </member>
+        <member name="T:Growl.DisplayStyle.LayoutManager.AutoPositionDirection">
+            <summary>
+            The direction to reposition open notifications
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.LayoutManager.AutoPositionDirection.UpRight">
+            <summary>
+            Notifications are repositioned above the new notification until the reach they top of the screen,
+            and then the start a new column to the right
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.LayoutManager.AutoPositionDirection.UpLeft">
+            <summary>
+            Notifications are repositioned above the new notification until the reach they top of the screen,
+            and then the start a new column to the left
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.LayoutManager.AutoPositionDirection.DownRight">
+            <summary>
+            Notifications are repositioned below the new notification until they reach the bottom of the screen,
+            and then the start a new column to the right
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.LayoutManager.AutoPositionDirection.DownLeft">
+            <summary>
+            Notifications are repositioned below the new notification until they reach the bottom of the screen,
+            and then the start a new column to the left
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.Win32Animator">
+            <summary>
+            Animates a form when it is shown, hidden or closed using the Win32 AnimateWindow API.
+            </summary>
+            <remarks>
+            MDI child forms do not support the Blend method and only support other methods while 
+            being displayed for the first time and when closing.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AW_HIDE">
+            <summary>
+            Hide the form.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AW_ACTIVATE">
+            <summary>
+            Activate the form.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.DEFAULT_DURATION">
+            <summary>
+            The number of milliseconds over which the animation occurs if no value is specified.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator._form">
+            <summary>
+            The form to be animated.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator._method">
+            <summary>
+            The animation method used to show and hide the form.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator._direction">
+            <summary>
+            The direction in which to Roll or Slide the form.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator._duration">
+            <summary>
+            The number of milliseconds over which the animation is played.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Win32Animator.AnimateWindow(System.IntPtr,System.Int32,System.Int32)">
+            <summary>
+            Windows API function to animate a window.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Win32Animator.#ctor(System.Windows.Forms.Form)">
+            <summary>
+            Creates a new <b>FormAnimator</b> object for the specified form.
+            </summary>
+            <param name="form">
+            The form to be animated.
+            </param>
+            <remarks>
+            No animation will be used unless the <b>Method</b> and/or <b>Direction</b> properties are set independently. The <b>Duration</b> is set to quarter of a second by default.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.Win32Animator.#ctor(System.Windows.Forms.Form,Growl.DisplayStyle.Win32Animator.AnimationMethod,System.Int32)">
+            <summary>
+            Creates a new <b>FormAnimator</b> object for the specified form using the specified method over the specified duration.
+            </summary>
+            <param name="form">
+            The form to be animated.
+            </param>
+            <param name="method">
+            The animation method used to show and hide the form.
+            </param>
+            <param name="duration">
+            The number of milliseconds over which the animation is played.
+            </param>
+            <remarks>
+            No animation will be used for the <b>Roll</b> or <b>Slide</b> methods unless the <b>Direction</b> property is set independently.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.Win32Animator.#ctor(System.Windows.Forms.Form,Growl.DisplayStyle.Win32Animator.AnimationMethod,Growl.DisplayStyle.Win32Animator.AnimationDirection,System.Int32)">
+            <summary>
+            Creates a new <b>FormAnimator</b> object for the specified form using the specified method in the specified direction over the specified duration.
+            </summary>
+            <param name="form">
+            The form to be animated.
+            </param>
+            <param name="method">
+            The animation method used to show and hide the form.
+            </param>
+            <param name="direction">
+            The direction in which to animate the form.
+            </param>
+            <param name="duration">
+            The number of milliseconds over which the animation is played.
+            </param>
+            <remarks>
+            The <i>direction</i> argument will have no effect if the <b>Centre</b> or <b>Blend</b> method is
+            specified.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.Win32Animator.Form_VisibleChanged(System.Object,System.EventArgs)">
+            <summary>
+            Animates the form automatically when it is shown or hidden.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Win32Animator.Form_Closing(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Animates the form automatically when it closes.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Win32Animator.CancelClosing">
+            <summary>
+            Cancels the closing (and thus, animation) of a display.
+            </summary>
+            <remarks>
+            If the display is not yet closing, this has no effect.
+            This only cancels the current animation - if the display is closed again later, a new
+            animation may be started.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.Win32Animator.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.Win32Animator.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="P:Growl.DisplayStyle.Win32Animator.Method">
+            <summary>
+            Gets or sets the animation method used to show and hide the form.
+            </summary>
+            <value>
+            The animation method used to show and hide the form.
+            </value>
+            <remarks>
+            <b>Roll</b> is used by default if no method is specified.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.Win32Animator.Direction">
+            <summary>
+            Gets or Sets the direction in which the animation is performed.
+            </summary>
+            <value>
+            The direction in which the animation is performed.
+            </value>
+            <remarks>
+            The direction is only applicable to the <b>Roll</b> and <b>Slide</b> methods.
+            </remarks>
+        </member>
+        <member name="P:Growl.DisplayStyle.Win32Animator.Duration">
+            <summary>
+            Gets or Sets the number of milliseconds over which the animation is played.
+            </summary>
+            <value>
+            The number of milliseconds over which the animation is played.
+            </value>
+        </member>
+        <member name="P:Growl.DisplayStyle.Win32Animator.Form">
+            <summary>
+            Gets the form to be animated.
+            </summary>
+            <value>
+            The form to be animated.
+            </value>
+        </member>
+        <member name="T:Growl.DisplayStyle.Win32Animator.AnimationMethod">
+            <summary>
+            The methods of animation available.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AnimationMethod.Roll">
+            <summary>
+            Rolls out from edge when showing and into edge when hiding.
+            </summary>
+            <remarks>
+            This is the default animation method and requires a direction.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AnimationMethod.Centre">
+            <summary>
+            Expands out from centre when showing and collapses into centre when hiding.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AnimationMethod.Slide">
+            <summary>
+            Slides out from edge when showing and slides into edge when hiding.
+            </summary>
+            <remarks>
+            Requires a direction.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AnimationMethod.Blend">
+            <summary>
+            Fades from transaprent to opaque when showing and from opaque to transparent when hiding.
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.Win32Animator.AnimationDirection">
+            <summary>
+            The directions in which the Roll and Slide animations can be shown.
+            </summary>
+            <remarks>
+            Horizontal and vertical directions can be combined to create diagonal animations.
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AnimationDirection.Right">
+            <summary>
+            From left to right.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AnimationDirection.Left">
+            <summary>
+            From right to left.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AnimationDirection.Down">
+            <summary>
+            From top to bottom.
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.Win32Animator.AnimationDirection.Up">
+            <summary>
+            From bottom to top.
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.PopupAnimator">
+            <summary>
+            Provides the behavior for popping up a notification (like toast)
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.TIMER_INTERVAL">
+            <summary>
+            The default interval for the fade timer
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.timer">
+            <summary>
+            The timer that controls the fading
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.form">
+            <summary>
+            The form window to be faded
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.popInDuration">
+            <summary>
+            The amount of time (in milliseconds) over which the pop-up should occur
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.popOutDuration">
+            <summary>
+            The amount of time (in milliseconds) over which the pop-down should occur
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.popInComplete">
+            <summary>
+            Indicates if the form pop-up process is complete
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.direction">
+            <summary>
+            The direction the window should pop
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.finalX">
+            <summary>
+            The final X cooridinate that indicates the popup is done (for horizontal directions)
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.finalY">
+            <summary>
+            The final Y cooridinate that indicates the popup is done (for vertical directions)
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.regionHeight">
+            <summary>
+            The height of the window region
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.interval">
+            <summary>
+            The delta amount to move the window during each cycle
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.PopupAnimator.#ctor(Growl.DisplayStyle.NotificationWindow)">
+            <summary>
+            Creates a new PopupAnimator using the preset default values.
+            </summary>
+            <param name="form">The <see cref="T:Growl.DisplayStyle.NotificationWindow"/> to animate</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.PopupAnimator.#ctor(Growl.DisplayStyle.NotificationWindow,System.Int32,System.Int32,Growl.DisplayStyle.PopupAnimator.PopupDirection)">
+            <summary>
+            Creates a new PopupAnimator specifying the pop behavior values
+            </summary>
+            <param name="form">The <see cref="T:Growl.DisplayStyle.NotificationWindow"/> to animate</param>
+            <param name="popInDuration">The amount of time (in milliseconds) over which the pop-in should occur</param>
+            <param name="popOutDuration">The amount of time (in milliseconds) over which the pop-out should occur</param>
+            <param name="direction">The direction the window should pop</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.PopupAnimator.form_BeforeShown(System.Object,System.EventArgs)">
+            <summary>
+            Handles starting the pop-in animation
+            </summary>
+            <param name="sender">The object that fired the event</param>
+            <param name="e">Information about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.PopupAnimator.form_AutoClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
+            <summary>
+            Handles starting the pop-out animation
+            </summary>
+            <param name="sender">The object that fired the event</param>
+            <param name="e">Information about the event</param>
+            <remarks>
+            It is important to set the <c>e.Cancel</c> property to <c>true</c>
+            if animating so that the calling code does not immediately
+            close the form
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.PopupAnimator.Close">
+            <summary>
+            Closes the form by animating it away.
+            </summary>
+            <returns>
+            <c>true</c> if the form will animate away;
+            <c>false</c> if the form should close immediately with no animation
+            </returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.PopupAnimator.timer_Tick(System.Object,System.EventArgs)">
+            <summary>
+            Handles moving the form/region to perform the pop-in effect
+            </summary>
+            <param name="sender">The object that fired the event</param>
+            <param name="e">Information about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.PopupAnimator.CancelClosing">
+            <summary>
+            Cancels the closing (and thus, animation) of a display.
+            </summary>
+            <remarks>
+            If the display is not yet closing, this has no effect.
+            This only cancels the current animation - if the display is closed again later, a new
+            animation may be started.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.PopupAnimator.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.PopupAnimator.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="T:Growl.DisplayStyle.PopupAnimator.PopupDirection">
+            <summary>
+            Specifies the direction that the window should pop
+            </summary>
+            <remarks>
+            At this time, the only value supported is <c>Up</c>
+            </remarks>
+        </member>
+        <member name="F:Growl.DisplayStyle.PopupAnimator.PopupDirection.Up">
+            <summary>
+            The notification window will rise up from a baseline and then slide back down when closed
+            </summary>
+        </member>
+        <member name="T:Growl.DisplayStyle.MultipleMonitorHelper">
+            <summary>
+            Provides helper methods useful when dealing with multiple monitor support.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.MultipleMonitorHelper.GetScreen(System.String)">
+            <summary>
+            Gets the <see cref="T:System.Windows.Forms.Screen"/> associated with the <paramref name="preferredDeviceName"/>
+            </summary>
+            <param name="preferredDeviceName">Name of the preferred device.</param>
+            <returns><see cref="T:System.Windows.Forms.Screen"/> - if the <paramref name="preferredDeviceName"/> is not valid or not
+            associated with a currently available <see cref="T:System.Windows.Forms.Screen"/>, the <see cref="P:System.Windows.Forms.Screen.PrimaryScreen"/>
+            is returned instead.</returns>
+        </member>
+        <member name="M:Growl.DisplayStyle.MultipleMonitorHelper.GetDeviceName(System.Windows.Forms.Screen)">
+            <summary>
+            Gets the name of the device.
+            </summary>
+            <param name="screen">The <see cref="T:System.Windows.Forms.Screen"/></param>
+            <returns>string</returns>
+            <remarks>
+            Since the device name normally contains null bytes and other unnecessary characters,
+            this method only returns the normalized device name with unnecessary characters
+            removed.
+            </remarks>
+        </member>
+        <member name="T:Growl.DisplayStyle.FadeAnimator">
+            <summary>
+            Provides the behavior for fading a form window in and out
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.FadeAnimator.TIMER_INTERVAL">
+            <summary>
+            The default interval for the fade timer
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.FadeAnimator.MAX_OPACITY">
+            <summary>
+            The maximum value for opacity. (this is kept below 1.0 to avoid a flicker when Windows converts the form to/from a layered window)
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.FadeAnimator.timer">
+            <summary>
+            The timer that controls the fading
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.FadeAnimator.form">
+            <summary>
+            The form window to be faded
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.FadeAnimator.fadeInDuration">
+            <summary>
+            The amount of time (in milliseconds) over which the fade-in should occur
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.FadeAnimator.fadeOutDuration">
+            <summary>
+            The amount of time (in milliseconds) over which the fade-out should occur
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.FadeAnimator.finalOpacity">
+            <summary>
+            The final opacity of the form once faded in
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.FadeAnimator.opacityDelta">
+            <summary>
+            The amount to change the opacity with each cycle
+            </summary>
+        </member>
+        <member name="F:Growl.DisplayStyle.FadeAnimator.fadeInComplete">
+            <summary>
+            Indicates if the form fade-in process is complete
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.FadeAnimator.#ctor(Growl.DisplayStyle.NotificationWindow)">
+            <summary>
+            Creates a new FadeAnimator using the preset default values.
+            </summary>
+            <param name="form">The <see cref="T:Growl.DisplayStyle.NotificationWindow"/> to animate</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.FadeAnimator.#ctor(Growl.DisplayStyle.NotificationWindow,System.Int32,System.Int32,System.Double)">
+            <summary>
+            Creates a new FadeAnimator specifying the fade behavior values
+            </summary>
+            <param name="form">The <see cref="T:Growl.DisplayStyle.NotificationWindow"/> to animate</param>
+            <param name="fadeInDuration">The amount of time (in milliseconds) over which the fade-in should occur</param>
+            <param name="fadeOutDuration">The amount of time (in milliseconds) over which the fade-out should occur</param>
+            <param name="finalOpacity">The final opacity of the form once faded in</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.FadeAnimator.form_BeforeShown(System.Object,System.EventArgs)">
+            <summary>
+            Handles starting the fade-in animation
+            </summary>
+            <param name="sender">The object that fired the event</param>
+            <param name="e">Information about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.FadeAnimator.timer_Tick(System.Object,System.EventArgs)">
+            <summary>
+            Handles increasing/decreasing the form's opacity as it fades in or out
+            </summary>
+            <param name="sender">The object that fired the event</param>
+            <param name="e">Information about the event</param>
+        </member>
+        <member name="M:Growl.DisplayStyle.FadeAnimator.form_AutoClosing(System.Object,System.Windows.Forms.FormClosingEventArgs)">
+            <summary>
+            Handles starting the fade-out animation
+            </summary>
+            <param name="sender">The object that fired the event</param>
+            <param name="e">Information about the event</param>
+            <remarks>
+            It is important to set the <c>e.Cancel</c> property to <c>true</c>
+            if animating so that the calling code does not immediately
+            close the form
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.FadeAnimator.CancelClosing">
+            <summary>
+            Cancels the closing (and thus, animation) of a display.
+            </summary>
+            <remarks>
+            If the display is not yet closing, this has no effect.
+            This only cancels the current animation - if the display is closed again later, a new
+            animation may be started.
+            </remarks>
+        </member>
+        <member name="M:Growl.DisplayStyle.FadeAnimator.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Growl.DisplayStyle.FadeAnimator.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+    </members>
+</doc>

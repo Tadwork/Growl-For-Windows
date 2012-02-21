@@ -1,0 +1,20 @@
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Debug\ResGen.read.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Debug\ResGen.write.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\flashpolicy.xml
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Test Server.exe
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Test Server.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Growl.Connector.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Growl.CoreLibrary.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Growl.Daemon.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Mono.Zeroconf.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Growl.Connector.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Growl.Connector.xml
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Growl.CoreLibrary.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Growl.CoreLibrary.xml
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Growl.Daemon.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Debug\Growl.Daemon.xml
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Debug\Test_Server.Form1.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Debug\Test_Server.Properties.Resources.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Debug\Test Server.exe
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Debug\Test Server.pdb

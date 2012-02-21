@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
-
 namespace Growl
 {
     public class NotifyIOListener : IDisposable
@@ -173,6 +172,7 @@ namespace Growl
                 System.IO.StringReader sr = new System.IO.StringReader(json);
                 using (sr)
                 {
+                   
                     Newtonsoft.Json.JsonSerializer js = new Newtonsoft.Json.JsonSerializer();
                     js.MissingMemberHandling = Newtonsoft.Json.MissingMemberHandling.Ignore;
                     js.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;

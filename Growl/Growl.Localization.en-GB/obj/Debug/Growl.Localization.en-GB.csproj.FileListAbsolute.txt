@@ -1,0 +1,10 @@
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\bin\Debug\Growl.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\bin\Debug\Growl.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\bin\Debug\en-GB\Growl.resources.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\obj\Debug\Growl.Properties.Resources.en-GB.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\obj\Debug\ResGen.read.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\obj\Debug\ResGen.write.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\obj\Debug\en-GB\Growl.resources.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\obj\Debug\Growl.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Localization.en-GB\obj\Debug\Growl.pdb

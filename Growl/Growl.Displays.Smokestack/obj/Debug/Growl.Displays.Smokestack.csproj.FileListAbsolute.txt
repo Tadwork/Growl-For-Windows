@@ -1,0 +1,16 @@
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Debug\ResGen.read.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Debug\ResGen.write.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Debug\Growl.Displays.Smokestack.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Debug\Growl.Displays.Smokestack.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Debug\Growl.CoreLibrary.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Debug\Growl.DisplayStyle.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Debug\Growl.CoreLibrary.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Debug\Growl.CoreLibrary.xml
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Debug\Growl.DisplayStyle.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Debug\Growl.DisplayStyle.xml
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Debug\Growl.Displays.Smokestack.Properties.Resources.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Debug\Growl.Displays.Smokestack.SmokestackWindow.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Debug\Growl.Displays.Smokestack.SmokestackSettingsPanel.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Debug\Growl.Displays.Smokestack.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Debug\Growl.Displays.Smokestack.pdb

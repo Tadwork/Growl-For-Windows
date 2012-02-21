@@ -1,0 +1,13 @@
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\bin\Release\Test App.exe
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\bin\Release\Test App.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\bin\Release\Growl.Connector.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\bin\Release\Growl.CoreLibrary.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\bin\Release\Growl.Connector.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\bin\Release\Growl.CoreLibrary.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\obj\Release\Test_App.Form1.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\obj\Release\Test_App.Properties.Resources.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\obj\Release\ResGen.read.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\obj\Release\ResGen.write.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\obj\Release\Test App.exe
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test App\obj\Release\Test App.pdb

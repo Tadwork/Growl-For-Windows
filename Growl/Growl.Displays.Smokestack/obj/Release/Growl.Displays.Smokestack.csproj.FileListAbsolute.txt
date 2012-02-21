@@ -1,0 +1,14 @@
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Release\Growl.Displays.Smokestack.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Release\Growl.Displays.Smokestack.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Release\Growl.CoreLibrary.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Release\Growl.DisplayStyle.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Release\Growl.CoreLibrary.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\bin\Release\Growl.DisplayStyle.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Release\Growl.Displays.Smokestack.Properties.Resources.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Release\Growl.Displays.Smokestack.SmokestackWindow.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Release\Growl.Displays.Smokestack.SmokestackSettingsPanel.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Release\ResGen.read.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Release\ResGen.write.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Release\Growl.Displays.Smokestack.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Growl.Displays.Smokestack\obj\Release\Growl.Displays.Smokestack.pdb

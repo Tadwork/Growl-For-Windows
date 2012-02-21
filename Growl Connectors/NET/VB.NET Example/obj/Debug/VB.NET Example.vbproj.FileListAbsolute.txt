@@ -1,0 +1,13 @@
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\bin\Debug\VB.NET Example.exe
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\bin\Debug\VB.NET Example.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\bin\Debug\VB.NET_Example.xml
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\bin\Debug\Growl.Connector.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\bin\Debug\Growl.CoreLibrary.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\obj\Debug\VB.NET_Example.Form1.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\obj\Debug\VB.NET_Example.Resources.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\obj\Debug\ResGen.read.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\obj\Debug\ResGen.write.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\obj\Debug\VB.NET Example.exe
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\obj\Debug\VB.NET_Example.xml
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Connectors\NET\VB.NET Example\obj\Debug\VB.NET Example.pdb

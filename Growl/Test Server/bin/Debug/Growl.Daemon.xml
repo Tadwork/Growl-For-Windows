@@ -1,0 +1,3676 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Growl.Daemon</name>
+    </assembly>
+    <members>
+        <member name="T:Growl.Daemon.GNTPRequestReader">
+            <summary>
+            Abstract base class for any classes that want to read GNTP messages over various transports.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPRequestReader.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.GNTPRequestReader"/> class.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPRequestReader.OnMessageParsed(Growl.Daemon.GNTPRequest)">
+            <summary>
+            Called when a GNTP request is successfully parsed and no errors are found.
+            </summary>
+            <param name="request">The <see cref="T:Growl.Daemon.GNTPRequest"/>.</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPRequestReader.OnError(System.Int32,System.String,System.Object[])">
+            <summary>
+            Called when the GNTP request is malformed or invalid.
+            </summary>
+            <param name="errorCode">The error code. See <see cref="T:Growl.Connector.ErrorCode"/></param>
+            <param name="errorMessage">The error message.</param>
+            <param name="args">Any additional arguments to append to the error message.</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPRequestReader.BeforeResponse(System.Byte[]@)">
+            <summary>
+            Called immediately before the <see cref="T:Growl.Daemon.MessageHandler"/> write the response back to the 
+            sender, this allows the request reader to modify the data right before it is sent.
+            </summary>
+            <param name="bytes">The data to be sent.</param>
+            <remarks>
+            Most readers will not need to implement this method. It is however useful for scenarios
+            such as WebSockets that need to frame the response before sending.
+            </remarks>
+        </member>
+        <member name="E:Growl.Daemon.GNTPRequestReader.Error">
+            <summary>
+            Occurs when the MessageHandler is going to return an Error response
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.GNTPRequestReader.MessageParsed">
+            <summary>
+            Occurs when the request has been successfully parsed
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequestReader.AlreadyReceivedData">
+            <summary>
+            Gets a <see cref="T:System.Text.StringBuilder"/> used to hold data as it is read in.
+            </summary>
+            <value>The already received data.</value>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequestReader.ReceivedData">
+            <summary>
+            Gets the received data.
+            </summary>
+            <value>The received data.</value>
+            <remarks>
+            The <see cref="T:Growl.Daemon.MessageHandler"/> class uses this property to write the log file for GNTP requests.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequestReader.DecryptedData">
+            <summary>
+            Gets or sets the decrypted data.
+            </summary>
+            <value>The decrypted data.</value>
+            <remarks>
+            For unencrypted requests, this value will be null.
+            For encrypted requests, this will contain the full decrypted data.
+            </remarks>
+        </member>
+        <member name="T:Growl.Daemon.GNTPRequestReader.GNTPRequestReaderErrorEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GNTPRequestReader.Error"/> event.
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.GNTPRequestReader.GNTPRequestReaderMessageParsedEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GNTPRequestReader.MessageParsed"/> event.
+            </summary>
+            <param name="request">The <see cref="T:Growl.Daemon.MessageHandler"/> that parsed the message</param>
+        </member>
+        <member name="T:Growl.Daemon.SubscriptionResponse">
+            <summary>
+            Represents a GNTP reponse to a SUBSCRIBE request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.SubscriptionResponse.ttl">
+            <summary>
+            The amount of time (in seconds) that the subscription is valid for
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionResponse.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.SubscriptionResponse"/> class.
+            </summary>
+            <param name="ttl">The amount of time (in seconds) that the subscription is valid for</param>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionResponse.#ctor(System.Int32,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.SubscriptionResponse"/> class.
+            </summary>
+            <param name="errorCode">The error code.</param>
+            <param name="errorDescription">The error description.</param>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionResponse.ToHeaders">
+            <summary>
+            Converts the SubscriptionResponse to a list of headers
+            </summary>
+            <returns><see cref="T:Growl.Connector.HeaderCollection"/></returns>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionResponse.FromResponse(Growl.Connector.Response,Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Daemon.SubscriptionResponse"/> from a base <see cref="T:Growl.Connector.Response"/> and a list of headers
+            </summary>
+            <param name="response">The base <see cref="T:Growl.Connector.Response"/></param>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the response</param>
+            <returns><see cref="T:Growl.Daemon.SubscriptionResponse"/></returns>
+        </member>
+        <member name="P:Growl.Daemon.SubscriptionResponse.TTL">
+            <summary>
+            Gets the amount of time (in seconds) that the subscription is valid for
+            </summary>
+            <remarks>
+            This value generally should not be less than 60 seconds in order to give the
+            subscriber time to process any notifications and renew its subscriptions.
+            </remarks>
+        </member>
+        <member name="T:Growl.Daemon.Pointer">
+            <summary>
+            Represents the information pertaining to an inline binary resource
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Pointer.headerCollection">
+            <summary>
+            The header collection that contains the pointer header
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Pointer.identifier">
+            <summary>
+            The identifier value
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Pointer.length">
+            <summary>
+            The length of the data
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Pointer.byteArray">
+            <summary>
+            The actual data
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.Pointer.#ctor(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Daemon.Pointer"/> class
+            </summary>
+            <param name="headerCollection">The <see cref="P:Growl.Daemon.Pointer.HeaderCollection"/> that contains the pointer header</param>
+        </member>
+        <member name="M:Growl.Daemon.Pointer.Clear">
+            <summary>
+            Clears the pointer of any resource information.
+            </summary>
+            <remarks>
+            This is usually used if we read some data from the cache, but we need to read the data from the request instead.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.Pointer.HeaderCollection">
+            <summary>
+            Gets the <see cref="P:Growl.Daemon.Pointer.HeaderCollection"/> that contains the pointer header
+            </summary>
+            <value>
+            <see cref="P:Growl.Daemon.Pointer.HeaderCollection"/>
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.Pointer.Identifier">
+            <summary>
+            The identifier value of the resource
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.Pointer.Length">
+            <summary>
+            The length of the data
+            </summary>
+            <value>
+            int
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.Pointer.ByteArray">
+            <summary>
+            The actual data
+            </summary>
+            <value>
+            array of bytes
+            </value>
+        </member>
+        <member name="T:Growl.Daemon.GNTPParser">
+            <summary>
+            This class handles parsing GNTP requests. Data is fed in and parsed in real-time.
+            If the request is malformed or invalid, an error event will be triggered. Otherwise,
+            when an entire valid request has been read, a 'message parsed' event will be triggered.
+            
+            NOTE that currently, the parser is geared for use with the GNTPSocketReader and thus
+            expects data to be fed in in a certain way. This limitation will be removed eventually,
+            but it works for now.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.PARTIAL_MESSAGE_NOTICE">
+            <summary>
+            Message logged when a request is only partially read before encountering an error
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.alreadyReceived">
+            <summary>
+            Contains data already read and parsed.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.tag">
+            <summary>
+            Tag used to indicate where in the parsing process the parser is at and what to expect next
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.regExMessageHeader_Local">
+            <summary>
+            Regex used to parse GNTP headers for local requests (dont require password)
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.regExMessageHeader_Remote">
+            <summary>
+            Regex used to parse GNTP headers for non-local requests (password required)
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.allowNetworkNotifications">
+            <summary>
+            Indicates if remote notifications are allowed
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.allowBrowserConnections">
+            <summary>
+            Indicates if notifications originating from a browser are allowed
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.allowSubscriptions">
+            <summary>
+            Indicates if client are allowed to subscribe to notifications from this server
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.key">
+            <summary>
+            The key used to validate and encrypt the message
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.passwordManager">
+            <summary>
+            The list of valid passwords
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.ivHex">
+            <summary>
+            The hex-encoded IV value from the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.iv">
+            <summary>
+            The actual IV bytes from the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.passwordRequired">
+            <summary>
+            Indicates if the request must supply a password
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.headers">
+            <summary>
+            The collection of headers parsed from the current request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.version">
+            <summary>
+            The version of the GNTP request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.directive">
+            <summary>
+            The type of GNTP request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.keyHashAlgorithm">
+            <summary>
+            The type of hashing algorithm used in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.encryptionAlgorithm">
+            <summary>
+            The type of encryption used in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.applicationName">
+            <summary>
+            The name of the application sending the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.expectedNotifications">
+            <summary>
+            For REGISTER requests, the number of notifications expected to be registered
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.expectedNotificationsRemaining">
+            <summary>
+            For REGISTER requests, the number of notifcations still to be registered
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.currentNotification">
+            <summary>
+            For REGISTER requests, the index of the current notification type
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.notificationsToBeRegistered">
+            <summary>
+            A collection of the groups of headers for each notification type to be registered
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.pointersExpected">
+            <summary>
+            The number of binary pointers in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.pointersExpectedRemaining">
+            <summary>
+            The number of binary pointers still to be found in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.currentPointer">
+            <summary>
+            The index of the current binary pointer
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.pointers">
+            <summary>
+            A collection of all pointers in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.callbackInfo">
+            <summary>
+            The callback info associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.callbackData">
+            <summary>
+            The callback data associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.callbackDataType">
+            <summary>
+            The callback data type associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.callbackUrl">
+            <summary>
+            The callback url associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.requestInfo">
+            <summary>
+            The request info associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser.decryptedRequest">
+            <summary>
+            The text of the request after decryption (null if the request was not originally encrypted)
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser.#ctor(Growl.Connector.PasswordManager,System.Boolean,System.Boolean,System.Boolean,System.Boolean,Growl.Connector.RequestInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.GNTPParser"/> class.
+            </summary>
+            <param name="passwordManager">The <see cref="T:Growl.Connector.PasswordManager"/> containing a list of allowed passwords</param>
+            <param name="passwordRequired">Indicates if a password is required</param>
+            <param name="allowNetworkNotifications">Indicates if network requests are allowed</param>
+            <param name="allowBrowserConnections">Indicates if browser requests are allowed</param>
+            <param name="allowSubscriptions">Indicates if SUBSCRIPTION requests are allowed</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with this request</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser.Parse(System.Byte[])">
+            <summary>
+            Parses the specified input bytes and returns information on what is expected next.
+            </summary>
+            <param name="inputBytes">The input bytes to parse.</param>
+            <returns>
+            A <see cref="T:Growl.Daemon.NextIndicator"/> instance that can be used by the reading class to 
+            figure out what is expected next.
+            </returns>
+            <remarks>
+            NOTE that currently, the parser is geared for use with the GNTPSocketReader and thus
+            expects data to be fed in in a certain way. This limitation will be removed eventually,
+            but it works for now.
+            </remarks>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser.OnMessageParsed">
+            <summary>
+            Called when the request is successfully parsed.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser.OnError(System.Int32,System.String,System.Object[])">
+            <summary>
+            Triggers the Error event
+            </summary>
+            <param name="errorCode">The error code</param>
+            <param name="errorMessage">The error message</param>
+            <param name="args">Any additional data to include in the error message</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser.ParseGNTPHeaderLine(System.String,System.Boolean)">
+            <summary>
+            Parses the GNTP header line.
+            </summary>
+            <param name="line">The GNTP header</param>
+            <param name="passwordRequired">Indicates if the request must contain a password</param>
+            <returns></returns>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser.ParseEncryptedMessage(System.Byte[])">
+            <summary>
+            Parses the encrypted message.
+            </summary>
+            <param name="bytes">The encrypted bytes</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser.GetNumberOfPointers">
+            <summary>
+            Gets the number of pointers that need to be read from the request, taking
+            into account any pre-cached binary data.
+            </summary>
+            <returns>The number of pointers that need to be read</returns>
+        </member>
+        <member name="E:Growl.Daemon.GNTPParser.Error">
+            <summary>
+            Occurs when the MessageHandler is going to return an Error response
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.GNTPParser.MessageParsed">
+            <summary>
+            Occurs when the request has been successfully parsed
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.GNTPParser.Tag">
+            <summary>
+            Gets the value indicating where in the parsing process the parser is at and what to expect next.
+            </summary>
+            <value>long</value>
+        </member>
+        <member name="P:Growl.Daemon.GNTPParser.DecryptedRequest">
+            <summary>
+            Gets the decrypted request.
+            </summary>
+            <value>
+            This value will only be set once the <see cref="E:Growl.Daemon.GNTPParser.MessageParsed"/> event has been fired.
+            For unencrypted requests, this value will always be null.
+            For encrypted requests, this will contain the full decrypted data.
+            </value>
+        </member>
+        <member name="T:Growl.Daemon.GNTPParser.GNTPParserErrorEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GNTPParser.Error"/> event.
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.GNTPParser.GNTPParserMessageParsedEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GNTPParser.MessageParsed"/> event.
+            </summary>
+            <param name="request">The <see cref="T:Growl.Daemon.GNTPRequest"/> representing the parsed message</param>
+        </member>
+        <member name="T:Growl.Daemon.Subscriber">
+            <summary>
+            Represents a client that is subscribed to receive notifications from a Growl server.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Subscriber.id">
+            <summary>
+            The unique id of the subscriber
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Subscriber.name">
+            <summary>
+            The friendly name of the subscriber
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Subscriber.port">
+            <summary>
+            The port the subscriber will listen on
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Subscriber.ipaddress">
+            <summary>
+            The IP address of the subscriber
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Subscriber.key">
+            <summary>
+            The <see cref="P:Growl.Daemon.Subscriber.Key"/> used to authenticate and encrypt messages
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.Subscriber.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Daemon.Subscriber"/> class.
+            </summary>
+            <param name="id">The unique ID of the subscriber</param>
+            <param name="name">The identifying name of the subscriber</param>
+        </member>
+        <member name="M:Growl.Daemon.Subscriber.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Daemon.Subscriber"/> class.
+            </summary>
+            <param name="id">The unique ID of the subscriber</param>
+            <param name="name">The identifying name of the subscriber</param>
+            <param name="port">The port the subscriber will listen on</param>
+        </member>
+        <member name="M:Growl.Daemon.Subscriber.ToHeaders">
+            <summary>
+            Converts the object to a list of headers
+            </summary>
+            <returns><see cref="T:Growl.Connector.HeaderCollection"/></returns>
+        </member>
+        <member name="M:Growl.Daemon.Subscriber.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Daemon.Subscriber"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the object</param>
+            <returns><see cref="T:Growl.Daemon.Subscriber"/></returns>
+        </member>
+        <member name="P:Growl.Daemon.Subscriber.ID">
+            <summary>
+            The unique ID of the subscriber
+            </summary>
+            <value>
+            guid
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.Subscriber.Name">
+            <summary>
+            The identifying name of the subscriber
+            </summary>
+            <value>
+            string - Ex: Growl on Gazebo
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.Subscriber.Port">
+            <summary>
+            The port that the client will listen on
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.Subscriber.IPAddress">
+            <summary>
+            The IP address of the client
+            </summary>
+            <remarks>
+            This value is read-only and is set by the subscribed-to Growl server.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.Subscriber.Key">
+            <summary>
+            The <see cref="P:Growl.Daemon.Subscriber.Key"/> used to authorize and encrypt messages
+            </summary>
+            <value><see cref="T:Growl.Daemon.SubscriberKey"/></value>
+        </member>
+        <member name="T:Growl.Daemon.GrowlServer">
+            <summary>
+            Represents the Growl server that listens for and receives incoming GNTP requests.
+            </summary>
+            <remarks>
+            The server only handles receiving the request and returning the response - the actual display/handling
+            of the notification is up to the calling code. Implementors can register for the various server events
+            (RegisterReceived, NotifyReceived) and handle the notifications appropriately.
+            
+            If Bonjour is available and running on the server machine, the server will also advertise itself with a 
+            type of "_gntp._tcp" and the port configured with each instance.
+            </remarks>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.BONJOUR_SERVICE_TYPE">
+            <summary>
+            The type of service advertised via Bonjour
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.BONJOUR_SERVICE_DOMAIN">
+            <summary>
+            The domain used when advertising via Bonjour
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.BonjourServiceName">
+            <summary>
+            The name of the service advertised via Bonjour
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.ServerID">
+            <summary>
+            A unique ID for this server. (This value may change across application restarts, but should not change while the app is running.)
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.port">
+            <summary>
+            The port that the server will listen on
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.serverName">
+            <summary>
+            The default name of the server
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.isStarted">
+            <summary>
+            Indicates if the server is started
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.listenSocket">
+            <summary>
+            The socket used to listen for requests
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.connectedSockets">
+            <summary>
+            A list of connected sockets currently being serviced
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.connectedHandlers">
+            <summary>
+            A list of MessageHandlers currently servicing requests
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.socketCleanupTimer">
+            <summary>
+            Runs in the background and disconnects orphaned sockets
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.passwordManager">
+            <summary>
+            The list of valid passwords to allow
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.userFolder">
+            <summary>
+            The full path to the user folder (where logs, data cache, etc are kept)
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.logFolder">
+            <summary>
+            The full path to the log folder
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.resourceFolder">
+            <summary>
+            The full path to the resource cache folder
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.loggingEnabled">
+            <summary>
+            Indicates if logging is enabled or not
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.bonjour">
+            <summary>
+            The Bonjour service that advertises this server
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.requireLocalPassword">
+            <summary>
+            Indicates if local applications must supply the password or not
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.requireLANPassword">
+            <summary>
+            Indicates if LAN applications must supply the password or not
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.allowNetworkNotifications">
+            <summary>
+            Indicates if network (non-local) request are allowed
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.allowWebNotifications">
+            <summary>
+            Indicates if webpage notifications are allowed
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.allowSubscriptions">
+            <summary>
+            Indicates if client subscriptions are allowed
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.#ctor(System.Int32,Growl.Connector.PasswordManager,System.String)">
+            <summary>
+            Creates a new instance of the Growl server.
+            </summary>
+            <param name="port">The port to listen on. The standard GNTP port is <see cref="F:Growl.Connector.ConnectorBase.TCP_PORT"/>.</param>
+            <param name="passwordManager">The <see cref="P:Growl.Daemon.GrowlServer.PasswordManager"/> containing the list of allowed passwords.</param>
+            <param name="userFolder">The full path to the user folder where logs, resource cache, and other files will be stored.</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.Start">
+            <summary>
+            Starts the server
+            </summary>
+            <returns>
+            <c>true</c> - if the server started successfully;
+            <c>false</c> - the server failed to start. The <see cref="M:Growl.Daemon.GrowlServer.OnFailedToStart(System.Object,System.EventArgs)"/> event will be raised.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.Stop">
+            <summary>
+            Stops the server and closes any open connections.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.OnFailedToStart(System.Object,System.EventArgs)">
+            <summary>
+            Handles the <see cref="E:Growl.Daemon.GrowlServer.FailedToStart"/> event
+            </summary>
+            <param name="sender">The <see cref="T:Growl.Daemon.GrowlServer"/> instance that failed to start</param>
+            <param name="args"><see cref="F:System.EventArgs.Empty"/></param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.listenSocket_DidAccept(Growl.Daemon.AsyncSocket,Growl.Daemon.AsyncSocket)">
+            <summary>
+            Handles the <see cref="E:Growl.Daemon.AsyncSocket.DidAccept"/> event.
+            </summary>
+            <param name="sender">The listening <see cref="T:Growl.Daemon.AsyncSocket"/></param>
+            <param name="newSocket">The new <see cref="T:Growl.Daemon.AsyncSocket"/> that was accepted</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.mh_Error(Growl.Connector.Error)">
+            <summary>
+            Handles the <see cref="E:Growl.Daemon.MessageHandler.Error"/> event
+            </summary>
+            <param name="error">The <see cref="T:Growl.Connector.Error"/> that occurred</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.mh_MessageParsed(Growl.Daemon.MessageHandler)">
+            <summary>
+            Handles the <see cref="E:Growl.Daemon.MessageHandler.MessageParsed"/> event
+            </summary>
+            <param name="mh">The <see cref="T:Growl.Daemon.MessageHandler"/> that parsed the message</param>
+            <remarks>
+            This method starts a new thread to peform the actual message handling
+            </remarks>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.HandleParsedMessage(System.Object)">
+            <summary>
+            Handles the parsed message after it is received
+            </summary>
+            <param name="obj">The <see cref="T:Growl.Daemon.MessageHandler"/> object that parsed the message</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.WriteResponse(Growl.Daemon.CallbackInfo,Growl.Connector.Response)">
+            <summary>
+            Writes back the GNTP response to the requesting application
+            </summary>
+            <param name="cbInfo">The <see cref="T:Growl.Daemon.CallbackInfo"/> associated with the response</param>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/> to be written back</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.OnRegisterReceived(Growl.Connector.Application,System.Collections.Generic.List{Growl.Connector.NotificationType},Growl.Connector.RequestInfo)">
+            <summary>
+            Handles the <see cref="E:Growl.Daemon.GrowlServer.RegisterReceived"/> event
+            </summary>
+            <param name="application">The <see cref="T:Growl.Connector.Application"/> that is registering</param>
+            <param name="notificationTypes">A list of <see cref="T:Growl.Connector.NotificationType"/>s being registered</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with the request</param>
+            <returns><see cref="T:Growl.Connector.Response"/></returns>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.OnNotifyReceived(Growl.Connector.Notification,Growl.Daemon.CallbackInfo,Growl.Connector.RequestInfo)">
+            <summary>
+            Handles the <see cref="E:Growl.Daemon.GrowlServer.NotifyReceived"/> event
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> that was received</param>
+            <param name="callbackInfo">The <see cref="T:Growl.Daemon.CallbackInfo"/> for the notification</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with the request</param>
+            <returns><see cref="T:Growl.Connector.Response"/></returns>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.OnSubscribeReceived(Growl.Daemon.Subscriber,Growl.Connector.RequestInfo)">
+            <summary>
+            Handles the <see cref="E:Growl.Daemon.GrowlServer.SubscribeReceived"/> event
+            </summary>
+            <param name="subscriber">The <see cref="T:Growl.Daemon.Subscriber"/> information</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with the request</param>
+            <returns><see cref="T:Growl.Connector.Response"/></returns>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.AddServerHeaders(Growl.Connector.ExtensibleObject)">
+            <summary>
+            Adds some custom server-specific headers to the outgoing response
+            </summary>
+            <param name="exObj">The <see cref="T:Growl.Connector.Response"/> or <see cref="T:Growl.Connector.Error"/> being returned</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.AddRequestData(Growl.Connector.MessageBuilder,Growl.Connector.RequestData)">
+            <summary>
+            Adds any application-specific headers to the message
+            </summary>
+            <param name="mb">The <see cref="T:Growl.Connector.MessageBuilder"/> used to construct the message</param>
+            <param name="requestData">The <see cref="T:Growl.Connector.RequestData"/> that contains the application-specific data</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.newSocket_DidClose(Growl.Daemon.AsyncSocket)">
+            <summary>
+            Handles the <see cref="E:Growl.Daemon.AsyncSocket.DidClose"/> event
+            </summary>
+            <param name="sender">The <see cref="T:Growl.Daemon.AsyncSocket"/> that disconnected</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.socketCleanupTimer_Elapsed(System.Object,System.Timers.ElapsedEventArgs)">
+            <summary>
+            Checks to see if any open sockets have disconnected and cleans them up.
+            </summary>
+            <param name="sender">The sender</param>
+            <param name="e">Event args</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.mh_SocketUsageComplete(Growl.Daemon.AsyncSocket)">
+            <summary>
+            Called when a socket is done being used (for example, after all responses and callbacks
+            have been returned to the caller).
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> that has completed</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.LogInfo(System.String,System.Object[])">
+            <summary>
+            Log an informational message
+            </summary>
+            <param name="format">The format string.</param>
+            <param name="args">The values to log.</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.LogError(System.String,System.Object[])">
+            <summary>
+            Log an error message
+            </summary>
+            <param name="format">The format string.</param>
+            <param name="args">The values to log.</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.LogData(System.String)">
+            <summary>
+            Log data received or sent
+            </summary>
+            <param name="msg">The data to log</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.Log(Growl.Daemon.GrowlServer.LogMessageType,System.String)">
+            <summary>
+            Fires the <see cref="E:Growl.Daemon.GrowlServer.ServerMessage"/> event so calling code can handle the logging events
+            </summary>
+            <param name="type">The type of message being logged.</param>
+            <param name="message">The log message.</param>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GrowlServer.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="E:Growl.Daemon.GrowlServer.FailedToStart">
+            <summary>
+            Raised when the server fails to start properly
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.GrowlServer.RegisterReceived">
+            <summary>
+            Raised when a REGISTER request is received
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.GrowlServer.NotifyReceived">
+            <summary>
+            Raised when a NOTIFY request is received
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.GrowlServer.SubscribeReceived">
+            <summary>
+            Raised when a SUBSCRIBE request is received
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.GrowlServer.ServerMessage">
+            <summary>
+            Raised when the server is outputting an informational message to it implementor
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.GrowlServer.Port">
+            <summary>
+            The port that the server will listen on
+            </summary>
+            <value>int - The standard GNTP port is <see cref="F:Growl.Connector.ConnectorBase.TCP_PORT"/>.</value>
+        </member>
+        <member name="P:Growl.Daemon.GrowlServer.ServerName">
+            <summary>
+            The name of the server.
+            </summary>
+            <remarks>
+            This name is returned in the GNTP responses as the Origin-Software-Name node.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.GrowlServer.LoggingEnabled">
+            <summary>
+            Indicates if logging is enabled.
+            </summary>
+            <remarks>
+            If logging is enabled, a new text file will be written for each request/response/callback group. The files can
+            be found in the 'Logs' folder underneath the specified UserFolder.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.GrowlServer.RequireLocalPassword">
+            <summary>
+            Indicates if local applications must supply a password.
+            </summary>
+            <value>
+            <c>true</c> - local applications must supply a password;
+            <c>false</c> - local applications do not need to supply a password
+            </value>
+            <remarks>
+            Network applications must always supply a password.
+            Not all local applications supply the password, so some notifications may be blocked if enabled.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.GrowlServer.RequireLANPassword">
+            <summary>
+            Indicates if LAN applications must supply a password.
+            </summary>
+            <value>
+            <c>true</c> - LAN applications must supply a password;
+            <c>false</c> - LAN applications do not need to supply a password
+            </value>
+            <remarks>
+            Network applications normally must always supply a password, but LAN
+            applications can be exempted.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.GrowlServer.AllowNetworkNotifications">
+            <summary>
+            Indicates if network (non-local) requests are allowed.
+            </summary>
+            <value>
+            <c>true</c> - network requests are allowed;
+            <c>false</c> - network requests are blocked
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.GrowlServer.AllowWebNotifications">
+            <summary>
+            Indicates if webpage (browser-based) requests are allowed.
+            </summary>
+            <value>
+            <c>true</c> - browser-based requests are allowed;
+            <c>false</c> - browser-based requests are blocked
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.GrowlServer.AllowSubscriptions">
+            <summary>
+            Indicates if client subscriptions (SUBSCRIBE) requests are allowed
+            </summary>
+            <value>
+            <c>true</c> - Subscriptions are allowed;
+            <c>false</c> - Subscriptions are not allowed
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.GrowlServer.PasswordManager">
+            <summary>
+            Contains the list of allowed passwords used to authorize incoming requests
+            </summary>
+            <value>
+            <see cref="P:Growl.Daemon.GrowlServer.PasswordManager"/>
+            </value>
+        </member>
+        <member name="T:Growl.Daemon.GrowlServer.RegisterReceivedEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GrowlServer.RegisterReceived"/> event.
+            </summary>
+            <param name="application">The <see cref="T:Growl.Connector.Application"/> that is registering</param>
+            <param name="notificationTypes">A list of <see cref="T:Growl.Connector.NotificationType"/>s being registered</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with the request</param>
+            <returns><see cref="T:Growl.Connector.Response"/></returns>
+        </member>
+        <member name="T:Growl.Daemon.GrowlServer.NotifyReceivedEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GrowlServer.NotifyReceived"/> event.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> that was received</param>
+            <param name="callbackInfo">The <see cref="T:Growl.Daemon.CallbackInfo"/> for the notification</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with the request</param>
+            <returns><see cref="T:Growl.Connector.Response"/></returns>
+        </member>
+        <member name="T:Growl.Daemon.GrowlServer.SubscribeReceivedEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GrowlServer.SubscribeReceived"/> event.
+            </summary>
+            <param name="subscriber">The <see cref="T:Growl.Daemon.Subscriber"/> information</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with the request</param>
+            <returns><see cref="T:Growl.Daemon.SubscriptionResponse"/></returns>
+        </member>
+        <member name="T:Growl.Daemon.GrowlServer.ServerMessageEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GrowlServer.ServerMessage"/> event.
+            </summary>
+            <param name="sender">The <see cref="T:Growl.Daemon.GrowlServer"/> sending the message</param>
+            <param name="type">The <see cref="T:Growl.Daemon.GrowlServer.LogMessageType">type</see> of message</param>
+            <param name="message">The message</param>
+        </member>
+        <member name="T:Growl.Daemon.GrowlServer.LogMessageType">
+            <summary>
+            The type of log message
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.LogMessageType.Information">
+            <summary>
+            Informational
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.LogMessageType.Data">
+            <summary>
+            Raw data sent or received
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GrowlServer.LogMessageType.Error">
+            <summary>
+            Error
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.SubscriptionConnector">
+            <summary>
+            Used to communicate with Growl when subscribing to notifications.
+            </summary>
+            <remarks>
+            After calling the <see cref="M:Growl.Daemon.SubscriptionConnector.Subscribe"/> method, this class will
+            automatically try to renew the subscription at regular intervals in
+            order to keep the subscription alive or reestablish it if it fails.
+            The renewal interval is determined by the subscribed-to server.
+            </remarks>
+        </member>
+        <member name="F:Growl.Daemon.SubscriptionConnector.RETRY_INTERVAL">
+            <summary>
+            How often to try connecting to the server if it is not available
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.SubscriptionConnector.subscriber">
+            <summary>
+            The <see cref="T:Growl.Daemon.Subscriber"/> information
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.SubscriptionConnector.ttl">
+            <summary>
+            The interval at which renewal requests are sent.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.SubscriptionConnector.timer">
+            <summary>
+            Fires more frequently than the TTL value in order to keep the subscription alive.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.SubscriptionConnector.timerID">
+            <summary>
+            A unique ID used each time the timer is started/stopped
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.#ctor(Growl.Daemon.Subscriber,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.SubscriptionConnector"/> class.
+            </summary>
+            <param name="subscriber">The <see cref="T:Growl.Daemon.Subscriber"/> information/</param>
+            <param name="password">The password used to authenticate requests</param>
+            <param name="hostname">The hostname of the Growl instance to subscribe to.</param>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.#ctor(Growl.Daemon.Subscriber,System.String,System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.SubscriptionConnector"/> class
+            and allows the communication port to be set.
+            </summary>
+            <param name="subscriber">The <see cref="T:Growl.Daemon.Subscriber"/> information/</param>
+            <param name="password">The password used to authenticate requests</param>
+            <param name="hostname">The hostname of the Growl instance to subscribe to.</param>
+            <param name="port">The port of the Growl instance to subscribe to.</param>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.Subscribe">
+            <summary>
+            Subscribes the caller to be notified whenever the server receives a notification.
+            </summary>
+            <remarks>
+            Once subscribed, this class will handle renewing the subscription automatically
+            for the lifetime of the instance.
+            
+            IMPORTANT: If the subscription succeeds (OnOKResponse event fires), the calling code should
+            make sure to add the subscribed-to server's password to their PasswordManager instance.
+            The subscribed-to server will be using its own password to authorize/encrypt requests
+            (since it never knows the subscriber's password), so this password should be authorized
+            for the lifetime of the subscription. // TODO: should we manage this for them (maybe pass in PasswordManager instance to Subscribe?)
+            </remarks>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.StopRenewing">
+            <summary>
+            Stops renewing the subscription.
+            </summary>
+            <remarks>
+            Note that 'StopRenewing' is not necessarily the same as 'Unsubscribe'. If the subscription password is still
+            included in the PasswordManager and the subscribed-to server has not reach the expiration TTL yet, notifications
+            will still be forwarded and received.
+            In order to stop receiving notifications completely, you must also remove the subscription password from
+            the PasswordManager.
+            </remarks>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.RenewSubscription">
+            <summary>
+            Renews the callers subscription to the server to avoid being timed-out.
+            </summary>
+            <remarks>
+            By default, the renewal interval is equal to (Server TTL - 30 seconds).
+            </remarks>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.OnResponseReceived(System.String,System.Object)">
+            <summary>
+            Parses the response and raises the appropriate event
+            </summary>
+            <param name="responseText">The raw GNTP response</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.OnCommunicationFailure(Growl.Connector.Response,System.Object)">
+            <summary>
+            Occurs when any of the following network conditions occur:
+            1. Unable to connect to target host for any reason
+            2. Write request fails
+            3. Read request fails
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/> that contains information about the failure</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.OnOKResponse(Growl.Daemon.SubscriptionResponse)">
+            <summary>
+            Called when an 'OK' response occurs.
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/></param>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.OnErrorResponse(Growl.Daemon.SubscriptionResponse)">
+            <summary>
+            Called when an 'ERROR' response occurs.
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/></param>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.StartRenewalTimer">
+            <summary>
+            Starts the renewal timer.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.StopRenewalTimer">
+            <summary>
+            Stops the renewal timer.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.timer_Elapsed(System.Object,System.Timers.ElapsedEventArgs)">
+            <summary>
+            Fires when the renewal timer elapses. Renews the caller's subscription.
+            </summary>
+            <param name="sender">The sender</param>
+            <param name="e">Event args</param>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.SubscriptionConnector.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="E:Growl.Daemon.SubscriptionConnector.OKResponse">
+            <summary>
+            Occurs when an 'OK' response is received
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.SubscriptionConnector.ErrorResponse">
+            <summary>
+            Occurs when an 'ERROR' response is received
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.SubscriptionConnector.ResponseEventHandler">
+            <summary>
+            Represents methods that handle responses to 'SUBSCRIBE' requests
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.GNTPSocketReader">
+            <summary>
+            Reads GNTP data over a standard TCP connection.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPSocketReader.socket">
+            <summary>
+            The <see cref="T:Growl.Daemon.AsyncSocket"/> making the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPSocketReader.parser">
+            <summary>
+            Parses the GNTP data, extracting data and checking for validity
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPSocketReader.#ctor(Growl.Daemon.AsyncSocket,Growl.Connector.PasswordManager,System.Boolean,System.Boolean,System.Boolean,System.Boolean,Growl.Connector.RequestInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.GNTPSocketReader"/> class.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/></param>
+            <param name="passwordManager">The <see cref="T:Growl.Connector.PasswordManager"/> containing a list of allowed passwords</param>
+            <param name="passwordRequired">Indicates if a password is required</param>
+            <param name="allowNetworkNotifications">Indicates if network requests are allowed</param>
+            <param name="allowBrowserConnections">Indicates if browser requests are allowed</param>
+            <param name="allowSubscriptions">Indicates if SUBSCRIPTION requests are allowed</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with this request</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPSocketReader.Read(System.Byte[])">
+            <summary>
+            Reads the socket data and handles the request
+            </summary>
+            <param name="alreadyReadBytes">Any bytes that were already read from the socket</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPSocketReader.SocketDidRead(Growl.Daemon.AsyncSocket,System.Byte[],System.Int64)">
+            <summary>
+            Handles the socket's DidRead event.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/></param>
+            <param name="readBytes">Array of <see cref="T:System.Byte"/>s that were read</param>
+            <param name="tag">The tag identifying the read operation</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPSocketReader.parser_MessageParsed(Growl.Daemon.GNTPRequest)">
+            <summary>
+            Handles the parser's <see cref="E:Growl.Daemon.GNTPParser.MessageParsed"/> event
+            </summary>
+            <param name="request">The parsed <see cref="T:Growl.Daemon.GNTPRequest"/></param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPSocketReader.parser_Error(Growl.Connector.Error)">
+            <summary>
+            Handles the parser's <see cref="E:Growl.Daemon.GNTPParser.Error"/> event
+            </summary>
+            <param name="error">The <see cref="T:Growl.Connector.Error"/> information</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPSocketReader.CleanUp">
+            <summary>
+            Cleans up things by unhooking event handlers.
+            [This might not be needed, but i am leaving it for now]
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.GNTPSocketReader.Socket">
+            <summary>
+            Gets the <see cref="T:Growl.Daemon.AsyncSocket"/> associated with this request
+            </summary>
+            <value>The <see cref="T:Growl.Daemon.AsyncSocket"/>.</value>
+        </member>
+        <member name="T:Growl.Daemon.GNTPRequest">
+            <summary>
+            Represents a valid parsed GNTP request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPRequest.version">
+            <summary>
+            The version of the GNTP request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPRequest.directive">
+            <summary>
+            The type of GNTP request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPRequest.key">
+            <summary>
+            The key used to validate and encrypt the message
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPRequest.headers">
+            <summary>
+            The collection of headers parsed from the current request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPRequest.applicationName">
+            <summary>
+            The name of the application sending the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPRequest.notificationsToBeRegistered">
+            <summary>
+            A collection of the groups of headers for each notification type to be registered
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPRequest.callbackContext">
+            <summary>
+            The callback context associated with the request
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPRequest.#ctor(System.String,Growl.Connector.RequestType,Growl.Connector.Key,Growl.Connector.HeaderCollection,System.String,System.Collections.Generic.List{Growl.Connector.HeaderCollection},Growl.Connector.CallbackContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.GNTPRequest"/> class.
+            </summary>
+            <param name="version">The version of the GNTP request.</param>
+            <param name="directive">The type of GNTP request.</param>
+            <param name="key">The key used to validate and encrypt the message.</param>
+            <param name="headers">The collection of headers parsed from the current request.</param>
+            <param name="applicationName">The name of the application sending the request.</param>
+            <param name="notificationsToBeRegistered">A collection of the groups of headers for each notification type to be registered.</param>
+            <param name="callbackContext">The callback context associated with the request.</param>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequest.Version">
+            <summary>
+            Gets the version of the GNTP request
+            </summary>
+            <value>The only supported value is currently: 1.0</value>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequest.Directive">
+            <summary>
+            Gets the type of the request
+            </summary>
+            <value><see cref="T:Growl.Connector.RequestType"/></value>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequest.Key">
+            <summary>
+            Gets the <see cref="P:Growl.Daemon.GNTPRequest.Key"/> used to validate and encrypt the request
+            </summary>
+            <value><see cref="P:Growl.Daemon.GNTPRequest.Key"/></value>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequest.Headers">
+            <summary>
+            Gets the list of headers parsed from the request.
+            </summary>
+            <value><see cref="T:Growl.Connector.HeaderCollection"/></value>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequest.ApplicationName">
+            <summary>
+            Gets the name of the application sending the request
+            </summary>
+            <value>string</value>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequest.NotificationsToBeRegistered">
+            <summary>
+            Gets the collection of groups of headers for all notifications to be registered.
+            </summary>
+            <value><see cref="T:System.Collections.Generic.List`1"/></value>
+        </member>
+        <member name="P:Growl.Daemon.GNTPRequest.CallbackContext">
+            <summary>
+            Gets the callback context associated with the request.
+            </summary>
+            <value><see cref="P:Growl.Daemon.GNTPRequest.CallbackContext"/></value>
+        </member>
+        <member name="T:Growl.Daemon.GNTPFlashSocketReader">
+            <summary>
+            Handles Flash policy requests
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPFlashSocketReader.socket">
+            <summary>
+            The <see cref="T:Growl.Daemon.AsyncSocket"/> making the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPFlashSocketReader.allowFlash">
+            <summary>
+            Indicates if Flash requests are allowed
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPFlashSocketReader.#ctor(Growl.Daemon.AsyncSocket,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.GNTPFlashSocketReader"/> class.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> making the request</param>
+            <param name="allowFlash">Indicates if Flash requests are allowed</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPFlashSocketReader.Read(System.Byte[])">
+            <summary>
+            Reads the socket data and handles the request
+            </summary>
+            <param name="alreadyReadBytes">Any bytes that were already read from the socket</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPFlashSocketReader.ReadPolicyRequest(Growl.Daemon.AsyncSocket,System.Byte[],System.Int64)">
+            <summary>
+            Reads the Flash policy request and returns the policy response if Flash requests are allowed.
+            </summary>
+            <param name="sender">The <see cref="T:Growl.Daemon.AsyncSocket"/></param>
+            <param name="readBytes">The bytes read from the socket</param>
+            <param name="tag">A tag identifying the read request</param>
+        </member>
+        <member name="T:Growl.Daemon.SubscriberKey">
+            <summary>
+            Represents a <see cref="T:Growl.Connector.Key"/> that can be used by a subscribing client when communicating with Growl.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.SubscriberKey.#ctor(Growl.Connector.Key,System.String,Growl.Connector.Cryptography.HashAlgorithmType,Growl.Connector.Cryptography.SymmetricAlgorithmType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.SubscriberKey"/> class.
+            </summary>
+            <param name="key">The <see cref="T:Growl.Connector.Key"/> to base this key upon.</param>
+            <param name="subscriberID">The unique subscriber ID</param>
+            <param name="hashAlgorithm">The <see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/> used when hashing values</param>
+            <param name="encryptionAlgorithm">The <see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/> used when encrypting values</param>
+        </member>
+        <member name="T:Growl.Daemon.BonjourService">
+            <summary>
+            Provides methods for advertising a service via Bonjour
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.BonjourService.DOMAIN">
+            <summary>
+            The default domain to search
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.BonjourService.GUID_KEY">
+            <summary>
+            The TXT dictionary key that holds the GUID
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.BonjourService.serviceName">
+            <summary>
+            The service name
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.BonjourService.serviceType">
+            <summary>
+            The service type
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.BonjourService.isStarted">
+            <summary>
+            Indicates if the bonjour service advertising this server is started
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.BonjourService.guid">
+            <summary>
+            The unique id of this instance of the service
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.BonjourService.service">
+            <summary>
+            The service that advertises this server
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.BonjourService.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the BonjourService class
+            </summary>
+            <param name="serviceName">The service name</param>
+            <param name="serviceType">The service type</param>
+        </member>
+        <member name="M:Growl.Daemon.BonjourService.Start(System.Int32)">
+            <summary>
+            Starts the Bonjour service that advertises this server
+            </summary>
+            <param name="port">The port the actual server is running on</param>
+        </member>
+        <member name="M:Growl.Daemon.BonjourService.Stop">
+            <summary>
+            Stops advertising this server, and stops monitoring for other Bonjour services.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.BonjourService.Publish(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Publishes the service information to the domain
+            </summary>
+            <param name="domain">The domain to publish to</param>
+            <param name="type">The service type</param>
+            <param name="name">The service name</param>
+            <param name="port">The port being advertised</param>
+            <returns><see cref="T:Mono.Zeroconf.RegisterService"/></returns>
+        </member>
+        <member name="M:Growl.Daemon.BonjourService.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.BonjourService.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="P:Growl.Daemon.BonjourService.IsSupported">
+            <summary>
+            Indicates if Bonjour is supported on the current platform
+            </summary>
+            <value>
+            <c>true</c> if Bonjour is supported and available on the current platform,
+            <c>false</c> otherwise (usually due to not being installed and/or started)
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.BonjourService.IsStarted">
+            <summary>
+            Indicates if the Bonjour services that advertise this server have been started.
+            </summary>
+            <value>
+            <c>true</c> if the service has been started,
+            <c>false</c> otherwise
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.BonjourService.GUID">
+            <summary>
+            The unique id of this instance of the service
+            </summary>
+            <value>guid string</value>
+        </member>
+        <member name="T:Growl.Daemon.FlashPolicy">
+            <summary>
+            Provides methods for handling Flash policy requests
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.FlashPolicy.REQUEST_INDICATOR">
+            <summary>
+            String that indicates the request may be a Flash policy request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.FlashPolicy.REQUEST">
+            <summary>
+            String that represents a valid Flash policy request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.FlashPolicy.requestBytes">
+            <summary>
+            Policy request as an array of bytes
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.FlashPolicy.responseBytes">
+            <summary>
+            Policy response as an array of bytes
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.FlashPolicy.#cctor">
+            <summary>
+            Type initializer
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.FlashPolicy.RequestBytes">
+            <summary>
+            Gets the array of bytes that represent a valid policy request
+            </summary>
+            <value>
+            array of bytes
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.FlashPolicy.ResponseBytes">
+            <summary>
+            Gets the array of bytes that represent a valid policy response
+            </summary>
+            <value>
+            array of bytes
+            </value>
+        </member>
+        <member name="T:Growl.Daemon.MessageHandler">
+            <summary>
+            Handles a single request/response/callback message transaction.
+            </summary>
+            <remarks>
+            This class is responsible for most of the heavy lifting when dealing with GNTP messages.
+            It parses the incoming request, passes off control for displaying the notification,
+            and then builds and sends the response.
+            </remarks>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.SEPERATOR">
+            <summary>
+            Seperator line for log files
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.request">
+            <summary>
+            The parsed request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.requestReader">
+            <summary>
+            The class responsible for reading and parsing incoming requests
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.serverName">
+            <summary>
+            The name of the server
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.logFolder">
+            <summary>
+            The path to the folder where log files are written
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.loggingEnabled">
+            <summary>
+            Indicates if logging is enabled or not
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.allowNetworkNotifications">
+            <summary>
+            Indicates if remote notifications are allowed
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.allowBrowserConnections">
+            <summary>
+            Indicates if notifications originating from a browser are allowed
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.allowSubscriptions">
+            <summary>
+            Indicates if client are allowed to subscribe to notifications from this server
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.passwordManager">
+            <summary>
+            The list of valid passwords
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.passwordRequired">
+            <summary>
+            Indicates if the request must supply a password
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.callbackInfo">
+            <summary>
+            The callback info associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.requestInfo">
+            <summary>
+            The request info associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.MessageHandler.socket">
+            <summary>
+            The socket used to receive the request and send the response and callback
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.#cctor">
+            <summary>
+            Type initializer for the MessageHandler class
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.#ctor(System.String,Growl.Connector.PasswordManager,System.Boolean,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.MessageHandler"/> class.
+            </summary>
+            <param name="serverName">Name of the server</param>
+            <param name="passwordManager">A list of valid passwords</param>
+            <param name="passwordRequired">Indicates if the request must contain a password</param>
+            <param name="logFolder">The path to the folder where log files are written</param>
+            <param name="loggingEnabled">Indicates if logging is enabled or not</param>
+            <param name="allowNetworkNotifications">Indicates if notifications from remote machines are allowed</param>
+            <param name="allowBrowserConnections">Indicates if notifications from browsers are allowed</param>
+            <param name="allowSubscriptions">Indicates if clients are allowed to subscribe to notifications from this server</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.InitialRead(Growl.Daemon.AsyncSocket)">
+            <summary>
+            Performs an initial read of the received data to see if it looks like a
+            valid request.
+            </summary>
+            <param name="socket"><see cref="T:Growl.Daemon.AsyncSocket"/></param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.SocketDidReadIndicatorBytes(Growl.Daemon.AsyncSocket,System.Byte[],System.Int64)">
+            <summary>
+            Handles the socket's DidRead event after reading only the first four bytes of data.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/></param>
+            <param name="readBytes">Array of <see cref="T:System.Byte"/>s that were read</param>
+            <param name="tag">The tag identifying the read operation</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.requestReader_MessageParsed(Growl.Daemon.GNTPRequest)">
+            <summary>
+            Handles the requestReader's <see cref="E:Growl.Daemon.GNTPRequestReader.MessageParsed"/> event
+            </summary>
+            <param name="request">The parsed <see cref="T:Growl.Daemon.GNTPRequest"/></param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.requestReader_Error(Growl.Connector.Error)">
+            <summary>
+            Handles the requestReader's <see cref="E:Growl.Daemon.GNTPRequestReader.Error"/> event
+            </summary>
+            <param name="error">The <see cref="E:Growl.Daemon.MessageHandler.Error"/> information</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.socket_DidReadTimeout(Growl.Daemon.AsyncSocket)">
+            <summary>
+            Handles the socket's <see cref="E:Growl.Daemon.AsyncSocket.DidReadTimeout"/> event
+            </summary>
+            <param name="sender">The <see cref="T:Growl.Daemon.AsyncSocket"/></param>
+            <returns>Always returns <c>true</c></returns>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.WriteResponse(Growl.Connector.MessageBuilder,System.Boolean)">
+            <summary>
+            Writes the response back to the original sender.
+            </summary>
+            <param name="mb">The <see cref="T:Growl.Connector.MessageBuilder"/> containing the data to write</param>
+            <param name="requestComplete">Indicates if this completes the transaction (all responses and callbacks have been written)</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.WriteError(System.Int32,System.String,System.Object[])">
+            <summary>
+            Writes an error response back to the original sender.
+            </summary>
+            <param name="errorCode">The error code</param>
+            <param name="errorMessage">The error message</param>
+            <param name="args">Any additional data to include in the error message</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.WriteError(Growl.Daemon.AsyncSocket,System.Int32,System.String,System.Object[])">
+            <summary>
+            Writes an error response back to the original sender.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> used to write the response</param>
+            <param name="errorCode">The error code</param>
+            <param name="errorMessage">The error message</param>
+            <param name="args">Any additional data to include in the error message</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.WriteError(Growl.Daemon.AsyncSocket,Growl.Connector.Error)">
+            <summary>
+            Writes an error response back to the original sender.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> used to write the response</param>
+            <param name="error">The error</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.Write(Growl.Daemon.AsyncSocket,Growl.Connector.MessageBuilder,System.Int32,System.Int64,System.Boolean,System.Boolean)">
+            <summary>
+            Writes data to the specified socket.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> to write the data to</param>
+            <param name="mb">The <see cref="T:Growl.Connector.MessageBuilder"/> containing the data to write</param>
+            <param name="timeout">The socket write timeout value</param>
+            <param name="tag">The tag that will identify the write operation (can be referenced in the socket's DidWrite event)</param>
+            <param name="disconnectAfterWriting">Indicates if the server should disconnect the socket after writing the data</param>
+            <param name="requestComplete">Indicates if the request is complete once the data is written</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.FinalWrite(Growl.Daemon.AsyncSocket,System.Byte[],System.Int32,System.Int64,System.Boolean,System.Boolean)">
+            <summary>
+            Performs the actual writing of data to the socket. Used by all other Write* methods.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> to write the data to</param>
+            <param name="bytes">The bytes to write to the socket</param>
+            <param name="timeout">The socket write timeout value</param>
+            <param name="tag">The tag that will identify the write operation (can be referenced in the socket's DidWrite event)</param>
+            <param name="disconnectAfterWriting">Indicates if the server should disconnect the socket after writing the data</param>
+            <param name="requestComplete">Indicates if the request is complete once the data is written</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.Log(Growl.Daemon.Data)">
+            <summary>
+            Logs the specified data.
+            </summary>
+            <param name="data">The <see cref="T:Growl.Daemon.Data"/> to log</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.OnMessageParsed(Growl.Daemon.AsyncSocket)">
+            <summary>
+            Called when the request is successfully parsed.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> that the request came in on</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.OnSocketUsageComplete(Growl.Daemon.AsyncSocket)">
+            <summary>
+            Called when the socket usage is complete (all responses and callbacks have
+            been written).
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> used in the transaction</param>
+        </member>
+        <member name="M:Growl.Daemon.MessageHandler.CheckAlreadyProcessed">
+            <summary>
+            Checks the 'Received' headers to see if this machine has already handled this request
+            </summary>
+            <returns>
+            <c>true</c> if this machine has already handled this request;
+            <c>false</c> otherwise
+            </returns>
+            <remarks>
+            This check is not 100% perfect. All we can check for is if the machine name is in the Received header value.
+            It could appear in the Received header even if it did not already process it (similarly name machine, etc), 
+            producing a false positive. Just be aware.
+            </remarks>
+        </member>
+        <member name="E:Growl.Daemon.MessageHandler.Error">
+            <summary>
+            Occurs when the MessageHandler is going to return an Error response
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.MessageHandler.MessageParsed">
+            <summary>
+            Occurs when the request has been successfully parsed
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.MessageHandler.SocketUsageComplete">
+            <summary>
+            Occurs when the socket usage is complete (all response and callbacks have been written)
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.MessageHandler.CallbackInfo">
+            <summary>
+            Gets the <see cref="P:Growl.Daemon.MessageHandler.CallbackInfo"/> associated with the request.
+            </summary>
+            <value><see cref="P:Growl.Daemon.MessageHandler.CallbackInfo"/></value>
+        </member>
+        <member name="P:Growl.Daemon.MessageHandler.RequestInfo">
+            <summary>
+            Gets the <see cref="P:Growl.Daemon.MessageHandler.RequestInfo"/> associated with the request.
+            </summary>
+            <value><see cref="P:Growl.Daemon.MessageHandler.RequestInfo"/></value>
+        </member>
+        <member name="P:Growl.Daemon.MessageHandler.Socket">
+            <summary>
+            Gets the socket used for reading the request and writing the response and any callbacks.
+            </summary>
+            <value><see cref="T:Growl.Daemon.AsyncSocket"/></value>
+        </member>
+        <member name="P:Growl.Daemon.MessageHandler.Request">
+            <summary>
+            The parsed GNTP request.
+            </summary>
+            <value><see cref="T:Growl.Daemon.GNTPRequest"/></value>
+            <remarks>
+            This property will only be populated once the request has successfully been parsed.
+            </remarks>
+        </member>
+        <member name="T:Growl.Daemon.MessageHandler.MessageHandlerErrorEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.MessageHandler.Error"/> event.
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.MessageHandler.MessageHandlerMessageParsedEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.MessageHandler.MessageParsed"/> event.
+            </summary>
+            <param name="mh">The <see cref="T:Growl.Daemon.MessageHandler"/> that parsed the message</param>
+        </member>
+        <member name="T:Growl.Daemon.MessageHandler.MessageHandlerSocketUsageCompleteEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.MessageHandler.SocketUsageComplete"/> event.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> whose usage is complete</param>
+        </member>
+        <member name="T:Growl.Daemon.CallbackInfo">
+            <summary>
+            Represents information needed by the receiver in order to perform a callback
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.CallbackInfo.context">
+            <summary>
+            The callback context from the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.CallbackInfo.messageHandler">
+            <summary>
+            The MessageHandler that will peform the callback write
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.CallbackInfo.notificationID">
+            <summary>
+            The unique notification ID
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.CallbackInfo.alreadyResponded">
+            <summary>
+            Indicates if a callback associated with this notification has already been triggered
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.CallbackInfo.additionalInfo">
+            <summary>
+            Any additional information to return in the callback
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.CallbackInfo.requestInfo">
+            <summary>
+            Represents metadata about a received request such as when it was received, by whom, etc.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.CallbackInfo.ShouldKeepConnectionOpen">
+            <summary>
+            Indicates if the server should keep the connection open to perform the callback
+            </summary>
+            <returns>
+            <c>true</c> to keep the connection open and perform the callback via the connection,
+            <c>false</c> if the callback is url-based and will be performed out-of-band
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.CallbackInfo.SetAdditionalInfo(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Saves all extended information that should be returned with the callback response.
+            </summary>
+            <param name="additionalInfo">A <see cref="T:System.Collections.Generic.Dictionary`2"/> containing all of the additional information key/value pairs</param>
+        </member>
+        <member name="M:Growl.Daemon.CallbackInfo.HandleCallbackFromForwarder(Growl.Connector.Response,Growl.Connector.CallbackData)">
+            <summary>
+            Handles the callback from a forwarder.
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/> from the forwarder</param>
+            <param name="callbackData">The <see cref="T:Growl.Connector.CallbackData"/></param>
+        </member>
+        <member name="E:Growl.Daemon.CallbackInfo.ForwardedNotificationCallback">
+            <summary>
+            Occurs when a forwarded notification triggers a callback from the forwarded destination
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.CallbackInfo.Context">
+            <summary>
+            The callback context from the request
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.CallbackInfo.MessageHandler">
+            <summary>
+            The MessageHandler that will peform the callback write
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.CallbackInfo.NotificationID">
+            <summary>
+            Gets or sets the unique notification ID provided in the request
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.CallbackInfo.AlreadyResponded">
+            <summary>
+            Indicates if the request that spawned this callback has already been responded to.
+            </summary>
+            <remarks>
+            When a notification is forwarded to another computer, the notification may be clicked/handled on both computers.
+            Only the first response action is returned and all subsequent actions are ignored.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.CallbackInfo.AdditionalInfo">
+            <summary>
+            Gets a list of all extended-information key/value pairs that should be returned with the callback response.
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.CallbackInfo.RequestInfo">
+            <summary>
+            Represents metadata about a received request such as when it was received, by whom, etc.
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.CallbackInfo.ForwardedNotificationCallbackHandler">
+            <summary>
+            Handles the <see cref="E:Growl.Daemon.CallbackInfo.ForwardedNotificationCallback"/> event
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.GNTPParser2">
+            <summary>
+            This class handles parsing GNTP requests. Data is fed in and parsed in real-time.
+            If the request is malformed or invalid, an error event will be triggered. Otherwise,
+            when an entire valid request has been read, a 'message parsed' event will be triggered.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.PARTIAL_MESSAGE_NOTICE">
+            <summary>
+            Message logged when a request is only partially read before encountering an error
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.alreadyReceived">
+            <summary>
+            Contains data already read and parsed.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.tag">
+            <summary>
+            Tag used to indicate where in the parsing process the parser is at and what to expect next
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.regExMessageHeader_Local">
+            <summary>
+            Regex used to parse GNTP headers for local requests (dont require password)
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.regExMessageHeader_Remote">
+            <summary>
+            Regex used to parse GNTP headers for non-local requests (password required)
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.allowNetworkNotifications">
+            <summary>
+            Indicates if remote notifications are allowed
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.allowBrowserConnections">
+            <summary>
+            Indicates if notifications originating from a browser are allowed
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.allowSubscriptions">
+            <summary>
+            Indicates if client are allowed to subscribe to notifications from this server
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.key">
+            <summary>
+            The key used to validate and encrypt the message
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.passwordManager">
+            <summary>
+            The list of valid passwords
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.ivHex">
+            <summary>
+            The hex-encoded IV value from the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.iv">
+            <summary>
+            The actual IV bytes from the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.passwordRequired">
+            <summary>
+            Indicates if the request must supply a password
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.headers">
+            <summary>
+            The collection of headers parsed from the current request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.version">
+            <summary>
+            The version of the GNTP request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.directive">
+            <summary>
+            The type of GNTP request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.keyHashAlgorithm">
+            <summary>
+            The type of hashing algorithm used in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.encryptionAlgorithm">
+            <summary>
+            The type of encryption used in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.applicationName">
+            <summary>
+            The name of the application sending the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.expectedNotifications">
+            <summary>
+            For REGISTER requests, the number of notifications expected to be registered
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.expectedNotificationsRemaining">
+            <summary>
+            For REGISTER requests, the number of notifcations still to be registered
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.currentNotification">
+            <summary>
+            For REGISTER requests, the index of the current notification type
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.notificationsToBeRegistered">
+            <summary>
+            A collection of the groups of headers for each notification type to be registered
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.pointersExpected">
+            <summary>
+            The number of binary pointers in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.pointersExpectedRemaining">
+            <summary>
+            The number of binary pointers still to be found in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.currentPointer">
+            <summary>
+            The index of the current binary pointer
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.pointers">
+            <summary>
+            A collection of all pointers in the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.callbackInfo">
+            <summary>
+            The callback info associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.callbackData">
+            <summary>
+            The callback data associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.callbackDataType">
+            <summary>
+            The callback data type associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.callbackUrl">
+            <summary>
+            The callback url associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.requestInfo">
+            <summary>
+            The request info associated with the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.GNTPParser2.decryptedRequest">
+            <summary>
+            The text of the request after decryption (null if the request was not originally encrypted)
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser2.#ctor(Growl.Connector.PasswordManager,System.Boolean,System.Boolean,System.Boolean,System.Boolean,Growl.Connector.RequestInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.GNTPParser"/> class.
+            </summary>
+            <param name="passwordManager">The <see cref="T:Growl.Connector.PasswordManager"/> containing a list of allowed passwords</param>
+            <param name="passwordRequired">Indicates if a password is required</param>
+            <param name="allowNetworkNotifications">Indicates if network requests are allowed</param>
+            <param name="allowBrowserConnections">Indicates if browser requests are allowed</param>
+            <param name="allowSubscriptions">Indicates if SUBSCRIPTION requests are allowed</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with this request</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser2.Parse(System.Byte[])">
+            <summary>
+            Parses the specified input bytes and returns information on what is expected next.
+            </summary>
+            <param name="inputBytes">The input bytes to parse.</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser2.OnMessageParsed">
+            <summary>
+            Called when the request is successfully parsed.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser2.OnError(System.Int32,System.String,System.Object[])">
+            <summary>
+            Triggers the Error event
+            </summary>
+            <param name="errorCode">The error code</param>
+            <param name="errorMessage">The error message</param>
+            <param name="args">Any additional data to include in the error message</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser2.ParseGNTPHeaderLine(System.String,System.Boolean)">
+            <summary>
+            Parses the GNTP header line.
+            </summary>
+            <param name="line">The GNTP header</param>
+            <param name="passwordRequired">Indicates if the request must contain a password</param>
+            <returns></returns>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser2.ParseEncryptedMessage(System.Byte[])">
+            <summary>
+            Parses the encrypted message.
+            </summary>
+            <param name="bytes">The encrypted bytes</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPParser2.GetNumberOfPointers">
+            <summary>
+            Gets the number of pointers that need to be read from the request, taking
+            into account any pre-cached binary data.
+            </summary>
+            <returns>The number of pointers that need to be read</returns>
+        </member>
+        <member name="E:Growl.Daemon.GNTPParser2.Error">
+            <summary>
+            Occurs when the MessageHandler is going to return an Error response
+            </summary>
+        </member>
+        <member name="E:Growl.Daemon.GNTPParser2.MessageParsed">
+            <summary>
+            Occurs when the request has been successfully parsed
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.GNTPParser2.Tag">
+            <summary>
+            Gets the value indicating where in the parsing process the parser is at and what to expect next.
+            </summary>
+            <value>long</value>
+        </member>
+        <member name="P:Growl.Daemon.GNTPParser2.DecryptedRequest">
+            <summary>
+            Gets the decrypted request.
+            </summary>
+            <value>
+            This value will only be set once the <see cref="E:Growl.Daemon.GNTPParser2.MessageParsed"/> event has been fired.
+            For unencrypted requests, this value will always be null.
+            For encrypted requests, this will contain the full decrypted data.
+            </value>
+        </member>
+        <member name="T:Growl.Daemon.GNTPParser2.GNTPParserErrorEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GNTPParser2.Error"/> event.
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.GNTPParser2.GNTPParserMessageParsedEventHandler">
+            <summary>
+            Represents the method that will handle the <see cref="E:Growl.Daemon.GNTPParser2.MessageParsed"/> event.
+            </summary>
+            <param name="request">The <see cref="T:Growl.Daemon.GNTPRequest"/> representing the parsed message</param>
+        </member>
+        <member name="T:Growl.Daemon.Data">
+            <summary>
+            Provides an immutable (unchangeable) container for raw data.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.Data.ToHexString(System.Byte[])">
+            <summary>
+            Converts the data to a hexadecimal string format for easy displaying or saving.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.Data.IsEqual(System.Byte[],System.Byte[])">
+            <summary>
+            Compares two byte arrays for equality.
+            </summary>
+            <returns>
+            True if both byte arrays are non-null, the same length, and are bit-wise equals.
+            False otherwise.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.Data.IsEqual(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Compares byte arrays for equality, starting at the designated offsets, for the given length.
+            </summary>
+            <returns>
+            True if both arrays are non-null, are greater than or equal to offset + length,
+            and are bit-wise equal for that length.
+            False otherwise.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.Data.ReadFile(System.String)">
+            <summary>
+            Reads the entire file, and stores the result in a Data object wrapping the read bytes.
+            Warning: This method is only to be used for small files.
+            </summary>
+            <param name="filePath">
+            	Relative or absolute path to file.
+            </param>
+            <returns>
+            	A regular Data object, which wraps the read bytes from the file.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.Data.#ctor(System.Byte[])">
+            <summary>
+            Creates a new Data object using the given buffer.
+            The buffer is not copied.
+            That is, the new Data object is simply a wrapper around the given byte array.
+            </summary>
+            <param name="buffer">
+            	Byte array to use as underlying data.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.Data.#ctor(System.Byte[],System.Boolean)">
+            <summary>
+            Creates a new Data object using the given buffer.
+            If the copy flag is set, this method will create a new buffer, and copy the data from the given buffer into it.
+            Thus changes to the given buffer will not affect this Data object.
+            Otherwise the new Data object will simply form a wrapper around the given data (without copying anything).
+            </summary>
+            <param name="buffer">
+            	Byte array to use for underlying data.
+            </param>
+            <param name="copy">
+            	Whether or not to copy data from the given buffer into a new buffer.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.Data.#ctor(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Creates a new Data object using a specified subset of the given data.
+            The data must necessarily be copied (otherwise it would be unsafe).
+            </summary>
+            <param name="buffer">
+            	Byte array to extract data from.
+            </param>
+            <param name="offset">
+            	The offset within buffer to start reading from.
+            </param>
+            <param name="length">
+            	The amount to read from buffer.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.Data.#ctor(Growl.Daemon.Data)">
+            <summary>
+            Creates a new Data object using the data.
+            The data is not copied.
+            That is, the new Data object is simply a wrapper around that same data.
+            </summary>
+            <param name="buffer">
+            	Data to use as underlying data.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.Data.#ctor(Growl.Daemon.Data,System.Boolean)">
+            <summary>
+            Creates a new Data object using the given data.
+            If the copy flag is set, this method will create a new buffer, and copy the buffer from the given data into it.
+            Thus changes to the given data will not affect this Data object.
+            Otherwise the new Data object will simply form a wrapper around the given data (without copying anything).
+            
+            Note: If you pass a Data object which uses an internal stream (IsStream = true), the data is always copied.
+            </summary>
+            <param name="buffer">
+            	Byte array to use for underlying data.
+            </param>
+            <param name="copy">
+            	Whether or not to copy data from the given buffer into a new buffer.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.Data.#ctor(Growl.Daemon.Data,System.Int32,System.Int32)">
+            <summary>
+            Creates a new Data object using a specified subset of the given data.
+            The data must necessarily be copied (otherwise it would be unsafe).
+            </summary>
+            <param name="buffer">
+            	Byte array to use for underlying data.
+            </param>
+            <param name="offset">
+            	The offset within data to start reading from.
+            </param>
+            <param name="data">
+            	The amount to read from data.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.Data.#ctor(System.Int32)">
+            <summary>
+            Creates a new Data object wrapping a newly created byte array of the given size.
+            </summary>
+            <param name="length">
+            	The size to make the underlying byte array.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.Data.#ctor(System.String)">
+            <summary>
+            Creates a new Data object, converting the string using UTF8.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.Data.#ctor(System.String,System.Text.Encoding)">
+            <summary>
+            Creates a new Data object, converting the string with the given encoding.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.Data.Copy(System.Byte[]@,System.Int32,System.Int32)">
+            <summary>
+            Copies a portion of the data into a given byte array.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.Data.ReadThroughTerm(System.Int32,System.Byte[],System.Int32@)">
+            <summary>
+            Reads data up to and including the given termination sequence.
+            Then encodes and returns the resulting data in the set encoding.
+            This method is a simple extension to LookForTerm.
+            </summary>
+            <param name="offset">
+            	The offset to start reading data from the underlying byte array.
+            </param>
+            <param name="term">
+            	The termination sequence. Ex "\n", "\r\n", ",", etc.
+            </param>
+            <param name="length">
+            	The length of data that was read.
+            </param>
+            <returns>
+            	The read data, generated by reading from the offset, up to and including the terminator,
+            	and encoding the result in the currently set encoding.
+            	Null if the terminator is not found.
+            </returns>
+            <exception cref="T:System.ArgumentException">
+            	Thrown when offset &gt;= Data.Length, or if term.Length == 0
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            	Thrown when term is null.
+            </exception>
+        </member>
+        <member name="M:Growl.Daemon.Data.LookForTerm(System.Int32,System.Byte[])">
+            <summary>
+            Looks for the given termination sequence in the data, starting from the given offset.
+            
+            Example:
+            If the underlying data represents the following string:
+            Host: deusty.com\r\nCheese: Yes Please
+            
+            And this method is called with offset=0, and term="\r\n",
+            then this method will return 16.
+            </summary>
+            <param name="offset">
+            	The offset from which to start looking for the termination sequence.
+            </param>
+            <param name="term">
+            	The termination sequence to look for.
+            </param>
+            <returns>
+            	Returns the starting position of the given term, if found.
+            	Otherwise, returns -1.
+            </returns>
+            <exception cref="T:System.ArgumentException">
+            	Thrown when offset &gt;= Data.Length, or if term.Length == 0
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            	Thrown when term is null.
+            </exception>
+        </member>
+        <member name="M:Growl.Daemon.Data.ToString">
+            <summary>
+            Reads the entire data into a string.
+            Uses the default encoding (UTF8).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Growl.Daemon.Data.ToString(System.Text.Encoding)">
+            <summary>
+            Reads the entire data into a string using the given encoding.
+            </summary>
+            <param name="encoding">
+            	The encoding to use when converting from raw bytes to a string.
+            </param>
+            <returns>
+            	A string from the data in the given encoding.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.Data.ToHexString">
+            <summary>
+            Converts the data to a hexadecimal string format.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.Data.WriteToFile(System.String)">
+            <summary>
+            Writes the data to the given filepath.
+            If the file doesn't exist, it is created.
+            If it does exist, it is overwritten.
+            </summary>
+            <param name="filepath">
+            	The filepath (relative or absolute) to write to.
+            </param>
+            <returns>
+            	True if the write finished successfully.
+            	False otherwise.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.Data.WriteToFile(System.String,System.Exception@)">
+            <summary>
+            Writes the data to the given filepath.
+            If the file doesn't exist, it is created.
+            If it does exist, it is overwritten.
+            </summary>
+            <param name="filepath">
+            	The filepath (relative or absolute) to write to.
+            </param>
+            <param name="e">
+            	If this method returns false, e will be set to the exception that occurred.
+            	Otherwise e will be set to null.
+            </param>
+            <returns>
+            	True if the write finished successfully.
+            	False otherwise.
+            </returns>
+        </member>
+        <member name="P:Growl.Daemon.Data.Length">
+            <summary>
+            Returns the length of the data.
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.Data.ByteArray">
+            <summary>
+            Returns the entire underlying data as a byte array.
+            Use this method when you need to pass a byte array as a method parameter.
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.Data.Item(System.Int32)">
+            <summary>
+            Reads a byte at the given index.
+            </summary>
+            <param name="index">
+            	The index at which to read.
+            </param>
+        </member>
+        <member name="T:Growl.Daemon.MutableData">
+            <summary>
+            Provides a mutable (changeable) container for raw data.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.#ctor">
+            <summary>
+            Creates a new zero-length MutableData object.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.IncreaseLength(System.Int32)">
+            <summary>
+            Increases the length of the underlying byte array by the given length.
+            Does nothing if the given length is non-positive.
+            To truncate data, use the setLength method, or one of the trim methods.
+            </summary>
+            <param name="extraLength">
+            	The length in bytes.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.SetLength(System.Int32)">
+            <summary>
+            Sets the length of the underlying byte array.
+            If the given length is the same as the current length, this method does nothing.
+            If the given length is greater than the current length,
+            a new bigger array will be created and the bytes will be copied into it.
+            If the given length is less than the current length,
+            a new smaller array will be created and the bytes will be copied into it, with excess data being truncated.
+            </summary>
+            <param name="length">
+            	The length in bytes.
+            </param>
+            <exception cref="T:System.ArgumentException">
+            	Thrown only if the length parameter is negative.
+            </exception>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.TrimStart(System.Int32)">
+            <summary>
+            Trims a given amount from the beginning of the underlying buffer.
+            </summary>
+            <param name="length">
+            	The number of bytes to trim.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.TrimEnd(System.Int32)">
+            <summary>
+            Trims a given amount from the end of the underlying buffer.
+            </summary>
+            <param name="length">
+            	The number of bytes to trim.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.AppendData(Growl.Daemon.Data)">
+            <summary>
+            This method automatically increases the length of the data by the proper length,
+            and copies the bytes from the given data object into the mutable data array.
+            </summary>
+            <param name="data">
+            	A Data object to copy bytes from.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.AppendData(Growl.Daemon.Data,System.Int32,System.Int32)">
+            <summary>
+            Reads from the given data, starting at the given offset and reading the given length,
+            and appends the read data to the underlying buffer.
+            The underlying buffer length is automatically increased as needed.
+            
+            This method properly handles reading from stream data (data.IsStream == true).
+            </summary>
+            <param name="data">
+            	The data to append to the end of the underlying buffer.
+            </param>
+            <param name="offset">
+            	The offset from which to start copying from the given data.
+            </param>
+            <param name="length">
+            	The amount to copy from the given data.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.AppendData(System.Byte[])">
+            <summary>
+            This method automatically increases the length of the data by the proper length,
+            and copies the data from the given byte array into the mutable data array.
+            </summary>
+            <param name="byteArray">
+            	The array of bytes to append to the end of the current array.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.AppendData(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            This method automatically increases the length of the data by the proper length,
+            and copies the data from the given byte array into the underlying buffer.
+            The data is copied starting at the given offset up to the given length.
+            </summary>
+            <param name="byteArray">
+            	The array of bytes to append to the end of the underlying buffer.
+            </param>
+            <param name="offset">
+            	The offset from which to start copying data from the given byteArray.
+            </param>
+            <param name="length">
+            	The amount of data to copy from the given byteArray.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.InsertData(System.Int32,Growl.Daemon.Data)">
+            <summary>
+            This method automatically increases the length of the data by the proper length,
+            and copies the data from the given byte array into the underlying buffer.
+            The data is copied starting at the given offset up to the given length.
+            The data is inserted into the underlying buffer at the given index.
+            </summary>
+            <param name="index">
+            	The position in this instance where insertion begins.
+            </param>
+            <param name="data">
+            	The data to insert into the underlying buffer.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.InsertData(System.Int32,Growl.Daemon.Data,System.Int32,System.Int32)">
+            <summary>
+            This method automatically increases the length of the data by the proper length,
+            and copies the data from the given byte array into the underlying buffer.
+            The data is copied starting at the given offset up to the given length.
+            The data is inserted into the underlying buffer at the given index.
+            </summary>
+            <param name="index">
+            	The position in this instance where insertion begins.
+            </param>
+            <param name="data">
+            	The data to insert into the underlying buffer.
+            </param>
+            <param name="offset">
+            	The offset from which to start copying data from the given data.
+            </param>
+            <param name="length">
+            	The amount of data to copy from the given data.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.InsertData(System.Int32,System.Byte[])">
+            <summary>
+            This method automatically increases the length of the data by the proper length,
+            and copies the data from the given byte array into the underlying buffer.
+            The data is copied starting at the given offset up to the given length.
+            The data is inserted into the underlying buffer at the given index.
+            </summary>
+            <param name="index">
+            	The position in this instance where insertion begins.
+            </param>
+            <param name="byteArray">
+            	The array of bytes to insert into the underlying buffer.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.MutableData.InsertData(System.Int32,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            This method automatically increases the length of the data by the proper length,
+            and copies the data from the given byte array into the underlying buffer.
+            The data is copied starting at the given offset up to the given length.
+            The data is inserted into the underlying buffer at the given index.
+            </summary>
+            <param name="index">
+            	The position in this instance where insertion begins.
+            </param>
+            <param name="byteArray">
+            	The array of bytes to insert into the underlying buffer.
+            </param>
+            <param name="offset">
+            	The offset from which to start copying data from the given byteArray.
+            </param>
+            <param name="length">
+            	The amount of data to copy from the given byteArray.
+            </param>
+        </member>
+        <member name="T:Growl.Daemon.WebSocketHandshakeHandler">
+            <summary>
+            Handles the initial handshake for WebSocket communication
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.WebSocketHandshakeHandler.REQUEST_INDICATOR">
+            <summary>
+            String that indicates the request may be a WebSocket request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.WebSocketHandshakeHandler.socket">
+            <summary>
+            The socket making the connection
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.WebSocketHandshakeHandler.origin">
+            <summary>
+            The allowed origin
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.WebSocketHandshakeHandler.location">
+            <summary>
+            The location of the WebSocket endpoint
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.WebSocketHandshakeHandler.callback">
+            <summary>
+            Called when the handshake is complete
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.WebSocketHandshakeHandler.handshake">
+            <summary>
+            Handshake information
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.WebSocketHandshakeHandler.#ctor(Growl.Daemon.AsyncSocket,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.WebSocketHandshakeHandler"/> class.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/> making the connection</param>
+            <param name="origin">The allowed origin of connections, or *.</param>
+            <param name="location">The location of the WebSocket endpoint</param>
+        </member>
+        <member name="M:Growl.Daemon.WebSocketHandshakeHandler.DoHandshake(Growl.Daemon.WebSocketHandshakeHandler.HandshakeCompleteEventHandler)">
+            <summary>
+            Does the handshake and then calls the callback when complete.
+            </summary>
+            <param name="callback">The <see cref="T:Growl.Daemon.WebSocketHandshakeHandler.HandshakeCompleteEventHandler"/> callback.</param>
+        </member>
+        <member name="M:Growl.Daemon.WebSocketHandshakeHandler.socket_DidRead(Growl.Daemon.AsyncSocket,System.Byte[],System.Int64)">
+            <summary>
+            Handles the socket's DidRead event.
+            Reads the HTTP headers and sends the handshake response.
+            </summary>
+            <param name="sender">The <see cref="T:Growl.Daemon.AsyncSocket"/>.</param>
+            <param name="data">The data read.</param>
+            <param name="tag">The tag identifying the read request.</param>
+        </member>
+        <member name="M:Growl.Daemon.WebSocketHandshakeHandler.socket_DidWrite(Growl.Daemon.AsyncSocket,System.Int64)">
+            <summary>
+            Handles the socket's DidWrite event.
+            Calls the callback.
+            </summary>
+            <param name="sender">The <see cref="T:Growl.Daemon.AsyncSocket"/>.</param>
+            <param name="tag">The tag identifying the write request.</param>
+        </member>
+        <member name="T:Growl.Daemon.WebSocketHandshakeHandler.HandshakeCompleteEventHandler">
+            <summary>
+            Represents methods that handle the HandshakeComplete event
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.Handshake">
+            <summary>
+            Represents a websocket handshake. The class knows the format of the handshake, both from the client and the host.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Handshake.fields">
+            <summary>
+            The handshake-related fields from the request
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.Handshake.raw">
+            <summary>
+            The raw HTTP header information
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.Handshake.#ctor(System.Byte[],System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.Handshake"/> class.
+            </summary>
+            <param name="handshakeRaw">The raw HTTP information received from the client</param>
+            <param name="length">The length of the handshake information</param>
+        </member>
+        <member name="M:Growl.Daemon.Handshake.GetHostResponse(System.String,System.String,System.String)">
+            <summary>
+            Get the expected response to the handshake.
+            </summary>
+            <returns>string</returns>
+        </member>
+        <member name="M:Growl.Daemon.Handshake.SetFields(System.Text.RegularExpressions.GroupCollection)">
+            <summary>
+            Sets the handshake-related fields based on the HTTP information.
+            </summary>
+            <param name="gc">Regex-matched group collection</param>
+        </member>
+        <member name="P:Growl.Daemon.Handshake.Fields">
+            <summary>
+            Gets the handshake-related fields from the request
+            </summary>
+            <value><see cref="T:System.Collections.Generic.Dictionary`2"/></value>
+        </member>
+        <member name="P:Growl.Daemon.Handshake.Raw">
+            <summary>
+            Gets the raw HTTP header information.
+            </summary>
+            <value>byte array</value>
+        </member>
+        <member name="T:Growl.Daemon.ResourceCache">
+            <summary>
+            Provides methods for getting and storing binary resources in a file-based cache.
+            </summary>
+            <remarks>
+            Each application's resources will be cached in a seperate sub-folder inside of the
+            cache.
+            </remarks>
+        </member>
+        <member name="F:Growl.Daemon.ResourceCache.EXTENSION">
+            <summary>
+            The file extension for resource files
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.ResourceCache.cache">
+            <summary>
+            Cache pointers
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.ResourceCache.enabled">
+            <summary>
+            Indicates if the cache is enabled or not
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.ResourceCache.resourceFolder">
+            <summary>
+            The physical path to where resources will be saved
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.ResourceCache.filter">
+            <summary>
+            File search pattern filter
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.#cctor">
+            <summary>
+            Type initializer
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.IsCached(System.String,System.String)">
+            <summary>
+            Indicates if the specified resource is already cached
+            </summary>
+            <param name="applicationName">The application that owns the resource</param>
+            <param name="resourceID">The resource ID</param>
+            <returns>
+            <c>true</c> if the resource is cached,
+            <c>false</c> otherwise
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.Get(System.String,System.String)">
+            <summary>
+            Gets the specified from the cache
+            </summary>
+            <param name="applicationName">The application that owns the resource</param>
+            <param name="resourceID">The resource ID</param>
+            <returns>
+            <see cref="T:Growl.CoreLibrary.BinaryData"/> if the resource exists in the cache, <c>null</c> otherwise
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.Add(System.String,Growl.CoreLibrary.BinaryData)">
+            <summary>
+            Adds the specified resource to the cache
+            </summary>
+            <param name="applicationName">The application that owns the resource</param>
+            <param name="binaryData"><see cref="T:Growl.CoreLibrary.BinaryData"/> to cache</param>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.GetApplicationCacheDirectoryName(System.String)">
+            <summary>
+            Gets the application-specific cache folder name
+            </summary>
+            <param name="applicationName">The application that owns the resources</param>
+            <returns>string - folder path</returns>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.GetResourceFilename(System.String,System.String)">
+            <summary>
+            Gets the full physical path to a cached resource
+            </summary>
+            <param name="applicationName">The application that owns the resource</param>
+            <param name="resourceID">The resource ID</param>
+            <returns>string - file path</returns>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.CreateAppCacheDirectory(System.String)">
+            <summary>
+            Ensures that the app-specific cache directory is created
+            </summary>
+            <param name="path">The full path to the app-specific cache</param>
+            <returns><see cref="T:System.IO.DirectoryInfo"/></returns>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.ReadFile(System.String)">
+            <summary>
+            Reads the contents of a file
+            </summary>
+            <param name="path">The path of the file to read</param>
+            <returns>array of bytes</returns>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.WriteFile(System.String,System.Byte[])">
+            <summary>
+            Writes the specified bytes to a file
+            </summary>
+            <param name="path">The path of the file to write to</param>
+            <param name="bytes">The data to write</param>
+            <returns>
+            <c>true</c> if the data was successfully written,
+            <c>false</c> otherwise
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.PurgeCache">
+            <summary>
+            Purges all cache pointers
+            </summary>
+            <remarks>
+            This method does not delete the underlying files.
+            </remarks>
+        </member>
+        <member name="M:Growl.Daemon.ResourceCache.ReadCacheFromDisk(System.String)">
+            <summary>
+            Reads exisiting files into the cache
+            </summary>
+            <param name="path">The physical path to the cache</param>
+        </member>
+        <member name="P:Growl.Daemon.ResourceCache.Enabled">
+            <summary>
+            Indicates if the resource cache is enabled or not
+            </summary>
+            <value>
+            <c>true</c> if resources are cached to disk,
+            <c>false otherwise</c>
+            </value>
+            <remarks>
+            Caching resources to disk can help speed up the server by allowing it to skip reading
+            inline binary data that it already has cached.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.ResourceCache.ResourceFolder">
+            <summary>
+            The physical path to the folder where resources will be cached.
+            </summary>
+            <value>
+            string - Ex: c:\temp\
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.ResourceCache.IsCacheConfigured">
+            <summary>
+            Indicates if the cache is configured for use
+            </summary>
+            <value>
+            <c>true</c> if the cache is enabled and has a valid ResourceFolder set,
+            <c>false otherwise</c>
+            </value>
+        </member>
+        <member name="T:Growl.Daemon.NextIndicator">
+            <summary>
+            Represents information about what is expected next when the <see cref="T:Growl.Daemon.GNTPParser"/> is
+            parsing a request. It specifies either an absolute amount of bytes expected (length) or
+            a set of indicator bytes to look for.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.NextIndicator.None">
+            <summary>
+            No more data is expected.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.NextIndicator.CRLF">
+            <summary>
+            The next bit of data should be read until a CRLF is encountered.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.NextIndicator.CRLFCRLF">
+            <summary>
+            The next bit of data should be read until two CRLFs in a row are encountered.
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.NextIndicator.bytes">
+            <summary>
+            The indicator bytes
+            </summary>
+        </member>
+        <member name="F:Growl.Daemon.NextIndicator.length">
+            <summary>
+            The amount of data expected
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.NextIndicator.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.NextIndicator"/> class.
+            </summary>
+            <param name="bytes">The indicator bytes to look for.</param>
+        </member>
+        <member name="M:Growl.Daemon.NextIndicator.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.NextIndicator"/> class.
+            </summary>
+            <param name="length">The number of bytes to read.</param>
+        </member>
+        <member name="P:Growl.Daemon.NextIndicator.Bytes">
+            <summary>
+            Gets the indicator bytes to look for.
+            </summary>
+            <value>
+            If <see cref="P:Growl.Daemon.NextIndicator.UseBytes"/> is <c>true</c>, this contains the indicator bytes to look for;
+            otherwise, it returns null.
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.NextIndicator.Length">
+            <summary>
+            Gets the number of bytes to read.
+            </summary>
+            <value>
+            If <see cref="P:Growl.Daemon.NextIndicator.UseLength"/> is <c>true</c>, this contains the number of bytes to be read;
+            otherwise, it returns 0.
+            </value>
+        </member>
+        <member name="P:Growl.Daemon.NextIndicator.UseBytes">
+            <summary>
+            Gets a value indicating whether to use the indicator bytes or not.
+            </summary>
+            <value><c>true</c> if the indicator bytes should be used; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Growl.Daemon.NextIndicator.UseLength">
+            <summary>
+            Gets a value indicating whether to use the number of bytes or not.
+            </summary>
+            <value><c>true</c> if the number of bytes should be used; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Growl.Daemon.NextIndicator.ShouldContinue">
+            <summary>
+            Gets a value indicating whether or not the reader should continue reading data or not.
+            </summary>
+            <value>
+            <c>true</c> if more data is expected and the reader should continue; 
+            <c>false</c> if no more data is expected (valid response) or if an error condition was encountered
+            </value>
+        </member>
+        <member name="T:Growl.Daemon.GNTPWebSocketReader">
+            <summary>
+            Reads GNTP data over a WebSocket connection
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPWebSocketReader.#ctor(Growl.Daemon.AsyncSocket,Growl.Connector.PasswordManager,System.Boolean,System.Boolean,System.Boolean,System.Boolean,Growl.Connector.RequestInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Daemon.GNTPWebSocketReader"/> class.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/></param>
+            <param name="passwordManager">The <see cref="T:Growl.Connector.PasswordManager"/> containing a list of allowed passwords</param>
+            <param name="passwordRequired">Indicates if a password is required</param>
+            <param name="allowNetworkNotifications">Indicates if network requests are allowed</param>
+            <param name="allowBrowserConnections">Indicates if browser requests are allowed</param>
+            <param name="allowSubscriptions">Indicates if SUBSCRIPTION requests are allowed</param>
+            <param name="requestInfo">The <see cref="T:Growl.Connector.RequestInfo"/> associated with this request</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPWebSocketReader.parser_MessageParsed(Growl.Daemon.GNTPRequest)">
+            <summary>
+            Handles the parser's <see cref="E:Growl.Daemon.GNTPParser.MessageParsed"/> event
+            </summary>
+            <param name="request">The parsed <see cref="T:Growl.Daemon.GNTPRequest"/></param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPWebSocketReader.parser_Error(Growl.Connector.Error)">
+            <summary>
+            Handles the parser's <see cref="E:Growl.Daemon.GNTPParser.Error"/> event
+            </summary>
+            <param name="error">The <see cref="T:Growl.Connector.Error"/> information</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPWebSocketReader.CleanUp">
+            <summary>
+            Cleans up things by unhooking event handlers.
+            [This might not be needed, but i am leaving it for now]
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.GNTPWebSocketReader.Read(System.Byte[])">
+            <summary>
+            Reads the socket data and handles the request
+            </summary>
+            <param name="alreadyReadBytes">Any bytes that were already read from the socket</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPWebSocketReader.SocketDidRead(Growl.Daemon.AsyncSocket,System.Byte[],System.Int64)">
+            <summary>
+            Handles the socket's DidRead event.
+            </summary>
+            <param name="socket">The <see cref="T:Growl.Daemon.AsyncSocket"/></param>
+            <param name="readBytes">Array of <see cref="T:System.Byte"/>s that were read</param>
+            <param name="tag">The tag identifying the read operation</param>
+        </member>
+        <member name="M:Growl.Daemon.GNTPWebSocketReader.BeforeResponse(System.Byte[]@)">
+            <summary>
+            Frames the response with the special WebSocket framing bytes before sending.
+            </summary>
+            <param name="bytes">The data to be sent.</param>
+        </member>
+        <member name="T:Growl.Daemon.AsyncSocket">
+            <summary>
+            The AsyncSocket class allows for asynchronous socket activity,
+            and has usefull methods that allow for controlled reading of a certain length,
+            or until a specified terminator.
+            It also has the ability to timeout asynchronous operations, and has several useful events.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.#ctor">
+            <summary>
+            Default Constructor.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.ProcessEvent(System.Object)">
+            <summary>
+            Processes a single event in the event queue.
+            This method is used in muliti-threaded mode for asynchronous events.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.ProcessEvent">
+            <summary>
+            Processes every event in the event queue, and returns the value from the last event.
+            This method is used in multi-threaded mode for synchronous events.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.GetApplicationForm">
+            <summary>
+            Returns a form that can be used to invoke an event.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.InheritInvokeOptions(Growl.Daemon.AsyncSocket)">
+            <summary>
+            Allows invoke options to be inherited from another AsyncSocket.
+            This is usefull when accepting connections.
+            </summary>
+            <param name="fromSocket">
+            	AsyncSocket object to copy invoke options from.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Accept(System.UInt16)">
+            <summary>
+            Tells the socket to begin accepting connections on the given port.
+            The socket will listen on all interfaces.
+            Be sure to register to receive DidAccept events.
+            </summary>
+            <param name="port">
+            	The port to accept connections on. Pass 0 to allow the OS to pick any available port.
+            </param>
+            <returns>
+            	True if the socket was able to begin listening for connections on the given address and port.
+            	False otherwise.  If false consult the error parameter for more information.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Accept(System.UInt16,System.Exception@)">
+            <summary>
+            Tells the socket to begin accepting connections on the given port.
+            The socket will listen on all interfaces.
+            Be sure to register to receive DidAccept events.
+            </summary>
+            <param name="port">
+            	The port to accept connections on. Pass 0 to allow the OS to pick any available port.
+            </param>
+            <param name="error">
+            	If this method returns false, the error will contain the reason for it's failure.
+            </param>
+            <returns>
+            	True if the socket was able to begin listening for connections on the given address and port.
+            	False otherwise.  If false consult the error parameter for more information.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Accept(System.String,System.UInt16)">
+            <summary>
+            Tells the socket to begin accepting connections on the given address and port.
+            Be sure to register to receive DidAccept events.
+            </summary>
+            <param name="hostaddr">
+            	A string that contains an IP address in dotted-quad notation for IPv4
+            	or in colon-hexadecimal notation for IPv6.
+            	For convenience, you may also pass the strings "loopback" or "localhost".
+            </param>
+            <param name="port">
+            	The port to accept connections on. Pass 0 to allow the OS to pick any available port.
+            </param>
+            <returns>
+            	True if the socket was able to begin listening for connections on the given address and port.
+            	False otherwise.  If false consult the error parameter for more information.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Accept(System.String,System.UInt16,System.Exception@)">
+            <summary>
+            Tells the socket to begin accepting connections on the given address and port.
+            Be sure to register to receive DidAccept events.
+            </summary>
+            <param name="hostaddr">
+            	A string that contains an IP address in dotted-quad notation for IPv4
+            	or in colon-hexadecimal notation for IPv6.
+            	For convenience, you may also pass the strings "loopback" or "localhost".
+            	Pass null to listen on all interfaces.
+            </param>
+            <param name="port">
+            	The port to accept connections on. Pass 0 to allow the OS to pick any available port.
+            </param>
+            <param name="error">
+            	If this method returns false, the error will contain the reason for it's failure.
+            </param>
+            <returns>
+            	True if the socket was able to begin listening for connections on the given address and port.
+            	False otherwise.  If false consult the error parameter for more information.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.socket_DidAccept(System.IAsyncResult)">
+            <summary>
+            Description forthcoming
+            </summary>
+            <param name="iar"></param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.PreConfigure(System.Net.Sockets.Socket)">
+            <summary>
+            Called to configure an AsyncSocket after an accept has occured.
+            This is called before OnSocketDidAccept.
+            </summary>
+            <param name="socket">
+            	The newly accepted socket.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.PostConfigure">
+            <summary>
+            Called to configure an AsyncSocket after an accept has occured.
+            This is called after OnSocketDidAccept.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Connect(System.String,System.UInt16)">
+            <summary>
+            Begins an asynchronous connection attempt to the specified host and port.
+            Returns false if the connection attempt immediately fails.
+            If this method succeeds, the delegate will be informed of the
+            connection success/failure via the proper delegate methods.
+            </summary>
+            <param name="host">
+            	The host name or IP address to connect to.
+            	E.g. "deusty.com" or "70.85.193.226" or "2002:cd9:3ea8:0:88c8:b211:b605:ab59"
+            </param>
+            <param name="port">
+            	The port to connect to (eg. 80)
+            </param>
+            <returns>
+            	True if the socket was able to begin attempting to connect to the given host and port.
+            	False otherwise.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Connect(System.String,System.UInt16,System.Int32)">
+            <summary>
+            Begins an asynchronous connection attempt to the specified host and port.
+            Returns false if the connection attempt immediately fails.
+            If this method succeeds, the delegate will be informed of the
+            connection success/failure via the proper delegate methods.
+            </summary>
+            <param name="host">
+            	The host name or IP address to connect to.
+            	E.g. "deusty.com" or "70.85.193.226" or "2002:cd9:3ea8:0:88c8:b211:b605:ab59"
+            </param>
+            <param name="port">
+            	The port to connect to (eg. 80)
+            </param>
+            <param name="timeout">
+            	Timeout in milliseconds. Specify a negative value if no timeout is desired.
+            </param>
+            <returns>
+            	True if the socket was able to begin attempting to connect to the given host and port.
+            	False otherwise.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Connect(System.String,System.UInt16,System.Exception@)">
+            <summary>
+            Begins an asynchronous connection attempt to the specified host and port.
+            Returns false if the connection attempt immediately failed, in which case the error parameter will be set.
+            If this method succeeds, the delegate will be informed of the
+            connection success/failure via the proper delegate methods.
+            </summary>
+            <param name="host">
+            	The host name or IP address to connect to.
+            	E.g. "deusty.com" or "70.85.193.226" or "2002:cd9:3ea8:0:88c8:b211:b605:ab59"
+            </param>
+            <param name="port">
+            	The port to connect to (eg. 80)
+            </param>
+            <param name="error">
+            	If this method returns false, the error will contain the reason for it's failure.
+            </param>
+            <returns>
+            	True if the socket was able to begin attempting to connect to the given host and port.
+            	False otherwise.  If false consult the error parameter for more information.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Connect(System.String,System.UInt16,System.Int32,System.Exception@)">
+            <summary>
+            Begins an asynchronous connection attempt to the specified host and port.
+            Returns false if the connection attempt immediately failed, in which case the error parameter will be set.
+            If this method succeeds, the delegate will be informed of the
+            connection success/failure via the proper delegate methods.
+            </summary>
+            <param name="host">
+            	The host name or IP address to connect to.
+            	E.g. "deusty.com" or "70.85.193.226" or "2002:cd9:3ea8:0:88c8:b211:b605:ab59"
+            </param>
+            <param name="port">
+            	The port to connect to (eg. 80)
+            </param>
+            <param name="timeout">
+            	Timeout in milliseconds. Specify a negative value if no timeout is desired.
+            </param>
+            <param name="error">
+            	If this method returns false, the error will contain the reason for it's failure.
+            </param>
+            <returns>
+            	True if the socket was able to begin attempting to connect to the given host and port.
+            	False otherwise.  If false consult the error parameter for more information.
+            </returns>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Dns_DidResolve(System.IAsyncResult)">
+            <summary>
+            Callback method when dns has resolved the host (or was unable to resolve it).
+            
+            This method is thread safe.
+            </summary>
+            <param name="iar">
+            	The state of the IAsyncResult refers to the ConnectRequest object
+            	containing the parameters of the original call to the Connect() method.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.socket_DidConnect(System.IAsyncResult)">
+            <summary>
+            Callback method when socket has connected (or was unable to connect).
+            
+            This method is thread safe.
+            </summary>
+            <param name="iar">
+            	The state of the IAsyncResult refers to the socket that called BeginConnect().
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.socket_DidNotConnect(System.Object)">
+            <summary>
+            Called after a connect timeout timer fires.
+            This will fire on an available thread from the thread pool.
+            
+            This method is thread safe.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.CloseWithException(System.Exception)">
+            <summary>
+            Fires the WillDisconnect event, and then closes the socket.
+            
+            This method is NOT thread safe, and should only be invoked via thread safe methods.
+            </summary>
+            <param name="e">
+            	The exception that occurred, to be sent to the client.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.RecoverUnreadData">
+            <summary>
+            This method extracts any unprocessed data, and makes it available to the client.
+            
+            Called solely from CloseWithException, which is only called from thread safe methods.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.EmptyQueues">
+            <summary>
+            Clears the read and writes queues.
+            Remember that the queues are synchronized/thread-safe.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Close(System.Object)">
+            <summary>
+            Drops pending reads and writes, closes all sockets and stream, and notifies delegate if needed.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Close">
+            <summary>
+            Immediately stops all transfers, and releases any socket and stream resources.
+            Any pending reads or writes are dropped.
+            
+            If the socket is already closed, this method does nothing.
+            
+            Note: The SocketDidClose method will be called.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.CloseAfterReading">
+            <summary>
+            Closes the socket after all pending reads have completed.
+            After calling this, the read and write methods will do nothing.
+            The socket will close even if there are still pending writes.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.CloseAfterWriting">
+            <summary>
+            Closes after all pending writes have completed.
+            After calling this, the read and write methods will do nothing.
+            The socket will close even if there are still pending reads.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.CloseAfterReadingAndWriting">
+            <summary>
+            Closes after all pending reads and writes have completed.
+            After calling this, the read and write methods will do nothing.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.GetUnreadData">
+            <summary>
+            In the event of an error, this method may be called during SocketWillClose
+            to read any data that's left on the socket.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Read(System.Int32,System.Int64)">
+            <summary>
+            Reads the first available bytes on the socket.
+            </summary>
+            <param name="timeout">
+            	Timeout in milliseconds. Specify negative value for no timeout.
+            </param>
+            <param name="tag">
+            	Tag to identify read request.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Read(System.Int32,System.Int32,System.Int64)">
+            <summary>
+            Reads a certain number of bytes, and calls the delegate method when those bytes have been read.
+            If length is 0, this method does nothing and no delgate methods are called.
+            </summary>
+            <param name="length">
+            	The number of bytes to read.
+            </param>
+            <param name="timeout">
+            	Timeout in milliseconds. Specify negative value for no timeout.
+            </param>
+            <param name="tag">
+            	Tag to identify read request.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Read(System.Byte[],System.Int32,System.Int64)">
+            <summary>
+            Reads bytes up to and including the passed data paramter, which acts as a separator.
+            The bytes and the separator are returned by the delegate method.
+            
+            If you pass null or zero-length data as the separator, this method will do nothing.
+            To read a line from the socket, use the line separator (e.g. CRLF for HTTP) as the data parameter.
+            Note that this method is not character-set aware, so if a separator can occur naturally
+            as part of the encoding for a character, the read will prematurely end.
+            </summary>
+            <param name="term">
+            	The separator/delimeter to use.
+            </param>
+            <param name="timeout">
+            	Timeout in milliseconds. Specify negative value for no timeout.
+            </param>
+            <param name="tag">
+            	Tag to identify read request.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Read(System.Byte[],System.Int32,System.Int32,System.Int64)">
+            <summary>
+            Reads bytes up to and including the passed data parameter, which acts as a separator.
+            The bytes and the separator are returned by the delegate method.
+            
+            The amount of data read may not surpass the given maxLength (specified in bytes).
+            If the max length is surpassed, it is treated the same as a timeout - the socket is closed.
+            Pass -1 as maxLength if no length restriction is desired, or simply use the other Read method.
+            
+            If you pass null or zero-length data as the separator, or if you pass a maxLength parameter that is
+            less than the length of the data parameter, this method will do nothing.
+            To read a line from the socket, use the line separator (e.g. CRLF for HTTP) as the data parameter.
+            Not that this method is not character-set aware, so if a separator can occur naturally
+            as part of the encoding for a character, the read will prematurely end.
+            </summary>
+            <param name="term">
+            	The separator/delimeter to use.
+            </param>
+            <param name="timeout">
+            	Timeout in milliseconds. Specify negative value for no timeout.
+            </param>
+            <param name="maxLength">
+            	Max length of data to read (in bytes). Specify negative value for no max length.
+            </param>
+            <param name="tag">
+            	Tag to identify read request.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.MaybeDequeueRead(System.Object)">
+            <summary>
+            If possible, this method dequeues a read from the read queue and starts it.
+            This is only possible if all of the following are true:
+             1) any previous read has completed
+             2) there's a read in the queue
+             3) and the stream is ready.
+            
+            This method is thread safe.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.DoReadOverflow">
+            <summary>
+            This method fills the currentRead buffer with data from the readOverflow variable.
+            After this is properly completed, DoFinishRead is called to process the bytes.
+            
+            This method is called from MaybeDequeueRead().
+            
+            The above method is thread safe, so this method is inherently thread safe.
+            It is not explicitly thread safe though, and should not be called outside thread safe methods.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.DoStartRead">
+            <summary>
+            This method is called when either:
+             A) a new read is taken from the read queue
+             B) or when data has just been read from the stream, and we need to read more.
+            
+            More specifically, it is called from either:
+             A) MaybeDequeueRead()
+             B) DoFinishRead()
+            
+            The above methods are thread safe, or inherently thread safe, so this method is inherently thread safe.
+            It is not explicitly thread safe though, and should not be called outside thread safe methods.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.stream_DidRead(System.IAsyncResult)">
+            <summary>
+            Called after we've read data from the stream.
+            We now call DoBytesAvailable, which will read and process further available data via the stream.
+            
+            This method is thread safe.
+            </summary>
+            <param name="iar">AsyncState is AsyncReadPacket.</param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.stream_DidNotRead(System.Object)">
+            <summary>
+            Called after a read timeout timer fires.
+            This will generally fire on an available thread from the thread pool.
+            
+            This method is thread safe.
+            </summary>
+            <param name="state">state is AsyncReadPacket.</param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.DoFinishRead">
+            <summary>
+            This method is called when either:
+             A) a new read is taken from the read queue
+             B) or when data has just been read from the stream.
+            
+            More specifically, it is called from either:
+             A) DoReadOverflow()
+             B) stream_DidRead()
+            
+            The above methods are thread safe, so this method is inherently thread safe.
+            It is not explicitly thread safe though, and should not be called outside thread safe methods.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.CompleteCurrentRead">
+            <summary>
+            Completes the current read by ending it, and then informing the delegate that it's complete.
+            
+            This method is called from DoFinishRead, which is inherently thread safe.
+            Therefore this method is also inherently thread safe.
+            It is not explicitly thread safe though, and should not be called outside thread safe methods.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.EndCurrentRead">
+            <summary>
+            Ends the current read by disposing and nullifying the read timer,
+            and then nullifying the current read.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Write(System.Byte[],System.Int32,System.Int64)">
+            <summary>
+            Writes the specified data to the socket.
+            </summary>
+            <param name="data">
+            	The data to send.
+            </param>
+            <param name="timeout">
+            	Timeout in milliseconds. Specify a negative value if no timeout is desired.
+            </param>
+            <param name="tag">
+            	A tag that can be used to track the write.
+            	This tag will be returned in the callback methods.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.Write(System.Byte[],System.Int32,System.Int32,System.Int32,System.Int64)">
+            <summary>
+            Writes the specified data to the socket.
+            </summary>
+            <param name="data">
+            	The buffer that contains the data to write.
+            </param>
+            <param name="offset">
+            	The offset within the given data to start writing from.
+            </param>
+            <param name="length">
+            	The amount of data (in bytes) to write from the given data, starting from the given offset.
+            </param>
+            <param name="timeout">
+            	Timeout in milliseconds. Specify a negative value if no timeout is desired.
+            </param>
+            <param name="tag">
+            	A tag that can be used to track the write.
+            	This tag will be returned in the callback methods.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.MaybeDequeueWrite(System.Object)">
+            <summary>
+            If possible, this method dequeues a write from the write queue and starts it.
+            This is only possible if all of the following are true:
+             1) any previous write has completed
+             2) there's a write in the queue
+             3) and the socket is connected.
+            
+            This method is thread safe.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.DoSendBytes">
+            <summary>
+            This method is called when either:
+             A) a new write is taken from the write queue
+             B) or when a previos write has finished.
+            
+            More specifically, it is called from either:
+             A) MaybeDequeueWrite()
+             B) stream_DidWrite()
+            
+            The above methods are thread safe, so this method is inherently thread safe.
+            It is not explicitly thread safe though, and should not be called outside the above named methods.
+            </summary>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.stream_DidWrite(System.IAsyncResult)">
+            <summary>
+            Called when an asynchronous write has finished.
+            This may just be a chunk of the data, and not the entire thing.
+            
+            This method is thread safe.
+            </summary>
+            <param name="iar"></param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.stream_DidNotWrite(System.Object)">
+            <summary>
+            Called when a timeout occurs. (Called via thread timer).
+            
+            This method is thread safe.
+            </summary>
+            <param name="state">
+            	The AsyncWritePacket that the timeout applies to.
+            </param>
+        </member>
+        <member name="M:Growl.Daemon.AsyncSocket.CompleteCurrentWrite">
+            <summary>
+            Completes the current write by ending it, and then informing the delegate that it's complete.
+            
+            This method is called from stream_DidWrite, which is thread safe.
+            Therefore this method is inherently thread safe.
+            It is not explicitly thread safe though, and should not be called outside thread safe methods.
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.AsyncSocket.Tag">
+            <summary>
+            Gets or sets the object that contains data about the socket.
+            <remarks>
+            	Any type derived from the Object class can be assigned to this property.
+            	A common use for the Tag property is to store data that is closely associated with the socket.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.AsyncSocket.SynchronizingObject">
+            <summary>
+            Set the <see cref="T:System.ComponentModel.ISynchronizeInvoke">ISynchronizeInvoke</see>
+            object to use as the invoke object. When returning results from asynchronous calls,
+            the Invoke method on this object will be called to pass the results back
+            in a thread safe manner.
+            </summary>
+            <remarks>
+            If using in conjunction with a form, it is highly recommended
+            that you pass your main <see cref="T:System.Windows.Forms.Form">form</see> (window) in.
+            </remarks>
+            <remarks>
+            You should configure your invoke options before you start reading/writing.
+            It's recommended you don't change your invoke options in the middle of reading/writing.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.AsyncSocket.AllowApplicationForms">
+            <summary>
+            Allows the application to attempt to post async replies over the
+            application "main loop" by using the message queue of the first available
+            open form (window). This is retrieved through
+            <see cref="P:System.Windows.Forms.Application.OpenForms">Application.OpenForms</see>.
+            
+            Note: This is true by default.
+            </summary>
+            <remarks>
+            You should configure your invoke options before you start reading/writing.
+            It's recommended you don't change your invoke options in the middle of reading/writing.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.AsyncSocket.AllowMultithreadedCallbacks">
+            <summary>
+            If set to true, <see cref="P:Growl.Daemon.AsyncSocket.AllowApplicationForms">AllowApplicationForms</see>
+            is set to false and <see cref="P:Growl.Daemon.AsyncSocket.SynchronizingObject">SynchronizingObject</see> is set
+            to null. Any time an asynchronous method needs to invoke a delegate method
+            it will run the method in its own thread.
+            </summary>
+            <remarks>
+            If set to true, you will have to handle any synchronization needed.
+            If your application uses Windows.Forms or any other non-thread safe
+            library, then you will have to do your own invoking.
+            </remarks>
+            <remarks>
+            You should configure your invoke options before you start reading/writing.
+            It's recommended you don't change your invoke options in the middle of reading/writing.
+            </remarks>
+        </member>
+        <member name="P:Growl.Daemon.AsyncSocket.Connected">
+            <summary>
+            The Connected property gets the connection state of the Socket as of the last I/O operation.
+            When it returns false, the Socket was either never connected, or is no longer connected.
+            
+            Note that this functionallity matches normal Socket.Connected functionallity.
+            </summary>
+        </member>
+        <member name="P:Growl.Daemon.AsyncSocket.SmartConnected">
+            <summary>
+            Non-retarded method of Connected.
+            Returns the logical answer to the question "Is this socket connected."
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.AsyncSocket.AsyncReadPacket">
+            <summary>
+            The AsyncReadPacket encompasses the instructions for a read.
+            The content of a read packet allows the code to determine if we're:
+            reading to a certain length, reading to a certain separator, or simply reading the first chunk of data.
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.AsyncSocket.AsyncWritePacket">
+            <summary>
+            The AsyncWritePacket encompasses the instructions for a write.
+            </summary>
+        </member>
+        <member name="T:Growl.Daemon.AsyncSocket.AsyncSpecialPacket">
+            <summary>
+            Encompasses special instructions for interruptions in the read/write queues.
+            This class my be altered to support more than just TLS in the future.
+            </summary>
+        </member>
+    </members>
+</doc>

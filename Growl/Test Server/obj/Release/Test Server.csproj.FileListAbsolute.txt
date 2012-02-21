@@ -1,0 +1,17 @@
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\flashpolicy.xml
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\Test Server.exe
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\Test Server.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\Growl.Connector.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\Growl.CoreLibrary.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\Growl.Daemon.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\Mono.Zeroconf.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\Growl.Connector.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\Growl.CoreLibrary.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\bin\Release\Growl.Daemon.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Release\Test_Server.Form1.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Release\Test_Server.Properties.Resources.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Release\ResGen.read.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Release\ResGen.write.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Release\Test Server.exe
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl\Test Server\obj\Release\Test Server.pdb

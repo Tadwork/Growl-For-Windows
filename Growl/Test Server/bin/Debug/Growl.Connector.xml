@@ -1,0 +1,3118 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Growl.Connector</name>
+    </assembly>
+    <members>
+        <member name="T:Growl.Connector.GrowlException">
+            <summary>
+            The base exception type for any exceptions thrown from Growl code.
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.GrowlException.errorCode">
+            <summary>
+            The <see cref="P:Growl.Connector.GrowlException.ErrorCode"/> of the exception
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.GrowlException.args">
+            <summary>
+            Any additional information associated with the exception
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.GrowlException.#ctor(System.Int32,System.String,System.Object[])">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.GrowlException"/> class.
+            </summary>
+            <param name="errorCode">The <see cref="P:Growl.Connector.GrowlException.ErrorCode"/> of the exception</param>
+            <param name="errorDescription">The <see cref="T:Growl.Connector.ErrorDescription"/> of the exception</param>
+            <param name="args">Any additional information associated with the exception</param>
+        </member>
+        <member name="P:Growl.Connector.GrowlException.ErrorCode">
+            <summary>
+            Gets the <see cref="P:Growl.Connector.GrowlException.ErrorCode"/> of the exception
+            </summary>
+            <value>
+            int
+            </value>
+        </member>
+        <member name="P:Growl.Connector.GrowlException.AdditionalInfo">
+            <summary>
+            Gets any additional information associated with the exception
+            </summary>
+            <value>
+            Array of objects
+            </value>
+        </member>
+        <member name="T:Growl.Connector.ErrorCode">
+            <summary>
+            Contains the list of error codes that can be returned in error responses
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.TIMED_OUT">
+            <summary>
+            The server timed out waiting for the request to complete
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.NETWORK_FAILURE">
+            <summary>
+            The server was unavailable or the client could not reach the server for any reason
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.INVALID_REQUEST">
+            <summary>
+            The request contained an unsupported directive, invalid headers or values, or was otherwise malformed
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.UNKNOWN_PROTOCOL">
+            <summary>
+            The request was not a GNTP request
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.UNKNOWN_PROTOCOL_VERSION">
+            <summary>
+            The request specified an unknown or unsupported GNTP version
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.REQUIRED_HEADER_MISSING">
+            <summary>
+            The request was missing required information
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.NOT_AUTHORIZED">
+            <summary>
+            The request supplied a missing or wrong password/key or was otherwise not authorized
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.UNKNOWN_APPLICATION">
+            <summary>
+            Application is not registered to send notifications
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.UNKNOWN_NOTIFICATION">
+            <summary>
+            Notification type is not registered by the application
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.ALREADY_PROCESSED">
+            <summary>
+            The original request was already processed by this receiver (Normally, a request was forwarded back to a machine that already forwarded it)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorCode.INTERNAL_SERVER_ERROR">
+            <summary>
+            An internal server error occurred while processing the request
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.RequestData">
+            <summary>
+            Represents additional application-specific data that can be passed with a request and
+            will be returned with the response from Growl. The actual items and their values are
+            not used by Growl.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.RequestData.ToHeaders">
+            <summary>
+            Converts the object to a list of headers
+            </summary>
+            <returns><see cref="T:Growl.Connector.HeaderCollection"/></returns>
+        </member>
+        <member name="M:Growl.Connector.RequestData.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Connector.RequestData"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the object</param>
+            <returns><see cref="T:Growl.Connector.RequestData"/></returns>
+        </member>
+        <member name="T:Growl.Connector.PasswordManager">
+            <summary>
+            Contains a list of passwords and their associated keys, used to authorize incoming requests
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.PasswordManager.passwords">
+            <summary>
+            A list of valid passwords
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.PasswordManager.#ctor">
+            <summary>
+            Creates a new instance of the PasswordManager class
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.PasswordManager.Add(System.String,System.Boolean)">
+            <summary>
+            Adds a password to the list of valid passwords
+            </summary>
+            <param name="password">The new password</param>
+            <param name="permanent">Indicates if the password is permanent (user-specified) vs. temporary (automatically added by a subscription)</param>
+        </member>
+        <member name="M:Growl.Connector.PasswordManager.Add(Growl.Connector.Password)">
+            <summary>
+            Adds a password to the list of valid passwords
+            </summary>
+            <param name="password">The <see cref="T:Growl.Connector.Password"/> to add</param>
+        </member>
+        <member name="M:Growl.Connector.PasswordManager.Remove(System.String)">
+            <summary>
+            Removes the specified password from the list of valid passwords.
+            </summary>
+            <param name="password">The password to remove.</param>
+        </member>
+        <member name="M:Growl.Connector.PasswordManager.IsValid(System.String,System.String,Growl.Connector.Cryptography.HashAlgorithmType)">
+            <summary>
+            Checks the supplied <paramref name="keyHash"/> against all of the stored passwords to 
+            see if the hash is valid.
+            </summary>
+            <param name="keyHash">The hex-encoded hash to validate</param>
+            <param name="salt">The hex-encoded salt value</param>
+            <param name="hashAlgorithm">The <see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/> used to generate the hash</param>
+            <returns>
+            <c>true</c> if the hash matches one of the stored password/key values;
+            <c>false</c> if no match is found
+            </returns>
+        </member>
+        <member name="M:Growl.Connector.PasswordManager.IsValid(System.String,System.String,Growl.Connector.Cryptography.HashAlgorithmType,Growl.Connector.Cryptography.SymmetricAlgorithmType,Growl.Connector.Key@)">
+            <summary>
+            Checks the supplied <paramref name="keyHash"/> against all of the stored passwords to 
+            see if the hash is valid, and retuns the matching <see cref="T:Growl.Connector.Key"/> if a match is found.
+            </summary>
+            <param name="keyHash">The hex-encoded hash to validate</param>
+            <param name="salt">The hex-encoded salt value</param>
+            <param name="hashAlgorithm">The <see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/> used to generate the hash</param>
+            <param name="encryptionAlgorithm">The <see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/> used by this key to do encryption/decryption</param>
+            <param name="matchingKey">Contains the matching <see cref="T:Growl.Connector.Key"/> if a match is found</param>
+            <returns>
+            <c>true</c> if the hash matches one of the stored password/key values;
+            <c>false</c> if no match is found
+            If no match is found, <paramref name="matchingKey"/> will return <c>null</c>.
+            </returns>
+        </member>
+        <member name="P:Growl.Connector.PasswordManager.Passwords">
+            <summary>
+            Gets the list of valid passwords
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.Error">
+            <summary>
+            Represents an Error response
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.ExtensibleObject">
+            <summary>
+            Represents the base class for types that can be represented as a set of headers (including
+            pre-defined and custom headers)
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.ExtensibleObject.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.ExtensibleObject"/> class.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.ExtensibleObject.AddInheritedAttributesToHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Adds any inherited headers to the end of the header collection
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> to append the headers to</param>
+            <remarks>
+            This method should only be called from a derived class' .ToHeaders() method.
+            It takes care of adding the Origin-* headers as well as any X-* custom headers.
+            
+            This method is the same as calling both AddCommonAttributesToHeaders and 
+            AddCustomAttributesToHeaders.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.ExtensibleObject.SetInhertiedAttributesFromHeaders(Growl.Connector.ExtensibleObject,Growl.Connector.HeaderCollection)">
+            <summary>
+            Sets the object's base class properties from the supplied header list
+            </summary>
+            <param name="obj">The <see cref="T:Growl.Connector.ExtensibleObject"/> being rehydrated</param>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> containing the parsed header values</param>
+            <remarks>
+            This method should only be called from a derived class' .FromHeaders() method.
+            It takes care of setting the Origin-* related properties, as well as any custom attributes.
+            
+            This method is the same as calling both SetCommonAttributesFromHeaders and
+            SetCustomAttributesFromHeaders.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.ExtensibleObject.AddCommonAttributesToHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            When converting an <see cref="T:Growl.Connector.ExtensibleObject"/> to a list of headers,
+            this method adds the common attributes to the list of headers.
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> to add the custom headers to</param>
+        </member>
+        <member name="M:Growl.Connector.ExtensibleObject.SetCommonAttributesFromHeaders(Growl.Connector.ExtensibleObject,Growl.Connector.HeaderCollection)">
+            <summary>
+            When converting a list of headers to an <see cref="T:Growl.Connector.ExtensibleObject"/>, this
+            method sets the common attributes on the object.
+            </summary>
+            <param name="obj">The <see cref="T:Growl.Connector.ExtensibleObject"/> to be populated</param>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> containing the list of headers</param>
+        </member>
+        <member name="M:Growl.Connector.ExtensibleObject.AddCustomAttributesToHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            When converting an <see cref="T:Growl.Connector.ExtensibleObject"/> to a list of headers,
+            this method adds the custom attributes (both text and binary) to the
+            list of headers.
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> to add the custom attributes to</param>
+        </member>
+        <member name="M:Growl.Connector.ExtensibleObject.SetCustomAttributesFromHeaders(Growl.Connector.ExtensibleObject,Growl.Connector.HeaderCollection)">
+            <summary>
+            When converting a list of headers to an <see cref="T:Growl.Connector.ExtensibleObject"/>, this
+            method sets the custom attributes (both text and binary) on the object.
+            </summary>
+            <param name="obj">The <see cref="T:Growl.Connector.ExtensibleObject"/> to be populated</param>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> containing the list of headers</param>
+        </member>
+        <member name="M:Growl.Connector.ExtensibleObject.SetSoftwareInformation(System.String,System.String)">
+            <summary>
+            Sets the software information (name/version) for the current application
+            </summary>
+            <param name="name">The name of the software</param>
+            <param name="version">The version of the software</param>
+            <remarks>
+            This method is typically called by a server implementation that wants to identify itself
+            properly in the 'Origin-Software-*' headers.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.ExtensibleObject.SetPlatformInformation(System.String,System.String)">
+            <summary>
+            Sets the platform information (name/version) for the current application
+            </summary>
+            <param name="name">The name of the platform</param>
+            <param name="version">The version of the platform</param>
+            <remarks>
+            This method is typically called by a server implementation that wants to identify itself
+            properly in the 'Origin-Platform-*' headers.
+            Normally it is not necessary to call this method as the platform information is automatically
+            detected.
+            </remarks>
+        </member>
+        <member name="P:Growl.Connector.ExtensibleObject.MachineName">
+            <summary>
+            The name of the machine sending the notification
+            </summary>
+            <value>
+            string - Ex: Gazebo
+            </value>
+        </member>
+        <member name="P:Growl.Connector.ExtensibleObject.SoftwareName">
+            <summary>
+            The name of the software (framework) sending the notification
+            </summary>
+            <value>
+            string - Ex: GrowlConnector
+            </value>
+        </member>
+        <member name="P:Growl.Connector.ExtensibleObject.SoftwareVersion">
+            <summary>
+            The version of the software (framework) sending the notification
+            </summary>
+            <value>
+            string - Ex: 2.0
+            </value>
+        </member>
+        <member name="P:Growl.Connector.ExtensibleObject.PlatformName">
+            <summary>
+            The name of the platform (OS) sending the notification
+            </summary>
+            <value>
+            string - Ex: Windows XP
+            </value>
+        </member>
+        <member name="P:Growl.Connector.ExtensibleObject.PlatformVersion">
+            <summary>
+            The version of the platform (OS) sending the notification
+            </summary>
+            <value>
+            string - Ex: 5.0.12
+            </value>
+        </member>
+        <member name="P:Growl.Connector.ExtensibleObject.CustomTextAttributes">
+            <summary>
+            Gets a collection of custom text attributes associated with this object
+            </summary>
+            <remarks>
+            Each custom text attribute is equivalent to a custom "X-" header
+            </remarks>
+            <value>
+            <see cref="T:System.Collections.Generic.Dictionary`2"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.ExtensibleObject.CustomBinaryAttributes">
+            <summary>
+            Gets a collection of custom binary attributes associated with this object
+            </summary>
+            <remarks>
+            Each custom binary attribute is equivalent to a custom "X-" header with a 
+            "x-growl-resource://" value, as well as the necessary resource headers
+            (Identifier, Length, and binary bytes)
+            </remarks>
+            <value>
+            <see cref="T:System.Collections.Generic.Dictionary`2"/>
+            </value>
+        </member>
+        <member name="F:Growl.Connector.Error.errorCode">
+            <summary>
+            The error code of the response
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Error.description">
+            <summary>
+            The error description of the response
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Error.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.Error"/> class
+            without setting the error code or description.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Error.#ctor(System.Int32,System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.Error"/> class.
+            </summary>
+            <param name="errorCode">The error code</param>
+            <param name="description">The error description</param>
+        </member>
+        <member name="M:Growl.Connector.Error.ToHeaders">
+            <summary>
+            Converts the Error to a list of headers
+            </summary>
+            <returns><see cref="T:Growl.Connector.HeaderCollection"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Error.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Connector.Error"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the object</param>
+            <returns><see cref="T:Growl.Connector.Error"/></returns>
+        </member>
+        <member name="P:Growl.Connector.Error.ErrorCode">
+            <summary>
+            Gets the error code of the response
+            </summary>
+            <value>int</value>
+        </member>
+        <member name="P:Growl.Connector.Error.ErrorDescription">
+            <summary>
+            Gets the error description of the response
+            </summary>
+            <value>string</value>
+        </member>
+        <member name="T:Growl.Connector.DisplayName">
+            <summary>
+            Use the DisplayName class to retrieve the friendly display name from enumerated
+            values that make use of the DisplayNameAttribute
+            </summary>
+            <remarks>
+            This static class is the accessor for Enum fields that use the DisplayNameAttribute
+            custom attribute.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.DisplayName.#ctor">
+            <summary>
+            The default constructor is private so that this class can not be instanced
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.DisplayName.Fetch(System.Object)">
+            <summary>
+            The Fetch method retrieves the <see cref="P:Growl.Connector.DisplayNameAttribute.DisplayName"/> value from the
+            <see cref="T:Growl.Connector.DisplayNameAttribute"/> decorating the enum field.
+            of the enumField passed in.
+            </summary>
+            <param name="enumField">A specific field of an enumeration (MyEnum.Field)</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="enumField"/> is null</exception>
+            <returns cref="T:System.String">
+            String containing the value of <see cref="P:Growl.Connector.DisplayNameAttribute.DisplayName"/> if set.
+            If the DisplayNameAttribute was not set on the enum, the enumField's variable name is returned instead.
+            </returns>
+        </member>
+        <member name="T:Growl.Connector.HeaderCollection">
+            <summary>
+            Represents a set of <see cref="T:Growl.Connector.Header"/>s
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.HeaderCollection.headers">
+            <summary>
+            Contains a list of just the regular (defined) headers in the collection
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.HeaderCollection.customHeaders">
+            <summary>
+            Contains a list of just the custom headers in the collection
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.HeaderCollection.dataHeaders">
+            <summary>
+            Contains a list of just the application-specific data headers in the collection
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.HeaderCollection.pointers">
+            <summary>
+            Contains a list of just the resource pointer headers in the collection
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.HeaderCollection.allHeaders">
+            <summary>
+            Contains a list of all of the headers in the collection, regardless of type
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.AddHeader(Growl.Connector.Header)">
+            <summary>
+            Adds a <see cref="T:Growl.Connector.Header"/> to the collection
+            </summary>
+            <param name="header"><see cref="T:Growl.Connector.Header"/></param>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.AddHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Adds all of the headers in <paramref name="headers"/> to the
+            currently collection.
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> containing the headers to add</param>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.AssociateBinaryData(Growl.CoreLibrary.BinaryData)">
+            <summary>
+            Associates the specified <paramref name="binaryData"/> to its related header.
+            </summary>
+            <param name="binaryData"><see cref="T:Growl.CoreLibrary.BinaryData"/></param>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.Get(System.String)">
+            <summary>
+            Looks up the <see cref="T:Growl.Connector.Header"/> in the collection by the header name.
+            </summary>
+            <param name="name">The header name</param>
+            <returns><see cref="T:Growl.Connector.Header"/></returns>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.GetHeaderStringValue(System.String,System.Boolean)">
+            <summary>
+            Gets the string value of a header based on the header name
+            </summary>
+            <param name="name">The header name</param>
+            <param name="required">Indicates if the header is a required header</param>
+            <returns>string - header value</returns>
+            <remarks>
+            If <paramref name="required"/> is <c>true</c> and the header is not found in the collection, 
+            a <see cref="T:Growl.Connector.GrowlException"/> will be thrown. If the header is not required
+            and not found, <c>null</c> will be returned.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.GetHeaderBooleanValue(System.String,System.Boolean)">
+            <summary>
+            Gets the boolean value of a header based on the header name
+            </summary>
+            <param name="name">The header name</param>
+            <param name="required">Indicates if the header is a required header</param>
+            <returns>bool - header value</returns>
+            <remarks>
+            Valid <c>true</c> values include "TRUE" and "YES" in upper or lower case - 
+            all other values will be considered <c>false</c>.
+            If <paramref name="required"/> is <c>true</c> and the header is not found in the collection, 
+            a <see cref="T:Growl.Connector.GrowlException"/> will be thrown. If the header is not required
+            and not found, <c>false</c> will be returned.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.GetHeaderIntValue(System.String,System.Boolean)">
+            <summary>
+            Gets the integer value of a header based on the header name
+            </summary>
+            <param name="name">The header name</param>
+            <param name="required">Indicates if the header is a required header</param>
+            <returns>int - header value</returns>
+            <remarks>
+            If <paramref name="required"/> is <c>true</c> and the header is not found in the collection, 
+            a <see cref="T:Growl.Connector.GrowlException"/> will be thrown. If the header is not required
+            and not found, <c>zero</c> will be returned.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.GetHeaderResourceValue(System.String,System.Boolean)">
+            <summary>
+            Gets the <see cref="T:Growl.CoreLibrary.Resource"/> value of a header based on the header name
+            </summary>
+            <param name="name">The header name</param>
+            <param name="required">Indicates if the header is a required header</param>
+            <returns><see cref="T:Growl.CoreLibrary.Resource"/></returns>
+            <remarks>
+            If <paramref name="required"/> is <c>true</c> and the header is not found in the collection, 
+            a <see cref="T:Growl.Connector.GrowlException"/> will be thrown. If the header is not required
+            and not found, <c>null</c> will be returned.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.FromMessage(System.String)">
+            <summary>
+            Creates a <see cref="T:Growl.Connector.HeaderCollection"/> from a message
+            </summary>
+            <param name="message">The message to parse</param>
+            <returns><see cref="T:Growl.Connector.HeaderCollection"/></returns>
+        </member>
+        <member name="M:Growl.Connector.HeaderCollection.ThrowRequiredHeaderMissingException(System.String)">
+            <summary>
+            Throws a <see cref="T:Growl.Connector.GrowlException"/> with an error description that indicates that
+            a requested required header was not found.
+            </summary>
+            <param name="headerName">The header name that was not found</param>
+        </member>
+        <member name="P:Growl.Connector.HeaderCollection.Headers">
+            <summary>
+            Gets a list of all of the normal (defined) headers in the collection, 
+            excluding any custom headers.
+            </summary>
+            <value>
+            <see cref="T:System.Collections.Generic.List`1"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.HeaderCollection.CustomHeaders">
+            <summary>
+            Gets a list of all of the custom headers in the collection, 
+            excluding any normal (defined) headers.
+            </summary>
+            <value>
+            <see cref="T:System.Collections.Generic.List`1"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.HeaderCollection.DataHeaders">
+            <summary>
+            Gets a list of all of the application-specific data headers in the collection, 
+            excluding any normal (defined) headers.
+            </summary>
+            <value>
+            <see cref="T:System.Collections.Generic.List`1"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.HeaderCollection.Pointers">
+            <summary>
+            Gets a list of all of the resource pointer headers in the collection, 
+            excluding any other headers.
+            </summary>
+            <value>
+            <see cref="T:System.Collections.Generic.List`1"/>
+            </value>
+        </member>
+        <member name="T:Growl.Connector.Header">
+            <summary>
+            Represents a single header in a GNTP message
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.DATA_HEADER_PREFIX">
+            <summary>
+            The prefix used for application-specific (non-defined) data headers
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.CUSTOM_HEADER_PREFIX">
+            <summary>
+            The prefix used for custom (non-defined) headers
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.GROWL_RESOURCE_POINTER_PREFIX">
+            <summary>
+            The prefix used to identify binary resources that will be passed along with the message
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.BOOL_HEADER_TRUE_VALUE">
+            <summary>
+            The value of a boolean header that is set to true
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.BOOL_HEADER_FALSE_VALUE">
+            <summary>
+            The value of a boolean header that is set to false
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.HEADER_NAME_REGEX_GROUP_NAME">
+            <summary>
+            The RegEx group name for the match that contains the header name (see regExHeader expression below)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.HEADER_VALUE_REGEX_GROUP_NAME">
+            <summary>
+            The RegEx group name for the match that contains the header value (see regExHeader expression below)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.RESPONSE_ACTION">
+            <summary>
+            Response-Action header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.APPLICATION_NAME">
+            <summary>
+            Application-Name header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.APPLICATION_ICON">
+            <summary>
+            Application-Icon header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATIONS_COUNT">
+            <summary>
+            Notifications-Count header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_NAME">
+            <summary>
+            Notification-Name header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_DISPLAY_NAME">
+            <summary>
+            Notification-Display-Name header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_ENABLED">
+            <summary>
+            Notification-Enabled header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_ICON">
+            <summary>
+            Notification-Icon header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_ID">
+            <summary>
+            Notification-ID header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_TITLE">
+            <summary>
+            Notification-Title header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_TEXT">
+            <summary>
+            Notification-Text header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_STICKY">
+            <summary>
+            Notification-Sticky header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_PRIORITY">
+            <summary>
+            Notification-Priority header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_COALESCING_ID">
+            <summary>
+            Notification-Coalescing-ID header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_CALLBACK_RESULT">
+            <summary>
+            Notification-Callback-Result header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_CALLBACK_TIMESTAMP">
+            <summary>
+            Notification-Callback-Timestamp header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_CALLBACK_CONTEXT">
+            <summary>
+            Notification-Callback-Context header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_CALLBACK_CONTEXT_TYPE">
+            <summary>
+            Notification-Callback-Context-Type header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_CALLBACK_TARGET">
+            <summary>
+            Notification-Callback-Target header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NOTIFICATION_CALLBACK_CONTEXT_TARGET">
+            <summary>
+            Notification-Callback-Context-Target header (this is not a valid header, but it is left in for compatibility with existing implementations)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.RESOURCE_IDENTIFIER">
+            <summary>
+            Identifier header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.RESOURCE_LENGTH">
+            <summary>
+            Length header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.ORIGIN_MACHINE_NAME">
+            <summary>
+            Origin-Machine-Name header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.ORIGIN_SOFTWARE_NAME">
+            <summary>
+            Origin-Software-Name header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.ORIGIN_SOFTWARE_VERSION">
+            <summary>
+            Origin-Software-Version header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.ORIGIN_PLATFORM_NAME">
+            <summary>
+            Origin-Platform-Name header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.ORIGIN_PLATFORM_VERSION">
+            <summary>
+            Origin-Platform-Version header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.ERROR_CODE">
+            <summary>
+            Error-Code header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.ERROR_DESCRIPTION">
+            <summary>
+            Error-Description header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.RECEIVED">
+            <summary>
+            Received header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.SUBSCRIBER_ID">
+            <summary>
+            Subscriber-ID header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.SUBSCRIBER_NAME">
+            <summary>
+            Subscriber-Name header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.SUBSCRIBER_PORT">
+            <summary>
+            Subscriber-Port header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.SUBSCRIPTION_TTL">
+            <summary>
+            Subscription-TTL header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.regExHeader">
+            <summary>
+            The regular expression used to parse the header line
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.NotFoundHeader">
+            <summary>
+            A special <see cref="T:Growl.Connector.Header"/> that represents a header that was not found in the message
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.name">
+            <summary>
+            The header name
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.val">
+            <summary>
+            The header value
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.isValid">
+            <summary>
+            Indicates if the header is valid or not
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.isBlankLine">
+            <summary>
+            Indicates if the header is a blank line or not
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.isGrowlResourcePointer">
+            <summary>
+            Indicates if the header is a pointer to a binary resource
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.growlResourcePointerID">
+            <summary>
+            The resource pointer value
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.isIdentifier">
+            <summary>
+            Indicates if this header is an 'Identifier' header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.isCustomHeader">
+            <summary>
+            Indicates if this header is a custom header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.isDataHeader">
+            <summary>
+            Indicates if this header is a application-specific data header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Header.growlResource">
+            <summary>
+            The binary data associated with this header (if applicable)
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Header.#ctor">
+            <summary>
+            Creates a new uninitialized instance of the <see cref="T:Growl.Connector.Header"/> class.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Header.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.Header"/> class
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.Header.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.Header"/> class
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.Header.#ctor(System.String,Growl.CoreLibrary.Resource)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.Header"/> class
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.Header.Initialize(System.String,System.String)">
+            <summary>
+            Initializes the header object
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.Header.ParseHeader(System.String)">
+            <summary>
+            Creates a <see cref="T:Growl.Connector.Header"/> from a message line
+            </summary>
+            <param name="line">The individual message line</param>
+            <returns><see cref="T:Growl.Connector.Header"/></returns>
+        </member>
+        <member name="P:Growl.Connector.Header.Name">
+            <summary>
+            Gets the header name
+            </summary>
+            <value>
+            string - Ex: Application-Name: SurfWriter
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Header.ActualName">
+            <summary>
+            Gets the actual header name
+            </summary>
+            <value>
+            string
+            </value>
+            <remarks>
+            If the header is a defined header, this property returns the same value as the Name property.
+            If the header is a custom header, this property returns the header name with the custom header prefix removed.
+            If the header is a data header, this property returns the header name with the custom header prefix removed.
+            </remarks>
+        </member>
+        <member name="P:Growl.Connector.Header.Value">
+            <summary>
+            Gets the value of the header
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Header.IsValid">
+            <summary>
+            Indicates if the header is valid or not
+            </summary>
+            <value>
+            bool - this value is only <c>true</c> for special cases, like <see cref="F:Growl.Connector.Header.NotFoundHeader"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Header.IsBlankLine">
+            <summary>
+            Indicates if the header is a blank line of not
+            </summary>
+            <value>
+            <c>true</c> if the header is a blank line,
+            <c>false</c> otherwise
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Header.IsCustomHeader">
+            <summary>
+            Indicates if the header is a custom header or not
+            </summary>
+            <value>
+            <c>true</c> if the header is a custom header,
+            <c>false</c> if the header is a defined header
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Header.IsDataHeader">
+            <summary>
+            Indicates if the header is an application-specific data header or not
+            </summary>
+            <value>
+            <c>true</c> if the header is a data header,
+            <c>false</c> if the header is a defined header
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Header.IsIdentifier">
+            <summary>
+            Indicates if the header is a <see cref="F:Growl.Connector.Header.RESOURCE_IDENTIFIER"/> header
+            </summary>
+            <value>
+            <c>true</c> if the header is a <see cref="F:Growl.Connector.Header.RESOURCE_IDENTIFIER"/> header,
+            <c>false</c> otherwise
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Header.IsGrowlResourcePointer">
+            <summary>
+            Indicates if the header is a binary resource pointer
+            </summary>
+            <value>
+            <c>true</c> if the header is a binary resource pointer,
+            <c>false</c> otherwise
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Header.GrowlResourcePointerID">
+            <summary>
+            Gets the resource pointer value if this is a resource pointer header
+            </summary>
+            <value>
+            string - Ex: x-growl-resource://1234567890
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Header.GrowlResource">
+            <summary>
+            Gets or sets the <see cref="T:Growl.CoreLibrary.BinaryData"/> associated with this header if this
+            is a binary resource pointer header.
+            </summary>
+            <value>
+            <see cref="T:Growl.CoreLibrary.BinaryData"/> or <c>null</c> if this is not a resource pointer header
+            </value>
+        </member>
+        <member name="T:Growl.Connector.GrowlConnector">
+            <summary>
+            Used by applications to communicate with a Growl instance
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.ConnectorBase">
+            <summary>
+            The base class for any objects that want to send requests to a GNTP server.
+            </summary>
+            <remarks>
+            Along with applications sending notifications, this class serves as the basis
+            for objects that do things like forward notifications from one server to another
+            or subscribe to notifications from a remote client.
+            
+            NOTE: This class' ability to parse and receive GNTP responses is not currently able
+            to handle responses with inline binary data.
+            </remarks>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.TCP_PORT">
+            <summary>
+            The standard TCP port that GNTP uses
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.password">
+            <summary>
+            The password used for message authentication and/or encryption
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.hostname">
+            <summary>
+            The hostname of the Growl instance to connect to [defaults to "127.0.0.1"]
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.port">
+            <summary>
+            The port of the Growl instance to connect to [defaults to the GNTP standard]
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.keyHashAlgorithm">
+            <summary>
+            The algorithm to use when generating hashes [defaults to MD5]
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.encryptionAlgorithm">
+            <summary>
+            The algorithm to use when doing encryption [defaults to PlainText]
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.#ctor">
+            <summary>
+            Creates a new instance of the class, using the default hostname and port,
+            with no password.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the class, using the default hostname and port,
+            using the supplied password.
+            </summary>
+            <param name="password">The password used for message authentication and/or encryption</param>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            Creates a new instance of the class using the supplied hostname, port and password.
+            </summary>
+            <param name="password">The password used for message authentication and/or encryption</param>
+            <param name="hostname">The hostname of the Growl instance to connect to</param>
+            <param name="port">The port of the Growl instance to connect to</param>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.GetKey">
+            <summary>
+            Generates a unique <see cref="T:Growl.Connector.Key"/> using the supplied password.
+            </summary>
+            <returns><see cref="T:Growl.Connector.Key"/></returns>
+            <remarks>
+            See the <see cref="T:Growl.Connector.Key"/> class for details on how the password
+            is expanded into a key.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.OnResponseReceived(System.String,System.Object)">
+            <summary>
+            Parses the response and raises the appropriate event
+            </summary>
+            <param name="responseText">The raw GNTP response</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.OnCommunicationFailure(Growl.Connector.Response,System.Object)">
+            <summary>
+            Occurs when any of the following network conditions occur:
+                1. Unable to connect to target host for any reason
+                2. Write request fails
+                3. Read request fails
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/> that contains information about the failure</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.OnBeforeSend(Growl.Connector.MessageBuilder)">
+            <summary>
+            Fired immediately before the message is constructed and set.
+            Allows adding any additional headers to the outgoing request or
+            to cancel the request.
+            </summary>
+            <param name="mb">The <see cref="T:Growl.Connector.MessageBuilder"/> used to construct the message</param>
+            <returns>
+            <c>true</c> to allow the request to be sent;
+            <c>false</c> to cancel the request
+            </returns>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.Send(Growl.Connector.MessageBuilder,Growl.Connector.ConnectorBase.ResponseReceivedEventHandler,System.Boolean,System.Object)">
+            <summary>
+            Sends the request and handles any responses
+            </summary>
+            <param name="mb">The <see cref="T:Growl.Connector.MessageBuilder"/> used to contruct the request</param>
+            <param name="del">The <see cref="T:Growl.Connector.ConnectorBase.ResponseReceivedEventHandler"/> for handling the response</param>
+            <param name="waitForCallback"><c>true</c> to wait for a callback;<c>false</c> otherwise</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.SendAsync(System.Object)">
+            <summary>
+            Sends the request on a background thread.
+            </summary>
+            <param name="obj">The obj.</param>
+            <remarks>
+            Using the built-in async methods (Begin*/End*) results in flakey behavior.
+            Using the synchronous methods in another thread avoids the issue.
+            </remarks>
+        </member>
+        <member name="P:Growl.Connector.ConnectorBase.Password">
+            <summary>
+            Gets or sets the password used for message authentication and/or encryption
+            </summary>
+            <value>string</value>
+            <remarks>
+            See the <see cref="T:Growl.Connector.Key"/> class for details on how the password is
+            expanded into an encryption key.
+            </remarks>
+        </member>
+        <member name="P:Growl.Connector.ConnectorBase.KeyHashAlgorithm">
+            <summary>
+            Gets or sets the algorithm used when hashing values
+            </summary>
+            <value>
+            <see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/> - Defaults to <see cref="F:Growl.Connector.Cryptography.HashAlgorithmType.MD5"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.ConnectorBase.EncryptionAlgorithm">
+            <summary>
+            Gets or sets the algorithm used when encrypting values
+            </summary>
+            <value>
+            <see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/> - Defaults to <see cref="F:Growl.Connector.Cryptography.SymmetricAlgorithmType.PlainText"/>
+            </value>
+        </member>
+        <member name="T:Growl.Connector.ConnectorBase.ResponseReceivedEventHandler">
+            <summary>
+            Represents methods that handle the ResponseReceived events
+            </summary>
+            <param name="response"></param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="T:Growl.Connector.ConnectorBase.ConnectionState">
+            <summary>
+            Contains state information for a connection.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.ConnectionState.#ctor">
+            <summary>
+            Creates a new instance of the class.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.ConnectorBase.ConnectionState.#ctor(System.Byte[],Growl.Connector.ConnectorBase.ResponseReceivedEventHandler,System.Boolean,System.Object)">
+            <summary>
+            Creates a new instance of the class.
+            </summary>
+            <param name="bytes">The request bytes to be written</param>
+            <param name="del">The <see cref="T:Growl.Connector.ConnectorBase.ResponseReceivedEventHandler"/> method to call to handle the response</param>
+            <param name="waitForCallback"><c>true</c> if the connection should wait for a callback;<c>false</c> otherwise</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.ConnectionState.GUID">
+            <summary>
+            Uniquely identifies this instance
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.ConnectionState.Bytes">
+            <summary>
+            The request bytes to be written
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.ConnectionState.Delegate">
+            <summary>
+            The <see cref="T:Growl.Connector.ConnectorBase.ResponseReceivedEventHandler"/> method to call to handle the response
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.ConnectionState.WaitForCallback">
+            <summary>
+            Indicates if the connection should wait for a callback after receiving the initial response.
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ConnectorBase.ConnectionState.UserState">
+            <summary>
+            An optional state object that will be passed into the response events associated with this request
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.GrowlConnector"/> class
+            using the default hostname and port, with no password set.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.GrowlConnector"/> class
+            using the default hostname and port and the supplied password.
+            </summary>
+            <param name="password">The password used for message authentication and/or encryption.</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.GrowlConnector"/> class
+            using the supplied hostname, port, and password.
+            </summary>
+            <param name="password">The password used for message authentication and/or encryption.</param>
+            <param name="hostname">The hostname of the Growl instance to connect to.</param>
+            <param name="port">The port of the Growl instance to connect to.</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.IsGrowlRunning">
+            <summary>
+            Detects if Growl is currently running on the local machine.
+            </summary>
+            <returns>
+            <c>true</c> if Growl is running;
+            <c>false</c> if Growl is not running;
+            </returns>
+            <remarks>
+            This method is deprecated. Use the static IsGrowlRunningLocally() method instead.
+            
+            This method only detects if Growl is running on the local machine where this assembly is running. 
+            It does not detect if Growl is running on a remote client machine, even if the GrowlConnector instance is 
+            configured to point to a remote machine.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.IsGrowlRunningLocally">
+            <summary>
+            Detects if Growl is currently running on the local machine.
+            </summary>
+            <returns>
+            <c>true</c> if Growl is running;
+            <c>false</c> if Growl is not running;
+            </returns>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Register(Growl.Connector.Application,Growl.Connector.NotificationType[])">
+            <summary>
+            Registers the specified application and notification types.
+            </summary>
+            <param name="application">The <see cref="T:Growl.Connector.Application"/> to register.</param>
+            <param name="notificationTypes">The <see cref="T:Growl.Connector.NotificationType"/>s to register.</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Register(Growl.Connector.Application,Growl.Connector.NotificationType[],System.Object)">
+            <summary>
+            Registers the specified application and notification types.
+            </summary>
+            <param name="application">The <see cref="T:Growl.Connector.Application"/> to register.</param>
+            <param name="notificationTypes">The <see cref="T:Growl.Connector.NotificationType"/>s to register.</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Register(Growl.Connector.Application,Growl.Connector.NotificationType[],Growl.Connector.RequestData)">
+            <summary>
+            Registers the specified application and notification types and allows for additional request data.
+            </summary>
+            <param name="application">The <see cref="T:Growl.Connector.Application"/> to register.</param>
+            <param name="notificationTypes">The <see cref="T:Growl.Connector.NotificationType"/>s to register.</param>
+            <param name="requestData">The <see cref="T:Growl.Connector.RequestData"/> containing the additional information.</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Register(Growl.Connector.Application,Growl.Connector.NotificationType[],Growl.Connector.RequestData,System.Object)">
+            <summary>
+            Registers the specified application and notification types and allows for additional request data.
+            </summary>
+            <param name="application">The <see cref="T:Growl.Connector.Application"/> to register.</param>
+            <param name="notificationTypes">The <see cref="T:Growl.Connector.NotificationType"/>s to register.</param>
+            <param name="requestData">The <see cref="T:Growl.Connector.RequestData"/> containing the additional information.</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Notify(Growl.Connector.Notification)">
+            <summary>
+            Sends a notification to Growl.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> to send.</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Notify(Growl.Connector.Notification,System.Object)">
+            <summary>
+            Sends a notification to Growl.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> to send.</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Notify(Growl.Connector.Notification,Growl.Connector.RequestData)">
+            <summary>
+            Sends a notification to Growl and allows for additional request data.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> to send.</param>
+            <param name="requestData">The <see cref="T:Growl.Connector.RequestData"/> containing the additional information.</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Notify(Growl.Connector.Notification,Growl.Connector.RequestData,System.Object)">
+            <summary>
+            Sends a notification to Growl and allows for additional request data.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> to send.</param>
+            <param name="requestData">The <see cref="T:Growl.Connector.RequestData"/> containing the additional information.</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Notify(Growl.Connector.Notification,Growl.Connector.CallbackContext)">
+            <summary>
+            Sends a notification to Growl that specifies callback information.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> to send.</param>
+            <param name="callbackContext">The <see cref="T:Growl.Connector.CallbackContext"/> containing the callback information.</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Notify(Growl.Connector.Notification,Growl.Connector.CallbackContext,System.Object)">
+            <summary>
+            Sends a notification to Growl that specifies callback information.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> to send.</param>
+            <param name="callbackContext">The <see cref="T:Growl.Connector.CallbackContext"/> containing the callback information.</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Notify(Growl.Connector.Notification,Growl.Connector.CallbackContext,Growl.Connector.RequestData)">
+            <summary>
+            Sends a notification to Growl that specifies callback information.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> to send.</param>
+            <param name="callbackContext">The <see cref="T:Growl.Connector.CallbackContext"/> containing the callback information.</param>
+            <param name="requestData">The <see cref="T:Growl.Connector.RequestData"/> containing the additional information.</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.Notify(Growl.Connector.Notification,Growl.Connector.CallbackContext,Growl.Connector.RequestData,System.Object)">
+            <summary>
+            Sends a notification to Growl that specifies callback information and allows for additional request data.
+            </summary>
+            <param name="notification">The <see cref="T:Growl.Connector.Notification"/> to send.</param>
+            <param name="callbackContext">The <see cref="T:Growl.Connector.CallbackContext"/> containing the callback information.</param>
+            <param name="requestData">The <see cref="T:Growl.Connector.RequestData"/> containing the additional information.</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.OnResponseReceived(System.String,System.Object)">
+            <summary>
+            Parses the response and raises the appropriate event
+            </summary>
+            <param name="responseText">The raw GNTP response</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.OnCommunicationFailure(Growl.Connector.Response,System.Object)">
+            <summary>
+            Occurs when any of the following network conditions occur:
+            1. Unable to connect to target host for any reason
+            2. Write request fails
+            3. Read request fails
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/> that contains information about the failure</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.OnOKResponse(Growl.Connector.Response,System.Object)">
+            <summary>
+            Called when an 'OK' response occurs.
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/></param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.OnErrorResponse(Growl.Connector.Response,System.Object)">
+            <summary>
+            Called when an 'ERROR' response occurs.
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/></param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="M:Growl.Connector.GrowlConnector.OnNotificationCallback(Growl.Connector.Response,Growl.Connector.CallbackData,System.Object)">
+            <summary>
+            Called when an 'CALLBACK' response occurs.
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/></param>
+            <param name="callbackData">The <see cref="T:Growl.Connector.CallbackData"/></param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="E:Growl.Connector.GrowlConnector.OKResponse">
+            <summary>
+            Occurs when an 'OK' response is received.
+            </summary>
+        </member>
+        <member name="E:Growl.Connector.GrowlConnector.ErrorResponse">
+            <summary>
+            Occurs when an 'ERROR' response is received.
+            </summary>
+        </member>
+        <member name="E:Growl.Connector.GrowlConnector.NotificationCallback">
+            <summary>
+            Occurs when a 'CALLBACK' response is received.
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.GrowlConnector.ResponseEventHandler">
+            <summary>
+            Represents methods that handle Growl responses
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/> from Growl</param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="T:Growl.Connector.GrowlConnector.CallbackEventHandler">
+            <summary>
+            Represents methods that handle Growl callbacks
+            </summary>
+            <param name="response">The <see cref="T:Growl.Connector.Response"/> from Growl</param>
+            <param name="callbackData">The <see cref="T:Growl.Connector.CallbackData"/></param>
+            <param name="state">An optional state object that will be passed into the response events associated with this request</param>
+        </member>
+        <member name="T:Growl.Connector.DataHeader">
+            <summary>
+            Represents application-specific headers that are not used by Growl
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.DataHeader.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.DataHeader"/> class
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.DataHeader.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.DataHeader"/> class
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.DataHeader.#ctor(System.String,Growl.CoreLibrary.Resource)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.DataHeader"/> class
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.DataHeader.FormatName(System.String)">
+            <summary>
+            Formats the custom header name by prepending the appropriate prefix
+            </summary>
+            <param name="name">The header name</param>
+            <returns>The header name with the custom header prefix added</returns>
+        </member>
+        <member name="T:Growl.Connector.ResponseType">
+            <summary>
+            Contains a list of the valid types of responses
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ResponseType.OK">
+            <summary>
+            Response is good, returns immediately
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ResponseType.CALLBACK">
+            <summary>
+            Response is good, returns when a callback action occurs
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ResponseType.ERROR">
+            <summary>
+            Response indicates an error
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.Password">
+            <summary>
+            Represents a password that can be used to authorize notifications
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Password.DEFAULT_DESCRIPTION">
+            <summary>
+            Default password description when none is provided
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Password.password">
+            <summary>
+            The actual password
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Password.description">
+            <summary>
+            A description of the password
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Password.permanent">
+            <summary>
+            Indicates if the password is permanent (user-specified) vs. temporary (automatically added by a subscription)
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Password.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.Password"/> class.
+            </summary>
+            <param name="password">The actual password</param>
+            <param name="permanent">Indicates if the password is permanent (user-specified) vs. temporary (automatically added by a subscription)</param>
+        </member>
+        <member name="M:Growl.Connector.Password.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.Password"/> class.
+            </summary>
+            <param name="password">The actual password</param>
+            <param name="description">A description of the password</param>
+            <param name="permanent">Indicates if the password is permanent (user-specified) vs. temporary (automatically added by a subscription)</param>
+        </member>
+        <member name="M:Growl.Connector.Password.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the Password class with serialized data.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized password data.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <remarks>
+            The serialization routine uses a simple Base64 encoding on the password text so that the passwords are
+            not stored in clear text, but there is no additional security provided to the serialized password data.
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.Password.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Prepares the password for serialization
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized password data.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <remarks>
+            The serialization routine uses a simple Base64 encoding on the password text so that the passwords are
+            not stored in clear text, but there is no additional security provided to the serialized password data.
+            </remarks>
+        </member>
+        <member name="P:Growl.Connector.Password.ActualPassword">
+            <summary>
+            Gets or sets the actual password.
+            </summary>
+            <value>string</value>
+        </member>
+        <member name="P:Growl.Connector.Password.Description">
+            <summary>
+            Gets or sets a description of the password
+            </summary>
+            <value>string</value>
+        </member>
+        <member name="P:Growl.Connector.Password.Permanent">
+            <summary>
+            Gets or sets a value that indicates if this is a permanent password
+            </summary>
+            <value>bool</value>
+        </member>
+        <member name="T:Growl.Connector.DisplayNameAttribute">
+             <summary>
+             Provides a friendly display name (string) for enumerated values.
+             </summary>
+             <remarks>
+             The DisplayNameAttribute is only allowed on Fields, and only one DisplayNameAttribute is allowed per Field.
+             <code>
+             Usage:
+            
+            	enum MyEnum : int
+            	{
+            		[DisplayNameAttribute("Friendly display text goes here")]
+            		None = 1,
+            		[DisplayNameAttribute("This value has different display text")]
+            		Some = 2,
+            		All = 3
+            	}
+             </code>
+             
+             </remarks>
+        </member>
+        <member name="F:Growl.Connector.DisplayNameAttribute.displayName">
+            <summary>
+            The friendly name of the value
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.DisplayNameAttribute.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the DisplayNameAttribute class
+            </summary>
+            <param name="displayName">Friendly name for the enum value</param>
+        </member>
+        <member name="P:Growl.Connector.DisplayNameAttribute.DisplayName">
+            <summary>
+            Gets the friendly name
+            </summary>
+            <value>
+            The friendly name associated with the enumerated value
+            </value>
+        </member>
+        <member name="T:Growl.Connector.Application">
+            <summary>
+            Represents an application that may send notifications
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Application.name">
+            <summary>
+            The application name
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Application.icon">
+            <summary>
+            The application's icon
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Application.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.Application"/> class.
+            </summary>
+            <param name="name">The name of the application</param>
+        </member>
+        <member name="M:Growl.Connector.Application.ToHeaders">
+            <summary>
+            Converts the object to a list of headers
+            </summary>
+            <returns><see cref="T:Growl.Connector.HeaderCollection"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Application.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Connector.Application"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the object</param>
+            <returns><see cref="T:Growl.Connector.Application"/></returns>
+        </member>
+        <member name="P:Growl.Connector.Application.Name">
+            <summary>
+            The name of the application
+            </summary>
+            <value>
+            string - Ex: SurfWriter
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Application.Icon">
+            <summary>
+            The application's icon
+            </summary>
+            <value>
+            <see cref="T:Growl.CoreLibrary.Resource"/>
+            </value>
+        </member>
+        <member name="T:Growl.Connector.CallbackData">
+            <summary>
+            Represents the data returned during a callback, including the original Data and Type, 
+            as well as the resulting action performed by the user
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.CallbackDataBase">
+            <summary>
+            A base class for other callback-related classes that need to represent 
+            the original callback Data and Type
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.CallbackDataBase.data">
+            <summary>
+            The data to provide in the callback
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.CallbackDataBase.type">
+            <summary>
+            The type of the data provided in the callback
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.CallbackDataBase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.CallbackDataBase"/> class with
+            empty Data and Type properties.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.CallbackDataBase.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.CallbackDataBase"/> class.
+            </summary>
+            <param name="data">The callback data.</param>
+            <param name="type">The callback data type.</param>
+        </member>
+        <member name="M:Growl.Connector.CallbackDataBase.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Connector.CallbackDataBase"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the object</param>
+            <returns><see cref="T:Growl.Connector.CallbackDataBase"/></returns>
+        </member>
+        <member name="P:Growl.Connector.CallbackDataBase.Data">
+            <summary>
+            The application-specified data to provide in the callback
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.CallbackDataBase.Type">
+            <summary>
+            The type of data specified in the <see cref="P:Growl.Connector.CallbackDataBase.Data"/> property
+            </summary>
+            <string>
+            string - NOTE: the type does not need to be of any recognized type, it can be any arbitrary string that has meaning to the notifying application
+            </string>
+        </member>
+        <member name="F:Growl.Connector.CallbackData.result">
+            <summary>
+            The callback result
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.CallbackData.notificationID">
+            <summary>
+            The ID of the notification making the callback
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.CallbackData.#ctor(System.String,System.String,Growl.CoreLibrary.CallbackResult,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.CallbackData"/> class.
+            </summary>
+            <param name="data">The data.</param>
+            <param name="type">The type.</param>
+            <param name="result">The result.</param>
+            <param name="notificationID">The notification ID.</param>
+        </member>
+        <member name="M:Growl.Connector.CallbackData.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Connector.CallbackData"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the object</param>
+            <returns><see cref="T:Growl.Connector.CallbackData"/></returns>
+        </member>
+        <member name="P:Growl.Connector.CallbackData.Result">
+            <summary>
+            The callback result (clicked, closed, etc)
+            </summary>
+            <value>
+            <see cref="T:Growl.CoreLibrary.CallbackResult"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.CallbackData.NotificationID">
+            <summary>
+            Gets or sets the ID of the notification making the callback
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.Cryptography">
+            <summary>
+            Provides utilities for encrypting and decrypting data as well
+            as computing hash values.
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.hexChart">
+            <summary>
+            chart of all hex characters
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.rng">
+            <summary>
+            Random number generator
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.hashTypes">
+            <summary>
+            A list of all of the supported hash types
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.encryptionTypes">
+            <summary>
+            A list of all of the supported encryption algorithms
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.#ctor">
+            <summary>
+            Since this class provides only static methods, the default constructor is
+            private to prevent instances from being created with "new Cryptography()".
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.#cctor">
+            <summary>
+            Initializes the <see cref="T:Growl.Connector.Cryptography"/> class.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.ComputeHash(System.String)">
+            <summary>
+            Hashes the supplied input using using the MD5 hashing algorithm
+            </summary>
+            <remarks>
+            Unlike many methods, this method does NOT trim leading or trailing spaces from
+            <paramref name="inputString"/>.
+            </remarks>
+            <param name="inputString">The string to hash</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="inputString"/> is null</exception>
+            <exception cref="T:System.Security.Cryptography.CryptographicException">Returned when any other exception occurs</exception>
+            <returns cref="T:System.String">The hex-encoded MD5-hashed value</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.ComputeHash(System.String,Growl.Connector.Cryptography.HashAlgorithmType)">
+            <summary>
+            Hashes the supplied input using using the specified hashing algorithm
+            </summary>
+            <remarks>
+            Unlike many methods, this method does NOT trim leading or trailing spaces from
+            <paramref name="inputString"/>.
+            </remarks>
+            <param name="inputString">The string to hash</param>
+            <param name="hashAlgorithmType">The <see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/> to use to hash the input string</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="inputString"/> is null</exception>
+            <exception cref="T:System.Security.Cryptography.CryptographicException">Returned when any other exception occurs</exception>
+            <returns cref="T:System.String">The hex-encoded hashed value</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.ComputeHash(System.Byte[],Growl.Connector.Cryptography.HashAlgorithmType)">
+            <summary>
+            Hashes the supplied input using using the specified hashing algorithm.
+            </summary>
+            <remarks>
+            Unlike many methods, this method does NOT trim leading or trailing spaces from
+            <paramref name="inputString"/>.
+            </remarks>
+            <param name="inputBytes">The byte array to hash</param>
+            <param name="hashAlgorithmType">The <see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/> to use to hash the input string</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="inputBytes"/> is null</exception>
+            <exception cref="T:System.Security.Cryptography.CryptographicException">Returned when any other exception occurs</exception>
+            <returns cref="T:System.Byte">The hashed byte array</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.Encrypt(System.Byte[],System.Byte[])">
+            <summary>
+            Encrypts the supplied input using using the default encryption algorithm (AES).
+            </summary>
+            <param name="key">The key used to encrypt the data</param>
+            <param name="inputBytes">The bytes to encrypt</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="inputBytes"/> is null</exception>
+            <exception cref="T:System.Security.Cryptography.CryptographicException">Returned when any other exception occurs</exception>
+            <returns cref="T:System.Byte">array of encrypted bytes</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.Encrypt(System.Byte[],System.Byte[],Growl.Connector.Cryptography.SymmetricAlgorithmType)">
+            <summary>
+            Encrypts the supplied input using using the specified encryption algorithm.
+            </summary>
+            <param name="key">The key used to encrypt the data</param>
+            <param name="inputBytes">The bytes to encrypt</param>
+            <param name="algorithmType">The <see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/> to use to encrypt the input string</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="inputBytes"/> is null</exception>
+            <exception cref="T:System.Security.Cryptography.CryptographicException">Returned when any other exception occurs</exception>
+            <returns cref="T:System.Byte">array of encrypted bytes</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.Encrypt(System.Byte[],System.Byte[],Growl.Connector.Cryptography.SymmetricAlgorithmType,System.Byte[]@)">
+            <summary>
+            Encrypts the supplied input using using the specified encryption algorithm.
+            </summary>
+            <param name="key">The key used to encrypt the data</param>
+            <param name="inputBytes">The bytes to encrypt</param>
+            <param name="algorithmType">The <see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/> to use to encrypt the input string</param>
+            <param name="iv">The initialization vector to use (<c>null</c> to auto-generate the value)</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="inputBytes"/> is null</exception>
+            <exception cref="T:System.Security.Cryptography.CryptographicException">Returned when any other exception occurs</exception>
+            <returns cref="T:System.Byte">array of encrypted bytes</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.Decrypt(System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            Decrypts the supplied input using using the default decryption algorithm.
+            </summary>
+            <param name="key">The key used to encrypt the data</param>
+            <param name="iv">The initialization vector used during encryption</param>
+            <param name="encryptedBytes">The bytes to decrypt</param>
+            <returns>Array of decrypted bytes</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.Decrypt(System.Byte[],System.Byte[],System.Byte[],Growl.Connector.Cryptography.SymmetricAlgorithmType)">
+            <summary>
+            Decrypts the supplied input using using the specified decryption algorithm.
+            </summary>
+            <param name="key">The key used to encrypt the data</param>
+            <param name="iv">The initialization vector used during encryption</param>
+            <param name="encryptedBytes">The bytes to decrypt</param>
+            <param name="algorithmType">The <see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/> to use to decrypt the input string</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="encryptedBytes"/> is null</exception>
+            <exception cref="T:System.Security.Cryptography.CryptographicException">Returned when any other exception occurs</exception>
+            <returns cref="T:System.String">The decrypted value as clear text</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.GenerateBytes(System.Int32)">
+            <summary>
+            Generates a random array of bytes of the specified <paramref name="length"/>.
+            </summary>
+            <param name="length">The number of bytes to generate</param>
+            <returns>Array of bytes</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.HexEncode(System.Byte[])">
+            <summary>
+            Encodes the supplied byte array into a string of hex characters
+            </summary>
+            <param name="bytes">The array of <see cref="T:System.Byte">bytes</see> to encode</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="bytes"/> is null</exception>
+            <exception cref="T:System.Security.Cryptography.CryptographicException">Returned when any other exception occurs</exception>
+            <returns cref="T:System.String">The hex-encoded string</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.HexUnencode(System.String)">
+            <summary>
+            Unencodes the supplied hex string into an array of bytes
+            </summary>
+            <param name="hexString">The hex string to unencode</param>
+            <exception cref="T:System.ArgumentNullException">Returned when <paramref name="hexString"/> is null</exception>
+            <exception cref="T:System.Security.Cryptography.CryptographicException">Returned when any other exception occurs</exception>
+            <returns cref="T:System.Byte">Array of bytes</returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.GetKeyHashType(System.String)">
+            <summary>
+            Looks up the hash algorithm by name
+            </summary>
+            <param name="name">The name of the hash type</param>
+            <returns><see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.GetEncryptionType(System.String)">
+            <summary>
+            Looks up the encryption algorithm by name
+            </summary>
+            <param name="name">The name of the encryption algorithm</param>
+            <returns><see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Cryptography.GetKeyFromSize(System.Byte[],System.Int32)">
+            <summary>
+            Returns a key of <paramref name="keySize"/> length based on the input <paramref name="key"/>.
+            </summary>
+            <param name="key">The original key</param>
+            <param name="keySize">The length of the key to return</param>
+            <returns>Array of bytes</returns>
+        </member>
+        <member name="T:Growl.Connector.Cryptography.HashAlgorithmType">
+            <summary>
+            Enumeration of HashAlgorithmTypes
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.HashAlgorithmType.MD5">
+            <summary>
+            MD5 hash algorithm (128-bit)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.HashAlgorithmType.SHA1">
+            <summary>
+            SHA algorithm (160-bit)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.HashAlgorithmType.SHA256">
+            <summary>
+            SHA algorithm (256-bit)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.HashAlgorithmType.SHA384">
+            <summary>
+            SHA algorithm (384-bit)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.HashAlgorithmType.SHA512">
+            <summary>
+            SHA algorithm (512-bit)
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.Cryptography.SymmetricAlgorithmType">
+            <summary>
+            Enumeration of SymmetricAlgorithmTypes
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.SymmetricAlgorithmType.PlainText">
+            <summary>
+            No encryption
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.SymmetricAlgorithmType.RC2">
+            <summary>
+            RC2 Encryption (64-bit key, 64-bit IV)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.SymmetricAlgorithmType.DES">
+            <summary>
+            DES Encryption (64-bit key, 64-bit IV)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.SymmetricAlgorithmType.TripleDES">
+            <summary>
+            TripleDES Encryption (192-bit key, 64-bit IV)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Cryptography.SymmetricAlgorithmType.AES">
+            <summary>
+            AES Encryption (192-bit key, 128-bit IV, 128-bit block size)
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.Response">
+            <summary>
+            Represents a GNTP response
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Response.isOK">
+            <summary>
+            Indicates if this is an OK response
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Response.inResponseTo">
+            <summary>
+            Indicates what type of request this is in response to
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Response.callbackData">
+            <summary>
+            Contains the callback information and result
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Response.requestData">
+            <summary>
+            Contains the returned <see cref="P:Growl.Connector.Response.RequestData"/>
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Response.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.Response"/> class,
+            setting the IsOK property to <c>true</c>.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Response.#ctor(System.Int32,System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.Response"/> class,
+            setting the ErrorCode and ErrorDescription properties.
+            </summary>
+            <param name="errorCode">The error code</param>
+            <param name="errorDescription">The error description</param>
+        </member>
+        <member name="M:Growl.Connector.Response.SetCallbackData(System.String,Growl.Connector.CallbackContext,Growl.CoreLibrary.CallbackResult)">
+            <summary>
+            Sets the <see cref="P:Growl.Connector.Response.CallbackData"/> for this response
+            </summary>
+            <param name="notificationID">The ID of the notification making the callback</param>
+            <param name="callbackContext">The <see cref="T:Growl.Connector.CallbackContext"/> of the request</param>
+            <param name="callbackResult">The <see cref="T:Growl.CoreLibrary.CallbackResult"/> (clicked, closed)</param>
+        </member>
+        <member name="M:Growl.Connector.Response.ToHeaders">
+            <summary>
+            Converts the Response to a list of headers
+            </summary>
+            <returns><see cref="T:Growl.Connector.HeaderCollection"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Response.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Connector.Response"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the response</param>
+            <returns><see cref="T:Growl.Connector.Response"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Response.SetAttributesFromHeaders(Growl.Connector.HeaderCollection,System.Boolean)">
+            <summary>
+            Sets any properties from a collection of header values
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> of header values</param>
+            <param name="isCallback">Indicates if this is a callback response</param>
+        </member>
+        <member name="P:Growl.Connector.Response.IsOK">
+            <summary>
+            Gets or sets a flag that indicates if this is an OK response
+            </summary>
+            <value>
+            <c>true</c> if this is an OK or CALLBACK response,
+            <c>false</c> if this is an ERROR response
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Response.IsError">
+            <summary>
+            Gets a flag that indicates if this is an ERROR response
+            </summary>
+            <value>
+            <c>true</c> if this is an ERROR response,
+            <c>false</c> if this is any other response
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Response.IsCallback">
+            <summary>
+            Gets a flag that indicates if this is a CALLBACK response
+            </summary>
+            <value>
+            <c>true</c> if this is a CALLBACK response
+            <c>false</c> if this is any other response
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Response.CallbackData">
+            <summary>
+            Gets the <see cref="P:Growl.Connector.Response.CallbackData"/> if this is a callback-type response
+            </summary>
+            <value><see cref="P:Growl.Connector.Response.CallbackData"/></value>
+        </member>
+        <member name="P:Growl.Connector.Response.InResponseTo">
+            <summary>
+            Gets or sets the type of request that this response is in response to.
+            </summary>
+            <value>string</value>
+        </member>
+        <member name="P:Growl.Connector.Response.RequestData">
+            <summary>
+            Gets the <see cref="P:Growl.Connector.Response.RequestData"/> associated with this transaction
+            </summary>
+            <value><see cref="P:Growl.Connector.Response.RequestData"/></value>
+        </member>
+        <member name="T:Growl.Connector.CallbackContext">
+            <summary>
+            Represents the information needed to perform a callback to the notifying application
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.CallbackContext.url">
+            <summary>
+            The callback url
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.CallbackContext.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.CallbackContext"/> class.
+            </summary>
+            <param name="data">The data.</param>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:Growl.Connector.CallbackContext.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.CallbackContext"/> class,
+            specifying a callback url.
+            </summary>
+            <param name="url">The URL.</param>
+        </member>
+        <member name="M:Growl.Connector.CallbackContext.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Growl.Connector.CallbackContext"/> class.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.CallbackContext.ShouldKeepConnectionOpen">
+            <summary>
+            Indicates if the receiving server should keep the connection open to do the callback
+            </summary>
+            <returns>
+            <c>true</c> if the connection needs to be kept open,
+            <c>false</c> if the connection can be closed (url callback)
+            </returns>
+        </member>
+        <member name="M:Growl.Connector.CallbackContext.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Connector.CallbackContext"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the object</param>
+            <returns><see cref="T:Growl.Connector.CallbackContext"/></returns>
+        </member>
+        <member name="P:Growl.Connector.CallbackContext.CallbackUrl">
+            <summary>
+            Gets the callback URL.
+            </summary>
+            <value>The callback URL.</value>
+        </member>
+        <member name="T:Growl.Connector.MessageParser">
+            <summary>
+            Provides the ability to parse a response message
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageParser.GNTP_SUPPORTED_VERSION">
+            <summary>
+            The GNTP protocol version supported by this parser
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageParser.BLANK_LINE">
+            <summary>
+            A string representing a line ending (Carriage Return + Line Feed)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageParser.regExMessageHeader">
+            <summary>
+            Regular expression for parsing the message header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageParser.version">
+            <summary>
+            The protocol version of the response message
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageParser.directive">
+            <summary>
+            The response directive
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.MessageParser.Parse(System.String,Growl.Connector.CallbackData@)">
+            <summary>
+            Parses a response message and returns the corresponding <see cref="T:Growl.Connector.Response"/> object
+            </summary>
+            <param name="message">The entire GNTP response message</param>
+            <param name="context">If this is a CALLBACK response, returns the <see cref="T:Growl.Connector.CallbackData"/> associated with the response; otherwise <c>null</c></param>
+            <returns><see cref="T:Growl.Connector.Response"/>The <see cref="T:Growl.Connector.Response"/> represented by the message</returns>
+        </member>
+        <member name="M:Growl.Connector.MessageParser.Parse(System.String,Growl.Connector.CallbackData@,Growl.Connector.HeaderCollection@)">
+            <summary>
+            Parses a response message and returns the corresponding <see cref="T:Growl.Connector.Response"/> object, returning the list of parsed headers as well.
+            </summary>
+            <param name="message">The entire GNTP response message</param>
+            <param name="context">If this is a CALLBACK response, returns the <see cref="T:Growl.Connector.CallbackData"/> associated with the response; otherwise <c>null</c></param>
+            <param name="headers">Contains the list of parsed headers</param>
+            <returns><see cref="T:Growl.Connector.Response"/>The <see cref="T:Growl.Connector.Response"/> represented by the message</returns>
+        </member>
+        <member name="M:Growl.Connector.MessageParser.Parse(System.String,Growl.Connector.HeaderCollection@)">
+            <summary>
+            Parses a response message and returns the corresponding <see cref="T:Growl.Connector.Response"/> object
+            </summary>
+            <param name="message">The entire GNTP response message</param>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> of parsed header values</param>
+            <returns><see cref="T:Growl.Connector.Response"/></returns>
+        </member>
+        <member name="M:Growl.Connector.MessageParser.ParseGNTPHeaderLine(System.String)">
+            <summary>
+            Parses a GNTP header line and returns the RegEx matches
+            </summary>
+            <param name="line">The GNTP header line not including the ending line breaks</param>
+            <returns>RegEx <see cref="T:System.Text.RegularExpressions.Match"/></returns>
+        </member>
+        <member name="T:Growl.Connector.Key">
+            <summary>
+            Given a password, this class expands the password into an encryption key using a unqiue salt value
+            and provides means to encrypt and decrypt values using that key.
+            </summary>
+            <remarks>
+            The following procedure is used when converting a password to a key:
+                1. The password is converted an UTF8 byte array
+                2. A cyptographically secure salt is generated (should be between 4 and 16 bytes)
+                3. The salt bytes are appended to the password bytes to form the key basis
+                4. The encryption key is generated by computing the hash of the key basis using one of the supported hashing algorithms
+                5. The key hash is produced by computing the hash of the encryption key (using the same hashing algorithm used in step 4) and
+                   hex-encoding it to a fixed-length string
+            </remarks>
+        </member>
+        <member name="F:Growl.Connector.Key.None">
+            <summary>
+            A key that represents no password
+            (Note that this includes no password being set and empty-string passwords)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Key.hashAlgorithm">
+            <summary>
+            The algorithm used when hashing values.
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Key.encryptionAlgorithm">
+            <summary>
+            The algorithm used when encrypting values.
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Key.encryptionKey">
+            <summary>
+            The key used for encryption and decryption
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Key.keyHash">
+            <summary>
+            The hex-encoded hash of the encryption key
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Key.password">
+            <summary>
+            The original password used to generate the key
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Key.salt">
+            <summary>
+            The hex-encoded value of the password salt
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Key.#ctor(System.String,Growl.Connector.Cryptography.HashAlgorithmType,Growl.Connector.Cryptography.SymmetricAlgorithmType)">
+            <summary>
+            Creates a new instance of the Key class.
+            </summary>
+            <param name="password">The user-supplied password to use as the basis for the key</param>
+            <param name="hashAlgorithm">The <see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/> used when hashing values</param>
+            <param name="encryptionAlgorithm">The <see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/> used when encrypting values</param>
+        </member>
+        <member name="M:Growl.Connector.Key.#ctor">
+            <summary>
+            Creates a new empty key.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Key.InitializeEmptyKey">
+            <summary>
+            Initializes the instance with the same values as <see cref="F:Growl.Connector.Key.None"/>
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Key.Encrypt(System.Byte[])">
+            <summary>
+            Encrypts the supplied bytes using a random IV.
+            </summary>
+            <param name="bytes">The bytes to encrypt</param>
+            <returns><see cref="T:Growl.Connector.EncryptionResult"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Key.Encrypt(System.Byte[],System.Byte[]@)">
+            <summary>
+            Encrypts the supplied bytes using the supplied IV.
+            </summary>
+            <param name="bytes">The bytes to encrypt.</param>
+            <param name="iv">The IV to use.</param>
+            <returns><see cref="T:Growl.Connector.EncryptionResult"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Key.Decrypt(System.Byte[],System.Byte[])">
+            <summary>
+            Decrypts the encrypted bytes
+            </summary>
+            <param name="encryptedBytes">The bytes to decrypt.</param>
+            <param name="iv">The IV to use.</param>
+            <returns>Array of unencrypted bytes</returns>
+        </member>
+        <member name="M:Growl.Connector.Key.GenerateKey(System.String,Growl.Connector.Cryptography.HashAlgorithmType,Growl.Connector.Cryptography.SymmetricAlgorithmType)">
+            <summary>
+            Generates a <see cref="T:Growl.Connector.Key"/> based on the supplied password and algorithms.
+            </summary>
+            <param name="password">The password to use as the basis for the key.</param>
+            <param name="hashAlgorithm">The <see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/> used when hashing values</param>
+            <param name="encryptionAlgorithm">The <see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/> used when encrypting values</param>
+            <returns><see cref="T:Growl.Connector.Key"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Key.Compare(System.String,System.String,System.String,Growl.Connector.Cryptography.HashAlgorithmType,Growl.Connector.Cryptography.SymmetricAlgorithmType,Growl.Connector.Key@)">
+            <summary>
+            Compares the provides keyHash and salt to the supplied password to see if they are a match.
+            </summary>
+            <param name="password">The password to compare to.</param>
+            <param name="keyHash">The hex-encoded key hash</param>
+            <param name="salt">The hex-encoded salt value</param>
+            <param name="hashAlgorithm">The <see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/> used to generate the key hash</param>
+            <param name="encryptionAlgorithm">The <see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/> used by this key to do encryption/decryption</param>
+            <param name="matchingKey">If a match is found, returns the matching <see cref="T:Growl.Connector.Key"/>;if no match is found, returns <c>null</c>.</param>
+            <returns>
+            <c>true</c> if the key hash and salt match the password;
+            <c>false</c> otherwise
+            </returns>
+        </member>
+        <member name="P:Growl.Connector.Key.Password">
+            <summary>
+            The user-supplied password used as the basis for the key
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Key.Salt">
+            <summary>
+            The hex-encoded value of the password salt.
+            </summary>
+            <remarks>
+            This value will be unique for each instance of <see cref="T:Growl.Connector.Key"/>, even
+            when based on the same password.
+            </remarks>
+        </member>
+        <member name="P:Growl.Connector.Key.EncryptionKey">
+            <summary>
+            The key used for encryption and decryption
+            </summary>
+            <value>Array of bytes</value>
+        </member>
+        <member name="P:Growl.Connector.Key.KeyHash">
+            <summary>
+            The hex-encoded hash of the encryption key
+            </summary>
+        </member>
+        <member name="P:Growl.Connector.Key.HashAlgorithm">
+            <summary>
+            The algorithm used when hashing values
+            </summary>
+            <value><see cref="T:Growl.Connector.Cryptography.HashAlgorithmType"/></value>
+        </member>
+        <member name="P:Growl.Connector.Key.EncryptionAlgorithm">
+            <summary>
+            The algorithm used when encrypting values
+            </summary>
+            <value><see cref="T:Growl.Connector.Cryptography.SymmetricAlgorithmType"/></value>
+        </member>
+        <member name="T:Growl.Connector.ErrorDescription">
+            <summary>
+            Contains the list of error description strings
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.TIMED_OUT">
+            <summary>
+            The server timed out waiting for the remainder of the request
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.UNRECOGNIZED_REQUEST">
+            <summary>
+            Unrecognized request
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.UNSUPPORTED_DIRECTIVE">
+            <summary>
+            Unsupported directive
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.UNSUPPORTED_VERSION">
+            <summary>
+            Unsupported version
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.NO_NOTIFICATIONS_REGISTERED">
+            <summary>
+            No notifications registered
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.INVALID_RESOURCE_LENGTH">
+            <summary>
+            Invalid resource length
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.MALFORMED_REQUEST">
+            <summary>
+            Malformed request
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.UNRECOGNIZED_RESOURCE_HEADER">
+            <summary>
+            Unrecognized resource header
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.INTERNAL_SERVER_ERROR">
+            <summary>
+            Internal server error
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.INVALID_KEY">
+            <summary>
+            Invalid key hash
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.MISSING_KEY">
+            <summary>
+            Missing key hash
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.REQUIRED_HEADER_MISSING">
+            <summary>
+            Required header missing
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.UNSUPPORTED_HASH_ALGORITHM">
+            <summary>
+            Unsupported password hash algorithm
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.UNSUPPORTED_ENCRYPTION_ALGORITHM">
+            <summary>
+            Unsupported encryption algorithm
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.APPLICATION_NOT_REGISTERED">
+            <summary>
+            Application not registered
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.NOTIFICATION_TYPE_NOT_REGISTERED">
+            <summary>
+            Notification type not registered
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.BROWSER_CONNECTIONS_NOT_ALLOWED">
+            <summary>
+            Flash-based connections are not allowed
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.SUBSCRIPTIONS_NOT_ALLOWED">
+            <summary>
+            This server does not allow subscriptions
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.ALREADY_PROCESSED">
+            <summary>
+            The request was already handled by this machine. (Normally, this means the message was forwarded back to a machine that had already forwarded it.)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.CONNECTION_FAILURE">
+            <summary>
+            The destination was not reachable (invalid address or port, network connectivity, firewall, etc)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.WRITE_FAILURE">
+            <summary>
+            An unexpected error occurred while writing the request
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.ErrorDescription.READ_FAILURE">
+            <summary>
+            An unexpected error occurred while reading the response
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.EncryptionResult">
+            <summary>
+            Represents the results of an encryption operation
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.EncryptionResult.#ctor(System.Byte[],System.Byte[])">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.EncryptionResult"/> class
+            </summary>
+            <param name="encryptedBytes">The encrypted bytes</param>
+            <param name="iv">The IV used</param>
+        </member>
+        <member name="F:Growl.Connector.EncryptionResult.EncryptedBytes">
+            <summary>
+            The encrypted bytes
+            </summary>
+            <value>
+            Array of bytes
+            </value>
+        </member>
+        <member name="F:Growl.Connector.EncryptionResult.IV">
+            <summary>
+            The initialization vector used to do the encryption
+            </summary>
+            <value>
+            Array of bytes
+            </value>
+        </member>
+        <member name="T:Growl.Connector.RequestType">
+            <summary>
+            Contains a list of the valid types of requests
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.RequestType.REGISTER">
+            <summary>
+            Register an application and its notification types
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.RequestType.NOTIFY">
+            <summary>
+            Send a notification
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.RequestType.SUBSCRIBE">
+            <summary>
+            Subscribes a client to Growl notifications
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.RequestInfo">
+            <summary>
+            Represents metadata about a received request such as when it was received, by whom, etc.
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.RequestInfo.receivedFrom">
+            <summary>
+            The address from which the request was received
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.RequestInfo.receivedBy">
+            <summary>
+            The address of the receiving server
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.RequestInfo.timeReceived">
+            <summary>
+            The time the request was received
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.RequestInfo.receivedWith">
+            <summary>
+            The name or type of the receiving server
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.RequestInfo.requestID">
+            <summary>
+            A unique request ID
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.RequestInfo.previousReceivedHeaders">
+            <summary>
+            A list of 'Received' headers in the current request
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.RequestInfo.SaveHandlingInfo(System.String)">
+            <summary>
+            Saves arbitrary information about how the notification was handled.
+            </summary>
+            <param name="info">The information to save</param>
+            <remarks>
+            The handling information saved is primarily used for writing to the log file (if enabled)
+            </remarks>
+        </member>
+        <member name="M:Growl.Connector.RequestInfo.WasForwarded">
+            <summary>
+            Indicates if the request was forwarded from another machine
+            </summary>
+            <returns><c>true</c> if the request was forwarded from another machine;<c>false</c> otherwise</returns>
+        </member>
+        <member name="P:Growl.Connector.RequestInfo.ReceivedFrom">
+            <summary>
+            The address from which the request was received
+            </summary>
+            <remarks>
+            This value may be an IP address or hostname, with or without port information.
+            </remarks>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.RequestInfo.ReceivedBy">
+            <summary>
+            The address of the receiving server
+            </summary>
+            <remarks>
+            This value may be an IP address or hostname, with or without port information.
+            </remarks>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.RequestInfo.ReceivedWith">
+            <summary>
+            The name or type of server that received the request
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.RequestInfo.TimeReceived">
+            <summary>
+            The time when the request was received
+            </summary>
+            <remarks>
+            This value is in UTC
+            </remarks>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.RequestInfo.RequestID">
+            <summary>
+            A unique ID that identifies the request
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.RequestInfo.PreviousReceivedHeaders">
+            <summary>
+            A list of exisiting 'Recevied' headers in the request
+            </summary>
+            <value>
+            <see cref="T:System.Collections.Generic.List`1"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.RequestInfo.HandlingInfo">
+            <summary>
+            Gets the collection of handling information strings associated with the request
+            </summary>
+            <value><see cref="T:System.Collections.Generic.List`1"/></value>
+        </member>
+        <member name="T:Growl.Connector.CustomHeader">
+            <summary>
+            Represents a custom (non-defined) header
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.CustomHeader.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.CustomHeader"/> class
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.CustomHeader.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.CustomHeader"/> class
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.CustomHeader.#ctor(System.String,Growl.CoreLibrary.Resource)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.CustomHeader"/> class
+            </summary>
+            <param name="name">The header name</param>
+            <param name="val">The header value</param>
+        </member>
+        <member name="M:Growl.Connector.CustomHeader.FormatName(System.String)">
+            <summary>
+            Formats the custom header name by prepending the appropriate prefix
+            </summary>
+            <param name="name">The header name</param>
+            <returns>The header name with the custom header prefix added</returns>
+        </member>
+        <member name="T:Growl.Connector.Notification">
+            <summary>
+            Represents a notification
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Notification.applicationName">
+            <summary>
+            The name of the application sending the notification
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Notification.name">
+            <summary>
+            The name (type) of the notification
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Notification.id">
+            <summary>
+            A unique id for the notification (sender-specified)
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Notification.title">
+            <summary>
+            The notification title
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Notification.text">
+            <summary>
+            The notification text
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Notification.sticky">
+            <summary>
+            Indicates if the notification should be sticky or not
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Notification.priority">
+            <summary>
+            The notification priority
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Notification.icon">
+            <summary>
+            The notification icon
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Notification.coalescingID">
+            <summary>
+            The coalescing (grouping) id
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.Notification.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Creates a instance of the <see cref="T:Growl.Connector.Notification"/> class.
+            </summary>
+            <param name="applicationName">The name of the application sending the notification</param>
+            <param name="notificationName">The notification name (type)</param>
+            <param name="id">A unique ID for the notification</param>
+            <param name="title">The notification title</param>
+            <param name="text">The notification text</param>
+        </member>
+        <member name="M:Growl.Connector.Notification.#ctor(System.String,System.String,System.String,System.String,System.String,Growl.CoreLibrary.Resource,System.Boolean,Growl.Connector.Priority,System.String)">
+            <summary>
+            Creates a instance of the <see cref="T:Growl.Connector.Notification"/> class.
+            </summary>
+            <param name="applicationName">The name of the application sending the notification</param>
+            <param name="notificationName">The notification name (type)</param>
+            <param name="id">A unique ID for the notification</param>
+            <param name="title">The notification title</param>
+            <param name="text">The notification text</param>
+            <param name="icon">A <see cref="T:Growl.CoreLibrary.Resource"/> for the icon associated with the notification</param>
+            <param name="sticky"><c>true</c> to suggest that the notification should be sticky;<c>false</c> otherwise</param>
+            <param name="priority">The <see cref="P:Growl.Connector.Notification.Priority"/> of the notification</param>
+            <param name="coalescingID">The coalescing (grouping) ID (used to replace exisiting notifications)</param>
+        </member>
+        <member name="M:Growl.Connector.Notification.ToHeaders">
+            <summary>
+            Converts the object to a list of headers
+            </summary>
+            <returns><see cref="T:Growl.Connector.HeaderCollection"/></returns>
+        </member>
+        <member name="M:Growl.Connector.Notification.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Connector.Notification"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the object</param>
+            <returns><see cref="T:Growl.Connector.Notification"/></returns>
+        </member>
+        <member name="P:Growl.Connector.Notification.ApplicationName">
+            <summary>
+            The name of the application sending the notification
+            </summary>
+            <value>
+            string - Ex: SurfWriter
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Notification.Name">
+            <summary>
+            The name (type) of the notification.
+            </summary>
+            <value>
+            string - This should match the name of one of the registered <see cref="T:Growl.Connector.NotificationType"/>s
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Notification.ID">
+            <summary>
+            A unique ID for the notification
+            </summary>
+            <value>
+            string - This value is assigned by the sending application and can be any arbitrary string. This value is optional.
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Notification.Title">
+            <summary>
+            The title of the notification
+            </summary>
+            <value>
+            string - Ex: Download Complete
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Notification.Text">
+            <summary>
+            The text of the notification
+            </summary>
+            <value>
+            string - Ex: The file 'filename.txt' had finished downloading
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Notification.Sticky">
+            <summary>
+            Indicates if the notification should be sticky or not.
+            </summary>
+            <value>
+            <c>true</c> to suggest that the notification should be sticky;
+            <c>false</c> otherwise
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Notification.Priority">
+            <summary>
+            The priority of the notification
+            </summary>
+            <value>
+            <see cref="P:Growl.Connector.Notification.Priority"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Notification.Icon">
+            <summary>
+            The icon to associate with this notification
+            </summary>
+            <value>
+            <see cref="T:Growl.CoreLibrary.Resource"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.Notification.CoalescingID">
+            <summary>
+            An ID used to group notifications.
+            </summary>
+            <value>
+            string - This value is assigned by the sending application and can be any arbitrary string. This value is optional.
+            </value>
+            <remarks>
+            'Coalescing' in Growl is actually referring to replacement. If a previously sent notification is still on-screen, it
+            can be updated/replaced by specifying the same CoalescingID.
+            </remarks>
+        </member>
+        <member name="T:Growl.Connector.Priority">
+            <summary>
+            Indicates the relative priority of a notification.
+            </summary>
+            <remarks>
+            The priority of a notification can be used to change the way the notification is handled
+            and presented to the end user. For instance, higher priority notifications might be displayed
+            with a red color or exclamation icon. However, each display is responsible for
+            handling changes related to priority and may not make any distinction between different priority
+            levels. Further, although each notification can request its own priority, the end user may elect 
+            to override this priority setting, so the notification's requested priority is not guaranteed.
+            </remarks>
+        </member>
+        <member name="F:Growl.Connector.Priority.VeryLow">
+            <summary>
+            Very low
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Priority.Moderate">
+            <summary>
+            Moderate
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Priority.Normal">
+            <summary>
+            Normal
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Priority.High">
+            <summary>
+            High
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.Priority.Emergency">
+            <summary>
+            Emergency
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.NotificationType">
+            <summary>
+            Represents a type of notification that an application may send
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.NotificationType.name">
+            <summary>
+            The name of the notification type
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.NotificationType.displayName">
+            <summary>
+            The display name of the notification type
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.NotificationType.icon">
+            <summary>
+            The default icon for notifications of this type
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.NotificationType.enabled">
+            <summary>
+            Indicates if this type of notification should be enabled or disabled by default
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.NotificationType.#ctor(System.String)">
+            <summary>
+            Creates a instance of the <see cref="T:Growl.Connector.NotificationType"/> class.
+            </summary>
+            <param name="name">The name of this type of notification</param>
+        </member>
+        <member name="M:Growl.Connector.NotificationType.#ctor(System.String,System.String)">
+            <summary>
+            Creates a instance of the <see cref="T:Growl.Connector.NotificationType"/> class.
+            </summary>
+            <param name="name">The name of this type of notification</param>
+            <param name="displayName">The display name of this type of notification</param>
+        </member>
+        <member name="M:Growl.Connector.NotificationType.#ctor(System.String,System.String,Growl.CoreLibrary.Resource,System.Boolean)">
+            <summary>
+            Creates a instance of the <see cref="T:Growl.Connector.NotificationType"/> class.
+            </summary>
+            <param name="name">The name of this type of notification</param>
+            <param name="displayName">The display name of this type of notification</param>
+            <param name="icon">The default icon for notifications of this type</param>
+            <param name="enabled"><c>true</c> if this type of notification should be enabled by default; <c>false</c> if this type of notification should be disabled by default</param>
+        </member>
+        <member name="M:Growl.Connector.NotificationType.ToHeaders">
+            <summary>
+            Converts the object to a list of headers
+            </summary>
+            <returns><see cref="T:Growl.Connector.HeaderCollection"/></returns>
+        </member>
+        <member name="M:Growl.Connector.NotificationType.FromHeaders(Growl.Connector.HeaderCollection)">
+            <summary>
+            Creates a new <see cref="T:Growl.Connector.NotificationType"/> from a list of headers
+            </summary>
+            <param name="headers">The <see cref="T:Growl.Connector.HeaderCollection"/> used to populate the response</param>
+            <returns><see cref="T:Growl.Connector.NotificationType"/></returns>
+        </member>
+        <member name="P:Growl.Connector.NotificationType.Name">
+            <summary>
+            The name of this type of notification
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.NotificationType.DisplayName">
+            <summary>
+            The display name of this type of notification
+            </summary>
+            <value>
+            string
+            </value>
+        </member>
+        <member name="P:Growl.Connector.NotificationType.Icon">
+            <summary>
+            The default icon for notifications of this type
+            </summary>
+            <value>
+            <see cref="T:Growl.CoreLibrary.Resource"/>
+            </value>
+        </member>
+        <member name="P:Growl.Connector.NotificationType.Enabled">
+            <summary>
+            Indicates if this type of notification should be enabled or disabled by default
+            </summary>
+            <value>
+            <c>true</c> if this type of notification should be enabled by default;
+            <c>false</c> if this type of notification should be disabled by default
+            </value>
+        </member>
+        <member name="T:Growl.Connector.MessageBuilder">
+            <summary>
+            Provides the ability to dynamically construct a GNTP message
+            </summary>
+        </member>
+        <member name="T:Growl.Connector.MessageSection">
+            <summary>
+            Represents a section of GNTP message
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageSection.HEADER_FORMAT">
+            <summary>
+            Format string for header lines
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageSection.blankLineBytes">
+            <summary>
+            Byte array containing the bytes the represent a blank line
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageSection.bytes">
+            <summary>
+            The bytes of the section
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageSection.binaryData">
+            <summary>
+            List of any binary data refernced by this section
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.MessageSection.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.MessageSection"/> class.
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.MessageSection.AddHeader(Growl.Connector.Header)">
+            <summary>
+            Adds a <see cref="T:Growl.Connector.Header"/> to the section.
+            </summary>
+            <remarks>
+            Headers are added to the message output in the same order that they are added via this method.
+            If the header is a pointer to a binary resource, the binary data is also handled.
+            </remarks>
+            <param name="header">The <see cref="T:Growl.Connector.Header"/> to add</param>
+        </member>
+        <member name="M:Growl.Connector.MessageSection.AddHeader(System.String,System.String)">
+            <summary>
+            Adds a header line to the section
+            </summary>
+            <param name="name">The name of the header</param>
+            <param name="val">The value of the header</param>
+        </member>
+        <member name="M:Growl.Connector.MessageSection.AddBlankLine">
+            <summary>
+            Adds a blank line to the section
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.MessageSection.GetStringBytes(System.String)">
+            <summary>
+            Converts a string into an array of bytes
+            </summary>
+            <remarks>
+            The conversion uses UTF8 encoding.
+            </remarks>
+            <param name="val">The string to convert</param>
+            <returns>Array of bytes</returns>
+        </member>
+        <member name="M:Growl.Connector.MessageSection.GetBytes">
+            <summary>
+            Converts the contents of the section into an array of bytes
+            </summary>
+            <returns>Array of bytes</returns>
+        </member>
+        <member name="M:Growl.Connector.MessageSection.ToString">
+            <summary>
+            Outputs the contents of the section as a string
+            </summary>
+            <remarks>
+            The conversion uses UTF8 encoding.
+            </remarks>
+            <returns>string</returns>
+        </member>
+        <member name="P:Growl.Connector.MessageSection.BinaryData">
+            <summary>
+            Contains a list of all binary data referenced in this section
+            </summary>
+            <value>
+            <see cref="T:System.Collections.Generic.List`1"/>
+            </value>
+        </member>
+        <member name="F:Growl.Connector.MessageBuilder.PROTOCOL_NAME">
+            <summary>
+            The protocol name
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageBuilder.PROTOCOL_VERSION">
+            <summary>
+            The protocol version supported by the message builder
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageBuilder.protocolHeaderBytes">
+            <summary>
+            Array of bytes containing the protocol header information
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageBuilder.messageType">
+            <summary>
+            The type of message
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageBuilder.key">
+            <summary>
+            The secret key
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageBuilder.includeKeyHash">
+            <summary>
+            Indicates if the key hash should be included in the message
+            </summary>
+        </member>
+        <member name="F:Growl.Connector.MessageBuilder.sections">
+            <summary>
+            Collection of additional message sections that are part of this message
+            </summary>
+        </member>
+        <member name="M:Growl.Connector.MessageBuilder.#ctor(Growl.Connector.RequestType,Growl.Connector.Key)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.MessageBuilder"/> class
+            used to build a request message.
+            </summary>
+            <param name="messageType">The <see cref="T:Growl.Connector.RequestType"/> of the message</param>
+            <param name="key">The <see cref="T:Growl.Connector.Key"/> used to authorize and encrypt the message</param>
+        </member>
+        <member name="M:Growl.Connector.MessageBuilder.#ctor(Growl.Connector.ResponseType)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.MessageBuilder"/> class
+            used to build a response message.
+            </summary>
+            <param name="messageType">The <see cref="T:Growl.Connector.ResponseType"/> of the message</param>
+        </member>
+        <member name="M:Growl.Connector.MessageBuilder.#ctor(System.String,Growl.Connector.Key,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:Growl.Connector.MessageBuilder"/> class
+            </summary>
+            <param name="messageType">The type of message (directive)</param>
+            <param name="key">The <see cref="T:Growl.Connector.Key"/> used to authorize and encrypt the message</param>
+            <param name="includeKeyHash">Indicates if the key hash should be included in the message or not</param>
+        </member>
+        <member name="M:Growl.Connector.MessageBuilder.AddMessageSection(Growl.Connector.MessageSection)">
+            <summary>
+            Adds a <see cref="T:Growl.Connector.MessageSection"/> to the message
+            </summary>
+            <param name="section"><see cref="T:Growl.Connector.MessageSection"/></param>
+        </member>
+        <member name="M:Growl.Connector.MessageBuilder.GetBytes">
+            <summary>
+            Converts the contents of the message into an array of bytes
+            </summary>
+            <returns>Array of bytes</returns>
+        </member>
+    </members>
+</doc>
