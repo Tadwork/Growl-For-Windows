@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Growl.Displays.CompactDark", "Growl.Displays.CompactDark.csproj", "{79C44899-63B4-4B7E-BDF0-C2CED4519AFC}"
 EndProject
 Global

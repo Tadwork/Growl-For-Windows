@@ -209,5 +209,6 @@ namespace StickyNote
                 this.Height += args.HeightChange;
             }
         }
+
     }
 }

@@ -1,0 +1,12 @@
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\obj\Debug\StickyNote.Properties.Resources.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\obj\Debug\StickyNote.StickyNoteSettingsPanel.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\obj\Debug\StickyNote.StickyNoteWindow.resources
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\obj\Debug\ResGen.read.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\obj\Debug\ResGen.write.1.tlog
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\bin\Debug\StickyNote.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\bin\Debug\StickyNote.pdb
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\bin\Debug\Growl.CoreLibrary.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\bin\Debug\Growl.DisplayStyle.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\obj\Debug\StickyNote.dll
+C:\Users\Tzvi\Documents\VS Projects\Growl-For-Windows-git\Growl Extras\Sticky Note\Sticky Note\obj\Debug\StickyNote.pdb

@@ -17,6 +17,7 @@ namespace StickyNote
         private static Point BOTTOM_RIGHT = new Point(86, 69);
 
         private Point overlayPosition = TOP_RIGHT;
+        private String excludewith;
 
         public StickyNoteSettingsPanel()
         {
@@ -27,8 +28,27 @@ namespace StickyNote
         {
             this.computerScreenPictureBox.Image = global::StickyNote.Properties.Resources.my_computer;
             this.overlayPosition = GetLocation();
-
+            this.excludewith = GetExclusions();
             this.computerScreenPictureBox.Paint += new PaintEventHandler(computerScreenPictureBox_Paint);
+        }
+
+        private String GetExclusions()
+        {   
+            Dictionary<string, object> settings = this.GetSettings();
+            String exclusions = "";
+            if (settings != null && settings.ContainsKey(StickyNoteDisplay.SETTING_EXCLUSIONS))
+            {
+                try
+                {
+                    object val = settings[StickyNoteDisplay.SETTING_EXCLUSIONS];
+                    exclusions = Convert.ToString(val);
+                    this.txtExclusions.Text = exclusions;
+                }
+                catch
+                {
+                }
+            }
+            return exclusions;
         }
 
         void computerScreenPictureBox_Paint(object sender, PaintEventArgs e)
@@ -80,7 +100,11 @@ namespace StickyNote
 
             this.SaveSetting(StickyNoteDisplay.SETTING_DISPLAYLOCATION, i);
         }
-
+        private void SaveExclusions()
+        {
+            excludewith = this.txtExclusions.Text;
+            this.SaveSetting(StickyNoteDisplay.SETTING_EXCLUSIONS, this.excludewith);
+        }
         private void computerScreenPictureBox_MouseClick(object sender, MouseEventArgs e)
         {
             int leftRightLine = this.computerScreenPictureBox.Width / 2;
@@ -101,5 +125,18 @@ namespace StickyNote
 
             this.computerScreenPictureBox.Invalidate();
         }
+
+
+        private void txtExclusions_TextChanged(object sender, EventArgs e)
+        {
+            SaveExclusions();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }

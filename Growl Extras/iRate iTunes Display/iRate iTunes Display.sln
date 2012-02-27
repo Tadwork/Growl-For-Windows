@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRate iTunes Display", "iRate iTunes Display\iRate iTunes Display.csproj", "{CA52D521-009F-4CC0-A7F2-9029AB48CA86}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Deployment", "Deployment\Deployment.vdproj", "{9F66403C-15ED-4011-A598-F503E7676A26}"

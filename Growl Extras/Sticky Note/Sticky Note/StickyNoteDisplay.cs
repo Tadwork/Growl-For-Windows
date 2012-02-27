@@ -8,7 +8,7 @@ namespace StickyNote
     public class StickyNoteDisplay : MultiMonitorVisualDisplay
     {
         public const string SETTING_DISPLAYLOCATION = "DisplayLocation";
-
+        public const string SETTING_EXCLUSIONS = "Exclusions";
         LayoutManager tllm = new LayoutManager(LayoutManager.AutoPositionDirection.DownRight, 6, 6);
         LayoutManager bllm = new LayoutManager(LayoutManager.AutoPositionDirection.UpRight, 6, 6);
         LayoutManager trlm = new LayoutManager(LayoutManager.AutoPositionDirection.DownLeft, 6, 6);
@@ -66,11 +66,25 @@ namespace StickyNote
         {
             StickyNoteWindow win = new StickyNoteWindow();
             win.Tag = this;
+            //if (NotificationMeetsRules(notification,GetExclusionsFromSetting()))
+            //{
+            //    notification.Description = "true";
+            //}
             win.SetNotification(notification);
             win.SetDisplayLocation(GetLocationFromSetting());
+
             this.Show(win);
         }
 
+
+        private bool NotificationMeetsRules(Notification notification, string exclusions){
+            String[] excludelist = exclusions.Split(',');
+            
+            foreach(String e in excludelist){
+                if (notification.Description.Contains(e)) return true;
+            }
+            return false;
+        }
         protected override LayoutManager GetLayoutManager(NotificationWindow nw)
         {
             StickyNoteWindow win = (StickyNoteWindow)nw;
@@ -86,7 +100,25 @@ namespace StickyNote
                     return brlm;
             }
         }
-
+        private String GetExclusionsFromSetting()
+        {
+            String exclusions = "";
+            if (this.SettingsCollection != null && this.SettingsCollection.ContainsKey(SETTING_EXCLUSIONS))
+            {
+                try
+                {
+                    object val = this.SettingsCollection[SETTING_EXCLUSIONS];
+                    if (val != null)
+                    {
+                        exclusions = (String)val;
+                    }
+                }
+                catch
+                {
+                }
+            }
+            return exclusions;
+        }
         private Location GetLocationFromSetting()
         {
             Location location = Location.TopRight;
